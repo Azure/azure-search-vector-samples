@@ -270,7 +270,7 @@ api-key: {{admin-api-key}}
 
 Hybrid search instructs the search engine to search over both the vector indices and the inverted indices of your search index. Hybrid queries work when your index includes both vector fields and regular search fields (strings, numeric data, geo coordinates, and so forth).
 
-For expected results, vector "value" and "search" should be equivalent ("value" should be an embedding of the text in "search"). If the queries are different, the "search" string takes priority.
+For best results, vector "value" and "search" should be equivalent (i.e., vector "value" should be an embedding of whatever text is in "search"). If the queries are different, the queries are OR'd.
 
 The response includes the top 10 by search score. Both vector queries and free text queries are assigned a search score. The scores are merged using Reciprocal Rank Fusion (RRF) to weight each document with the inverse of its position on the rank. 
 
