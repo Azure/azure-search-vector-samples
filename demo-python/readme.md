@@ -1,0 +1,53 @@
+# Readme: Generate embeddings using OpenAI with Python
+
+The notebook in this repository contains Python code used to create vectorized data that can be indexed in a search index. There are no calls to Cognitive Search, but it does use Azure OpenAI to generate embeddings for title and content fields. You'll need access to Azure OpenAI to run this demo. 
+
+The code reads the text-sample.json file, which contains the input data for which embeddings need to be generated.
+
+When you finish the steps, the output is combination of human readable text and embeddings that can be pushed to a search index.
+
+## Prerequisites
+
+To run this code, you will need the following:
+
++ An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access)
+
++ A deployment of the text-embedding-ada-002 embedding model in your Azure OpenAI service. We use API version 2022-12-01 in this demo. For the deployment name, we used the same name as the model, "text-embedding-ada-002".
+
++ Azure OpenAI connection and model information
+
+  + OpenAI API key
+  + OpenAI embedding model deployment name
+  + OpenAI API version
+
++ Python (these instructions were tested with version 3.9.x)
+
+You can use [Visual Studio Code with the Python extension](https://code.visualstudio.com/docs/python/python-tutorial) for this demo. For help setting up the environment, see this [Python quickstart](https://learn.microsoft.com/azure/search/search-get-started-python).
+
+You don't need Azure Cognitive Search for this step.
+
+## Setup
+
+1. Clone this repository.
+
+2. Create a .env file in the same directory as the code and include the following variables:
+
+   ```
+   OPENAI_SERVICE_NAME=YOUR-OPENAI-SERVICE-NAME
+   DEPLOYMENT_NAME=YOUR-MODEL-DEPLOYMENT-NAME
+   OPENAI_API_VERSION=YOUR-OPENAI-API-VERSION
+   ```
+
+## Run the Code
+
+To run the code, execute the following command from a command line:
+
+```python main.py```
+
+This will generate embeddings for the title and content fields of the input data and write the embeddings to the *docVectors.json* file in the output directory.
+
+## Output
+
+The code writes the input_data with the added embeddings and "@search.action" field to the *docVectors.json* file in the output directory. The embeddings can be uploaded to an Azure Cognitive Search index using the 2023-07-01-preview API version of the [Add, Update, or Delete Documents REST API](../docs/rest-api-reference/upload-documents.md). 
+
+You can also generate a query embedding to perform vector searches.
