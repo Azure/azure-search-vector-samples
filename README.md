@@ -100,12 +100,12 @@ When you're ready to extend the quickstart or adapt the collection to you data, 
 
 + Service and subscription limits haven't been finalized, but the [API request limits](https://learn.microsoft.com/azure/search/search-limits-quotas-capacity#api-request-limits) do apply. Request payloads cannot exceed 8K for URIs or 16 MB for the request body. The following additional limits apply to this preview:
 
-  + Maximum number of vectors fields per index: None, limitation is
-  + Maximum number of dimensions: ##
+  + Maximum number of vectors fields per index: None. However, please keep in mind the vector float limit and index size limitations per SKU.
+  + Maximum number of dimensions: 2048
 
 + Index definitions are currently subject to the following limitations:
 
-  + Vector fields with complex types aren't supported.
+  + Vector fields with complex types or collections of complex types aren't supported.
   + Vector fields can't have filter, facet, or sort attributions.
 
 + Query definitions are currently subject to these limitations:
