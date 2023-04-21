@@ -2,8 +2,6 @@
 
 Use this article to get started with vector search using Azure Cognitive Search REST APIs that create, load, and query a search index. 
 
-[Watch this video](../videos/) for a visual walkthrough of this quickstart.
-
 ## About the sample data and queries
 
 Sample data consists of text and vector descriptions of 108 Azure services, generated from ChatGPT in Azure OpenAI.
