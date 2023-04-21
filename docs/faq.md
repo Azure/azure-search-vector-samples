@@ -24,7 +24,7 @@ The features aren't related, in the sense that you can use them independently.
 
 + Vector search introduces requirements on the index schema, the substance and structure of documents, and the types of queries.
 
-+ Semantic re-ranker works on results from keyword search. Internally, Cognitive Search uses large language models from Bing to re-rank an initial result set, increasing the relevance of results that are a closer semantic match to the initial query.
++ Semantic re-ranker works on results from keyword search. Internally, Cognitive Search uses deep nerual network models from Bing to re-rank an initial result set, increasing the relevance of results that are a closer semantic match to the initial query. Additionally, Semantic search has features such as answers, captions, and highlights.
 
 You can use vector search and semantic search together. Semantic search will work on fields that do not contain vectorized data. The search engine uses Reciprocal Rank Fusion to merge results from both ranking systems.
 

@@ -142,7 +142,7 @@ You should get a status HTTP 201 success.
 
 ## Upload documents
 
-Use the [Add, Update, or Delete Documents](/docs/rest-api-reference/upload-documents.md) REST APi for this request.
+Use the [Add, Update, or Delete Documents](/docs/rest-api-reference/upload-documents.md) REST API for this request.
 
 For readability, the following example show a subset of documents and embeddings. The body of the Upload Documents request consists of 108 documents, each with a full set of embeddings for "titleVector" and "contentVector".
 
