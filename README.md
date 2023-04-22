@@ -100,27 +100,31 @@ When you're ready to extend the quickstart or adapt the collection to you data, 
 
 + Service and subscription limits haven't been finalized, but the [API request limits](https://learn.microsoft.com/azure/search/search-limits-quotas-capacity#api-request-limits) do apply. Request payloads cannot exceed 8K for URIs or 16 MB for the request body. The following additional limits apply to this preview:
 
-  + Maximum number of vectors fields per index: None. However, please keep in mind the vector float limit and index size limitations per SKU.
+  + Maximum number of vectors fields per index: Subject to [existing index field limits](https://learn.microsoft.com/en-us/azure/search/search-limits-quotas-capacity#index-limits). However, please keep in mind the float limit and index size limitations per SKU.
   + Maximum number of dimensions: 2048
 
 + Index definitions are currently subject to the following limitations:
 
   + Vector fields with complex types or collections of complex types aren't supported.
-  + Vector fields can't have filter, facet, or sort attributions.
 
 + Query definitions are currently subject to these limitations:
 
   + POST verbs are required. Don't use GET.
-  + $count isn't supported.
-  + Multi-field vector queries aren't supported. Specifically, you can't set "searchFields" to multiple vector fields.
-  + Multi-vector queries aren't supported. For example, the Postman collection has vector fields named TitleVector and ContentVector. Your query can include TitleVector or ContentVector, but not both.
-  + Sorting ($orderby) and pagination ($skip) for hybrid queries aren't supported.
+  + Multi-field vector queries aren't supported. Specifically, you can't set "vector.fields" property to multiple vector fields. For example, the Postman collection has vector fields named TitleVector and ContentVector. Your query can include TitleVector or ContentVector, but not both.
+  + Multi-vector queries aren't supported. A search request can carry a single vector query.
+  + Sorting ($orderby) and pagination ($skip) are not supported for hybrid queries.
+  + Facets ($facet) and count ($count) are not supported for vector and hybrid queries.
 
 + There is no official public documentation or samples beyond what you'll find in this private repository. Please contact us with any questions or concerns.
 
-## Storage and usage limits
+## Storage and float limits
 
-| SKU	| Storage quota (GB)| Floats limit per partition (1e6) |
+FLoat limits refers to how many floats can be indexed on a single partition.
+For example, 100 documents with a single, 1536-dimensional vector field consume in total 100x1536=153600 floats. 1000 documents with two 768-dimensional vector fields, consume 2x1000x768=1536000 floats.
+
+The floats limit is a soft limit. It means that in some cases you will be able to exceed the limit but indexing will always succeed as long as you are below the limit.
+
+| SKU	| Storage quota (GB)| Floats limit per partition (million) |
 |--|--|--|
 | Basic | 2 | 100 |
 | S1 | 25 | 250 |
