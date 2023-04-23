@@ -4,39 +4,41 @@ Questions about vector search are answered here.
 
 ## What is vector search? 
 
-Vector search is a technique used in information retrieval to find similar items in a dataset based on their vector representations. Whether you use an indexer to pull documents into the indexing pipeline, or push documents to an index, Azure Cognitive Search can index documents that contain vector fields.
+Vector search is a technique used in information retrieval to find similar items in a dataset based on their vector representations. 
 
 ## How does vector search work? 
 
-Vector search works by accepting a query input represented as a vector. The search engine then calculates the similarity of vector fields in the search index, finding items that are similar to a given query. Both the query and matching content must have a vector representation.
+Vector search works by accepting a query input represented as a vector. The search engine then calculates the similarity of vector fields in the search index, finding items that are similar to the given vector query. Vector search is expensive to do exhaustively by comparing the query vector to all vectors in the index. Approximate Nearest Neighbors (ANN) algorithms are used to improve speed at the cost of recall - the measure of the proportion of relevant documents that are retrieved by a search system out of the total number of relevant documents that exist in the corpus.
 
-## How is vector search implemented in Cognitive Search?
+## How is vector search enabled in Cognitive Search?
 
-In Cognitive Search, support for vectors is per-field, which means you can combine vector search and keyword search in the same index. The field's data type determines its characteristics. The data type for a vector field is "Edm.Collection(Single)". Cognitive Search can support hybrid scenarios that combine keyword search and vector search in the same request.
+In Cognitive Search, you can index vector data as fields in documents alongside textual and other [types of content](https://learn.microsoft.com/en-us/rest/api/searchservice/supported-data-types). The data type for a vector field is "Collection(Edm.Single)", but other types of vector fields will be supported in the future, like Collection(Edm.Double) and Collection(Edm.Int32). Vector fields can be populated using an [Indexer](https://learn.microsoft.com/en-us/azure/search/search-indexer-overview) or by the [Push API](https://learn.microsoft.com/en-us/azure/search/search-what-is-data-import#pushing-data-to-an-index).
 
-## Can I upload a model to use for vectorization?
+Vector queries can be issued standalone or in combination with other query types including term queries and filters in the same search request.
 
-You can use any model for vectorization, but you can't upload the model to Azure Cognitive Search because there is no integration at that layer. Cognitive Search can't generate embeddings for the content that it indexes, or for the query inputs that it receives from a client app.
+## Can Cognitive Search vectorize my content or queries?
+
+Today Cognitive Search doesn't perform vectorization. It's up to the application layer to pick the best model for the data and generate embeddings for the content that it indexes and for the queries.
 
 ## Cognitive Search has features that are named "vector search" and "semantic search". How is vector search related to semantic search?
 
 The features aren't related, in the sense that you can use them independently. 
 
-+ Vector search introduces requirements on the index schema, the substance and structure of documents, and the types of queries.
++ Vector search adds vectors as a new type of data now supported by Cognitive Search and allows you to store and retrieve them efficiently. This opens a whole new set of scenarios that Cognitive Search can enable including multi-modal content retrieval, vector store for applications using Large Language Models (LLMs), recommendation systems, hybrid search scenarios, and more.
 
-+ Semantic re-ranker works on results from keyword search. Internally, Cognitive Search uses deep nerual network models from Bing to re-rank an initial result set, increasing the relevance of results that are a closer semantic match to the initial query. Additionally, Semantic search has features such as answers, captions, and highlights.
++ Semantic Search works on the results retrieved by the search engine. Cognitive Search uses deep neural network models from Bing to re-rank to results retrieved by the search engine, increasing the relevance of results that are a closer semantic match to the query. Additionally, Semantic search has features such as answers, captions, and highlights. 
 
-You can use vector search and semantic search together. Semantic search will work on fields that do not contain vectorized data. The search engine uses Reciprocal Rank Fusion to merge results from both ranking systems.
+You can use vector search and semantic search together if the search request contains a text query - hybrid search. The search engine uses Reciprocal Rank Fusion to merge results from both vector and term queries before Semantic Search reranking is applied.
 
 ## Can I add vector search to an existing index?
 
 No. You must create a new index using the 2023-07-01-preview REST API. Your queries must also specify the preview REST API.
 
-## How can I distinguish a vector search index from a non-vector index?
+## How to enable vector search on a search index?
 
-An index that implements vector search will have:
+To enable vector search in an index you will need:
 
-+ A **`vectorSearch`** section specifying the algorithm (currently, just "hnsw").
-+ One or more fields of type **`Collection(Edm.Single)`**, with a **"dimensions"** property and an **"algorithmConfiguration"** property.
-+ The request will specify the **2023-07-01-preview** API.
-+ On an index that's expressed on your search service, populated vector fields will contain numerical text embeddings instead of human readable content.
++ Add one or more fields of type **`Collection(Edm.Single)`**, with a **"dimensions"** property and an **"algorithmConfiguration"** property.
++ Add **`vectorSearch`** section to the index definition specifying the configuraiton used by vector search fields, including the parameters of the Approximate Nearest Neighbor algorithm used, like HNSW.
++ Use the **2023-07-01-Preview** API verison.
++ Index documents with vector content using an [Indexer](https://learn.microsoft.com/en-us/azure/search/search-indexer-overview) or the [Push API](https://learn.microsoft.com/en-us/azure/search/search-what-is-data-import#pushing-data-to-an-index).
