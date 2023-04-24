@@ -10,7 +10,7 @@ Vector search is a technique used in information retrieval to find similar items
 
 Vector search works by accepting a query input represented as a vector. The search engine then calculates the similarity of vector fields in the search index, finding items that are similar to the given vector query. Because it's too expensive to compare the query vector to all vectors in the index, vector search uses Approximate Nearest Neighbor (ANN) algorithms to find the nearest match. This improves query speed, at the cost of recall.
 
-## How is vector search enabled in Cognitive Search?
+## How vector search works in Cognitive Search?
 
 In Cognitive Search, you can index vector data as fields in documents alongside textual and other [types of content](https://learn.microsoft.com/en-us/rest/api/searchservice/supported-data-types). The data type for a vector field is "Collection(Edm.Single)", but other types of vector fields will be supported in the future, like Collection(Edm.Double) and Collection(Edm.Int32). Vector fields can be populated using an [Indexer](https://learn.microsoft.com/en-us/azure/search/search-indexer-overview) or by the [Push API](https://learn.microsoft.com/en-us/azure/search/search-what-is-data-import#pushing-data-to-an-index).
 
