@@ -1,10 +1,10 @@
 # How to create and use embeddings for search queries and documents
 
-Cognitive Search doesn't host machine learning algorithms for vector search, so one of your challenges is creating embeddings for query inputs and outputs. You can use any machine learning algorithm that generates embeddings, but this article assumes Azure OpenAI embeddings models. Demos in the private preview tap the [similarity embedding models](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/models#embeddings-models) of Azure OpenAI.
+Cognitive Search doesn't host vectorization models, so one of your challenges is creating embeddings for query inputs and outputs. You can use any embedding model, but this article assumes Azure OpenAI embeddings models. Demos in the private preview tap the [similarity embedding models](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/models#embeddings-models) of Azure OpenAI.
 
 ## How models are used
 
-+ Query inputs will require that you submits user-provided input to a machine learning algorithm that quickly converts human readable text into a vector. Optimizing for speed is the objective. Choosing a fast algorithm, co-located with Cognitive Search in the same region, helps you reduce latency. 
++ Query inputs will require that you submit user-provided input to an embedding model that quickly converts human readable text into a vector. Optimizing for speed is the objective. 
 
   + We used **text-embedding-ada-002** to generate embeddings.
   
