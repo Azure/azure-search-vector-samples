@@ -14,7 +14,7 @@ Azure Cognitive Search will allow to choose between exhaustive and approximate k
 ### Hybrid search
 
 By performing similarity searches over vector representations of your data, you can find information that's similar to your search query, even if the search terms don't match up perfectly to the indexed content. In practice, we often need to expand lexical matches with semantic matches to guarantee good recall. The notion of composing term queries with vector queries is called *hybrid search*.
-In Azure Cognitive Search, embeddings are indexed alongside textual and numerical fields allowing you to issue hybrid term and vector queries and take advantage of existing functionalities like filtering, faceting, sorting, scoring profiles, and [Semantic Search](https://learn.microsoft.com/en-us/azure/search/semantic-search-overview) in a single search request.
+In Azure Cognitive Search, embeddings are indexed alongside textual and numerical fields allowing you to issue hybrid term and vector queries and take advantage of existing functionalities like filtering, faceting, sorting, scoring profiles, and [semantic search](https://learn.microsoft.com/en-us/azure/search/semantic-search-overview) in a single search request.
 
 Hybrid search combines results from both term and vector queries, which use different ranking functions such as BM25 and cosine similarity. To present these results in a single ranked list, a method of merging the ranked result lists is needed. Azure Cognitive Search uses Reciprocal Rank Fusion, a non-parametric, rank-based method for this purpose. Other methods for ranking hybrid queries will be provided in the future.
 

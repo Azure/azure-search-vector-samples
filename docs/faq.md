@@ -8,7 +8,7 @@ Vector search is a technique used in information retrieval to find similar items
 
 ## How does vector search work? 
 
-Vector search works by accepting a query input represented as a vector. The search engine then calculates the similarity of vector fields in the search index, finding items that are similar to the given vector query. Vector search is expensive to do exhaustively by comparing the query vector to all vectors in the index. Approximate Nearest Neighbors (ANN) algorithms are used to improve speed at the cost of recall - the measure of the proportion of relevant documents that are retrieved by a search system out of the total number of relevant documents that exist in the corpus.
+Vector search works by accepting a query input represented as a vector. The search engine then calculates the similarity of vector fields in the search index, finding items that are similar to the given vector query. Because it's too expensive to compare the query vector to all vectors in the index, vector search uses Approximate Nearest Neighbor (ANN) algorithms to find the nearest match. This improves query speed, at the cost of recall.
 
 ## How is vector search enabled in Cognitive Search?
 
@@ -24,11 +24,11 @@ Today Cognitive Search doesn't perform vectorization. It's up to the application
 
 The features aren't related, in the sense that you can use them independently. 
 
-+ Vector search adds vectors as a new type of data now supported by Cognitive Search and allows you to store and retrieve them efficiently. This opens a whole new set of scenarios that Cognitive Search can enable including multi-modal content retrieval, vector store for applications using Large Language Models (LLMs), recommendation systems, hybrid search scenarios, and more.
++ Vector search adds vectors as a new type of data and allows you to store and retrieve them efficiently. This opens a whole new set of scenarios that Cognitive Search can enable including multi-modal content retrieval, vector store for applications using Large Language Models (LLMs), recommendation systems, hybrid search scenarios, and more.
 
-+ Semantic Search works on the results retrieved by the search engine. Cognitive Search uses deep neural network models from Bing to re-rank to results retrieved by the search engine, increasing the relevance of results that are a closer semantic match to the query. Additionally, Semantic search has features such as answers, captions, and highlights. 
++ Semantic search works on the results retrieved by the search engine. Cognitive Search uses deep neural network models from Bing to re-rank to results retrieved by the search engine, increasing the relevance of results that are a closer semantic match to the query. Additionally, Semantic search has features such as answers, captions, and highlights. 
 
-You can use vector search and semantic search together if the search request contains a text query - hybrid search. The search engine uses Reciprocal Rank Fusion to merge results from both vector and term queries before Semantic Search reranking is applied.
+You can use vector search and semantic search together if the search request contains a text query - hybrid search. The search engine uses Reciprocal Rank Fusion to merge results from both vector and term queries before semantic search reranking is applied.
 
 ## Can I add vector search to an existing index?
 
