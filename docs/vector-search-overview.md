@@ -22,7 +22,7 @@ Commonly used similarity metrics include 'cosine', 'euclidean' (also known as 'l
 
 ## Approximate Nearest Neighbors
 
-Finding the true set of 'k' nearest neighbors requires comparing the input vector exhaustively against all vectors in the dataset. While each vector similarity calculation is relatively fast, performing these exhaustive comparisons across large datasets is computationally expensive and slow because of the sheer number of comparisons that are required. For example, if a dataset contains 10 million 1,000-dimensional vectors, computing the distance between the query vector and all vectors in the dataset would require scanning 37 GB of data, assuming single-precision floating point vectors, and 10 million comparison calculations. 
+Finding the true set of 'k' nearest neighbors requires comparing the input vector exhaustively against all vectors in the dataset. While each vector similarity calculation is relatively fast, performing these exhaustive comparisons across large datasets is computationally expensive and slow because of the sheer number of comparisons that are required. For example, if a dataset contains 10 million 1,000-dimensional vectors, computing the distance between the query vector and all vectors in the dataset would require scanning 37 GB of data, assuming single-precision floating point vectors, and a high number of comparison calculations.
 
 To address this challenge, approximate nearest neighbor (ANN) search methods are used to trade-off recall for speed. These methods can efficiently find a small set of candidate vectors that are most likely to be similar to the query vector, reducing the total number of vectors comparisons.
 
