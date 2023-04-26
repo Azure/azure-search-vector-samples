@@ -195,7 +195,7 @@ api-key: {{admin-api-key}}
 
 Use the [Search Documents](/docs/rest-api-reference/search-documents.md) REST API for this request. Recall that the private preview has [several limitations](../README.MD#private-preview-limitations) related to queries:
 
-+ POST is required for this preview and the APi version must be 2023-07-01-preview
++ POST is required for this preview and the API version must be 2023-07-01-Preview
 + Only one vector field per query at this time (for example, either "titleVector" or "contentVector", but not both)
 + Multi-vector queries aren't supported. A search request can carry a single vector query.
 + Sorting ($orderby) and pagination ($skip) are not supported for hybrid queries.
