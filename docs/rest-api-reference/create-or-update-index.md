@@ -49,7 +49,7 @@ The body of the request contains a schema definition, which includes the list of
 
 The following JSON is a high-level representation of a schema that supports vector search. A schema requires a key field, and that key field can be searchable, filterable, sortable, and facetable. 
 
-A vector search field is of type `Collection(Edm.Single)`, and it can't be filterable, sortable, and facetable in this preview release. Because vector fields contain numeric content, it can't be used as a key, and it doesn't accept analyzers, normalizers, suggesters, or synonyms. It must have a "dimensions" property and an "algorithmConfiguration" property.
+A vector search field is of type `Collection(Edm.Single)`. Because vector fields are not textual, a vector fields can't be used as a key, and it doesn't accept analyzers, normalizers, suggesters, or synonyms. It must have a "dimensions" property and an "algorithmConfiguration" property.
 
 A schema that supports vector search can also support keyword search. Other non-vector fields in the index can use the analyzers, synonyms, and scoring profiles that you include in your index. For more information about parts of the schema not covered in this article., see [Create or Update Index (preview API)](https://learn.microsoft.com/rest/api/searchservice/preview-api/create-or-update-index).
 
@@ -61,7 +61,8 @@ A schema that supports vector search can also support keyword search. Other non-
     {  
       "name": "name_of_a_required_document_key_field",  
       "type": "Edm.String",  
-      "searchable": true (default where applicable) | false (only Edm.String and Collection(Edm.String) fields can be searchable),  
+      "searchable": true (default where applicable) | false 
+      
       "filterable": true (default) | false,  
       "sortable": true (default where applicable) | false (Collection(Edm.String) fields cannot be sortable),  
       "facetable": true (default where applicable) | false (Edm.GeographyPoint fields cannot be facetable),  
@@ -71,7 +72,7 @@ A schema that supports vector search can also support keyword search. Other non-
     {  
       "name": "name_of_vector_field",  
       "type": "Collection(Edm.Single)",  
-      "searchable": true (default where applicable) | false (only Edm.String and Collection(Edm.String) fields can be searchable),  
+      "searchable": true (default where applicable) | false
       "filterable": false,  
       "sortable": false,  
       "facetable": false,  

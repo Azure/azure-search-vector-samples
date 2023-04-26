@@ -1,42 +1,58 @@
 # Vector search in Azure Cognitive Search
 
-Vector search uses numerics instead of keywords to formulate queries and find matching documents. It's based on scans over a vector space, populated with embeddings that can describe the content of an item as a vector. Instead of ASCII matching on keywords or phrases, vector search looks for matches that have a similar composition. 
+Vector search is a method of information retrieval that aims to overcome the limitations of traditional keyword-based search. Rather than relying solely on lexical analysis and matching of individual query terms, vector search uses machine learning models to capture the meaning of words and phrases in context. This is done by representing documents and queries as vectors in a high-dimensional space, called an embedding. By understanding the intent of the query, vector search can return more relevant results that match the user's needs, even if the exact terms are not present in the document. Additionally, vector search can be applied to different types of content, such as images and videos, not just text.
 
- <!-- copied from azure OpenAI docs -->
-As explained in [this Azure OpenAI article](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/understand-embeddings), each embedding is a vector of floating-point numbers, such that the distance between two embeddings in the vector space is correlated with semantic similarity between two inputs in the original format. For example, if two texts are similar, then their vector representations should also be similar.
+## Embeddings and vectorization
 
-By performing similarity searches over vector representations of your data, you can find information that's similar to your search query, even if the search terms don't match up perfectly to the indexed content. While in some cases direct comparisons are appropriate (for example, find exact words in a sentence), a similarity search can help you find items that are semantically aligned, regardless of their representation or media type.
+*Embeddings* are a specific type of vector representation created by machine learning models that capture the semantic meaning of text, or abstract representations of other content such as images. Natural language machine learning models are trained on large amounts of data to identify patterns and relationships between words. During training, they learn to represent any input as a vector of real numbers in an intermediary step called the 'encoder'. After training is complete, these language models can be modified so the intermediary vector representation becomes the model's output. The resulting embeddings are high-dimensional vectors, where words with similar meanings are closer together in the vector space, as explained in [this Azure OpenAI Service article](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/understand-embeddings). The effectiveness of vector search in retrieving relevant information depends on the effectiveness of the embedding model in distilling the meaning of documents and queries into the resulting vector. The best models are well-trained on the types of data they are representing. This can be achieved by training directly on the problem space or fine-tuning a general-purpose model, such as GPT. Azure Cognitive Search today doesn't provide a way to vectorize documents and queries, leaving it up to you to pick the best embedding model for your data. The new vector search APIs allow you to store and retrieve vectors efficiently. 
 
-> [!NOTE]
-> Vector search is term-agnostic, so it's possible to get results from a corpus that doesn't include the terms that you've generated embeddings for. For example, if you generate an embedding for "best pets for small children" and submit it to a corpus containing recipes, you might get a match even if the corpus doesn't contain most of those terms.
+### What is the embedding space?
 
-## Terms and concepts
+These machine learning models map individual words, phrases, or documents (for natural language processing), images, or other forms of data into an abstract representation comprised of a vector of real numbers representing a coordinate in a high-dimensional space. In this embedding space, similar items are located close together, and dissimilar items are located farther apart.
 
-*Vectorization* converts chunks of text and other content to a mathematical representation.
+For example, documents that talk about different species of dogs would be clustered close together in the embedding space. Documents about cats would be close together, but farther from the dogs cluster while still being in the neighborhood for animals. Dissimilar concepts such as cloud computing would be much farther away. In practice, these embedding spaces are very abstract and don't have well-defined, human-interpretable meanings, but the core idea stays the same.
 
-*Vector fields* are of type "Collection(Edm.Single)" and are populated with embeddings (floating point numbers, which can be thousands depending on the size and complexity of the input).
+### How does this fit into search? 
 
-*Embedding* refers to a single vector representation of an object. It's a mathematical representation of an object, such as a word, sentence, or document, in a continuous vector space. This numerical representation allows for comparisons and analysis of the relationships between objects. In natural language processing (NLP) and machine learning, embeddings are often used to convert text data into numerical data that can be easily processed by algorithms. 
+The input data within a search request would be fed into the same machine learning model that generated the embedding space for the vector index. This model would output a vector in the same embedding space. Since similar data are clustered close together, finding matches is equivalent to finding the nearest vectors -- the "nearest neighbors" -- and returning the associated documents as the search result.
 
-*Embeddings* are a specific type of vector representation created by machine learning models that capture the semantic meaning of words or other content. For text, machine learning algorithms analyze large amounts of data to identify patterns and relationships between words. The resulting embeddings are high-dimensional vectors, where words with similar meanings are closer together in the vector space.
+Using the previous example, if a search request is about dogs, the model would map the query into a vector that exists somewhere in the cluster of vectors representing documents about dogs. Finding the nearest vectors -- the most "similar" based on a similarity metric -- would return those relevant documents.
+
+Commonly used similarity metrics include 'cosine', 'euclidean' (also known as 'l2 norm'), and 'dot product', which are summarized here. Cosine calculates the angle between two vectors. Euclidean calculates the Euclidean distance between two vectors, which is the l2-norm of the difference of the two vectors. Dot product is affected by both vectors' magnitudes and the angle between them. For normalized embedding spaces, dot product is equivalent to the cosine similarity, but is more efficient.
+
+## Approximate Nearest Neighbors
+
+Finding the true set of 'k' nearest neighbors requires comparing the input vector exhaustively against all vectors in the dataset. While each vector similarity calculation is relatively fast, performing these exhaustive comparisons across large datasets is computationally expensive and slow because of the sheer number of comparisons that are required. For example, if a dataset contains 10 million 1,000-dimensional vectors, computing the distance between the query vector and all vectors in the dataset would require scanning 37 GB of data (assuming single-precision floating point vectors) and a high number of similarity calculations.
+
+To address this challenge, approximate nearest neighbor (ANN) search methods are used to trade-off recall for speed. These methods can efficiently find a small set of candidate vectors that are most likely to be similar to the query vector, reducing the total number of vectors comparisons.
+
+Azure Cognitive Search will allow to choose between exhaustive and approximate kNN (k-nearest neighbor) algorithms, starting with HNSW. HNSW is a leading algorithm optimized for high-recall, low-latency applications where data distribution is unknown or can change frequently.
+
+## Hybrid search
+
+By performing similarity searches over vector representations of your data, you can find information that's similar to your search query, even if the search terms don't match up perfectly to the indexed content. In practice, we often need to expand lexical matches with semantic matches to guarantee good recall. The notion of composing term queries with vector queries is called *hybrid search*.
+
+In Azure Cognitive Search, embeddings are indexed alongside textual and numerical fields allowing you to issue hybrid term and vector queries and take advantage of existing functionalities like filtering, faceting, sorting, scoring profiles, and [semantic search](https://learn.microsoft.com/en-us/azure/search/semantic-search-overview) in a single search request.
+
+Hybrid search combines results from both term and vector queries, which use different ranking functions such as BM25 and cosine similarity. To present these results in a single ranked list, a method of merging the ranked result lists is needed. Azure Cognitive Search uses Reciprocal Rank Fusion, a non-parametric, rank-based method for this purpose. Other methods for ranking hybrid queries will be provided in the future.
 
 ## What can you do with vectors in Cognitive Search?
 
-You can create embeddings for documents, sentences, images, or audio. Embeddings might be trained on a single type of data (such as sentence embeddings), while others map multiple types of data into the same vector space (for example, sentences and images).
+We'll assume you created embeddings for your content like text, images, or audio. Embeddings might be trained on a single type of data (such as sentence embeddings), while others map multiple types of data into the same vector space (for example, sentences and images).
 
-In Azure Cognitive Search, vector search is integrated with the rest of the system. A [search index](https://learn.microsoft.com/azure/search/search-what-is-an-index) can have vector fields combined with text fields used for keyword search.
+You can now index those embeddings alongside other types of content in Azure Cognitive Search to perform:
 
-+ **Vector search for text**. You can encode text input using embedding models such as OpenAI embeddings or open source software (OSS) models such as SBERT, and retrieve with queries that are also encoded as vectors. 1. 
++ **Vector search for text**. You can encode text using embedding models such as OpenAI embeddings or open source models such as SBERT, and retrieve with queries that are also encoded as vectors to improve recall.
 
 + **Vector search across different data types**. You can encode images, text, audio, and video, or even a mix of them (for example, with models like CLIP) and do a similarity search across them.
 
-+ **Multi-lingual search**: Because searchable content is represented mathematically, a vector search can resolve to semantically similar content in multiple languages. 
++ **Multi-lingual search**: You can use multilingual embeddings models to represent your document in multiple languages in a single vector space to allow finding documents regardless of the language they are in.
+
++ **Filtered vector search**: You can use [filters](https://learn.microsoft.com/en-us/azure/search/search-filters) with vector queries to select a specific category of indexed documents, or to implement document-level security, geospatial search, and more.
 
 + **Hybrid search**. For text data, you can combine the best of vector retrieval and keyword retrieval to obtain the best results. Use with semantic search (preview) for even more accuracy with L2 reranking using the same language models that power Bing.  
 
-  Internally, within a single search index, there are inverted indexes for keyword search over text fields, and vector indexes for vector search. In hybrid scenarios, both forms of search are performed and the results are unified before the response is sent back.
-
-+ **Vector store**. A common scenario is to vectorize all of your data into a vector database, and then when the application needs to find an item, you use a query vector to retrieve similar items. Because Cognitive Search can store vectors, you could use it purely as a vector store.
++ **Vector database**. A common scenario is to vectorize all of your data into a vector database, and then when the application needs to find an item, you use a query vector to retrieve similar items. Because Cognitive Search can store vectors, you could use it purely as a vector store.
 
 ## Reciprocal Rank Fusion
 

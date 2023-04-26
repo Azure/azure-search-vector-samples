@@ -94,33 +94,37 @@ When you're ready to extend the quickstart or adapt the collection to you data, 
 
 + This feature is only available via indexes and queries that target **2023-07-01-preview** REST API. There is no Azure SDK support and no portal support. If you view or query a search index that has vector fields, the portal treats them as strings and any queries will be scored using BM25.
 
-  Your new index must be created using the new preview API, and your queries must target the preview API. You can't use vector search with existing indexes.
+* Your new index must be created using the new preview API, and your queries must target the preview API. You can't use vector search with existing indexes.
 
-+ Your search service must be a billable tier. Although the search service is billable, there is no additional charge for the vector search feature.
++ Your search service must be a billable tier. If the search service is already billable, there is no additional charge for the vector search feature.
 
 + Service and subscription limits haven't been finalized, but the [API request limits](https://learn.microsoft.com/azure/search/search-limits-quotas-capacity#api-request-limits) do apply. Request payloads cannot exceed 8K for URIs or 16 MB for the request body. The following additional limits apply to this preview:
 
-  + Maximum number of vectors fields per index: None. However, please keep in mind the vector float limit and index size limitations per SKU.
+  + Maximum number of vectors fields per index: Subject to [existing index field limits](https://learn.microsoft.com/en-us/azure/search/search-limits-quotas-capacity#index-limits). However, please keep in mind the float limit and index size limitations per SKU.
   + Maximum number of dimensions: 2048
 
 + Index definitions are currently subject to the following limitations:
 
   + Vector fields with complex types or collections of complex types aren't supported.
-  + Vector fields can't have filter, facet, or sort attributions.
 
 + Query definitions are currently subject to these limitations:
 
   + POST verbs are required. Don't use GET.
-  + $count isn't supported.
-  + Multi-field vector queries aren't supported. Specifically, you can't set "searchFields" to multiple vector fields.
-  + Multi-vector queries aren't supported. For example, the Postman collection has vector fields named TitleVector and ContentVector. Your query can include TitleVector or ContentVector, but not both.
-  + Sorting ($orderby) and pagination ($skip) for hybrid queries aren't supported.
+  + Multi-field vector queries aren't supported. Specifically, you can't set "vector.fields" property to multiple vector fields. For example, the Postman collection has vector fields named TitleVector and ContentVector. Your query can include TitleVector or ContentVector, but not both.
+  + Multi-vector queries aren't supported. A search request can carry a single vector query.
+  + Sorting ($orderby) and pagination ($skip) are not supported for hybrid queries.
+  + Facets ($facet) and count ($count) are not supported for vector and hybrid queries.
 
 + There is no official public documentation or samples beyond what you'll find in this private repository. Please contact us with any questions or concerns.
 
-## Storage and usage limits
+## Storage and float limits
 
-| SKU	| Storage quota (GB)| Floats limit per partition (1e6) |
+Float limits refers to how many floats can be indexed on a single partition.
+For example, 100 documents with a single, 1,536-dimensional vector field consume in total 100x1536=153,600 floats. 1000 documents with two 768-dimensional vector fields, consume 2x1000x768=1,536,000 floats.
+
+The floats limit is a soft limit. It means that in some cases you will be able to exceed the limit but indexing will always succeed as long as you are below the limit.
+
+| SKU	| Storage quota (GB)| Floats limit per partition (million) |
 |--|--|--|
 | Basic | 2 | 100 |
 | S1 | 25 | 250 |

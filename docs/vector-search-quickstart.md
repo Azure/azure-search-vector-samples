@@ -189,16 +189,17 @@ api-key: {{admin-api-key}}
 
 + Documents in the payload consist of fields defined in the index schema. 
 
-+ Vector fields can hold a maximum of 1536 embeddings each, and contain floating point values. The maximum number of embeddings is determined by the output dimensions of the model you're using. In this case, the maximum output dimensions of **text-embedding-ada-002** is 1536.
++ Vector fields can hold a maximum of 2014 embeddings each, and contain floating point values. The maximum number of embeddings is determined by the output dimensions of the model you're using. In this case, the maximum output dimensions of **text-embedding-ada-002** is 1536.
 
 ## Run queries
 
 Use the [Search Documents](/docs/rest-api-reference/search-documents.md) REST API for this request. Recall that the private preview has [several limitations](../README.MD#private-preview-limitations) related to queries:
 
-+ POST is required for this preview and the APi version must be 2023-07-01-preview
-+ $count isn't supported
++ POST is required for this preview and the API version must be 2023-07-01-Preview
 + Only one vector field per query at this time (for example, either "titleVector" or "contentVector", but not both)
-+ No sorting or paging (skip) on hybrid queries
++ Multi-vector queries aren't supported. A search request can carry a single vector query.
++ Sorting ($orderby) and pagination ($skip) are not supported for hybrid queries.
++ Facets ($facet) and count ($count) are not supported for vector and hybrid queries.
 
 There are 6 queries to demonstrate the patterns. We use the same query string (*"what azure services support full text search"*) across all of them so that you can compare results and relevance.
 
@@ -410,7 +411,7 @@ api-key: {{admin-api-key}}
 
 ### Key points:
 
-+ Vector search is specified through the vector "value" field. Keyword search is specified through "search".
++ Vector search is specified through the vector "vector.value" property. Keyword search is specified through "search" property.
 
 + In a hybrid search, you can integrate vector search with full text search over keywords. Filters, spell check, and semantic ranking apply to textual content only, and not vectors. In this final query, there is no semantic "answer" because the system didn't produce one that was sufficiently strong.
 
