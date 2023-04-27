@@ -9,7 +9,7 @@ As the private preview progresses, we'll have updates on bugs or behavior change
 
 Our latest deployment includes a breaking change to the API 2023-07-01 Preview API Version that you must update in your testing.
 
-1. In your index definition, **algorithmConfgiuration** has been updated to **vectorSearchConfiguration**
+1. In your index definition, **algorithmConfiguration** has been updated to **vectorSearchConfiguration**
 
 2. In your index definition, we have added a new hnswParamater **efSearch**. This property allows you to tune the size of the dynamic list containing the nearest neighbors, which is used during search time. Increasing this parameter may improve search results, at the expense of slower search. Increasing this parameter eventually leads to diminishing returns. A default value 800 will be used if this is omitted or null. The allowable range will be 100 to 1000.
 
