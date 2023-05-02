@@ -74,7 +74,7 @@ api-key: {{admin-api-key}}
             "searchable": true,
             "retrievable": true,
             "dimensions": 1536,
-            "algorithmConfiguration": "vectorConfig"
+            "vectorSearchConfiguration": "vectorConfig"
         },
         {
             "name": "content",
@@ -88,7 +88,7 @@ api-key: {{admin-api-key}}
             "searchable": true,
             "retrievable": true,
             "dimensions": 1536,
-            "algorithmConfiguration": "vectorConfig"
+            "vectorSearchConfiguration": "vectorConfig"
         }
     ],
     "corsOptions": {
@@ -101,7 +101,7 @@ api-key: {{admin-api-key}}
         "algorithmConfigurations": [
             {
                 "name": "vectorConfig",
-                "algorithm": "hnsw"
+                "kind": "hnsw"
             }
         ]
     },
@@ -132,7 +132,7 @@ You should get a status HTTP 201 success.
 
 + The "fields" collection includes a required key field, a category field, and pairs of fields (such as "title", "titleVector") for keyword and vector search. Co-locating vector and non-vector fields in the same index enables hybrid queries. For instance, you can combine filters, keyword search with semantic ranking, and vectors into a single query operation.
 
-+ Vector fields must be `"type": "Collection(Edm.Single)"` with `"dimensions"` and `"algorithmConfiguration"` properties. See [this article](rest-api-reference/create-or-update-index.md) for property descriptions.
++ Vector fields must be `"type": "Collection(Edm.Single)"` with `"dimensions"` and `"vectorSearchConfiguration"` properties. See [this article](rest-api-reference/create-or-update-index.md) for property descriptions.
 
 + The "vectorSearch" configuration is an array of algorithms, but only the "hnsw" algorithm is supported in this preview. Hierarchical Navigable Small World (HNSW) is part of the infrastructure that powers Azure Cognitive Search. It works well with [embedding models](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/models#embeddings-models) provided in Azure OpenAI.
 
