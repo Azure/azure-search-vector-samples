@@ -2,10 +2,12 @@
 
 As the private preview progresses, we'll have updates on bugs or behavior changes, doc updates, and demo updates. Check back here for a status summary of those updates.
 
-| Version | Date       | Changes                                                                                                                             |
-| ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| v0.1    | 2023-04-06 | Initial release                                                                                                                     |
-| v0.2    | 2023-04-24 | **[BREAKING]** Updated vectorSearch configuration properties, enabled existing indexes and all tiers, add efSearch property to hnsw |
+| Version | Date       | Changes                                                                                                                             | Regions                   |  
+| ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |  
+| v0.1    | 2023-04-06 | Initial release                                                                                                                     |                           |  
+| v0.2    | 2023-04-24 | **[BREAKING]** Updated vectorSearch configuration properties, enabled existing indexes and all tiers, add efSearch property to hnsw | Central US EUAP, East US 2 EUAP, West Central US, China North 3, China East 2, USGov Virginia, USGov Arizona, West Central US, China North 2, USGov Texas, Central US |  
+
+All other regions should use the v0.1 postman collection and schema. This change log will be updated daily.  
 
 Our latest deployment includes a breaking change to the API 2023-07-01 Preview API Version that you must update in your testing.
 
