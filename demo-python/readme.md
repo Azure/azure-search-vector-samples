@@ -6,6 +6,8 @@ The code reads the `text-sample.json` file, which contains the input data for wh
 
 The output is a combination of human-readable text and embeddings that can be pushed into a search index.
 
+![Python Vector Video](https://github.com/Azure/cognitive-search-vector-pr/blob/main/demo-python/data/images/python-vector-video.gif?raw=true)  
+
 ## Prerequisites
 
 To run this code, you will need the following:
