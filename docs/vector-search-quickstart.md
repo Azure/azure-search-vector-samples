@@ -22,7 +22,7 @@ For vector queries, *we've provided the embeddings for every query input*, but y
 
 + Azure Cognitive Search service (any region, any tier but free). However, to run the last two queries, S1 or higher is required, with [semantic search enabled](https://learn.microsoft.com/azure/search/semantic-search-overview#enable-semantic-search).
 
-+ [Sample Postman collection](/postman-collection/), with requests targeting the **2023-07-01-preview** API version of Azure Cognitive Search.
++ [Sample Postman collection](/postman-collection/), with requests targeting the **2023-07-01-preview** API version of Azure Cognitive Search. Please read the [Change Log](https://github.com/Azure/cognitive-search-vector-pr/blob/main/CHANGELIST.md) to see which version you should use. 
 
 + Optional "Create Query Embeddings" request: you'll need [Azure OpenAI](https://aka.ms/oai/access) with a deployment of **text-embedding-ada-002**. Provide the Azure OpenAI endpoint, key, model deployment name, and API version in the collection variables.
 
