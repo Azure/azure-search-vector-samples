@@ -41,9 +41,6 @@ Before running the code, ensure you have the [Jupyter extension](https://marketp
 
 To run the code, open the azure-search-vector-python-sample.ipynb file in Visual Studio Code and execute the cells by clicking the "Run" button or pressing Shift+Enter.
 
-Simple execute each code block
-
-
 ## Output
 
 The code writes the `input_data` with the added embeddings and `"@search.action"` field to the *docVectors.json* file in the `output` directory. The embeddings can be uploaded to an Azure Cognitive Search index using the 2023-07-01-preview API version of the [Add, Update, or Delete Documents REST API](../docs/rest-api-reference/upload-documents.md).
