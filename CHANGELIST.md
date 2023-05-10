@@ -5,15 +5,13 @@ As the private preview progresses, we'll have updates on bugs or behavior change
 | Version | Date       | Changes                                                                                                                             | Regions                   |  
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |  
 | v0.1    | 2023-04-06 | Initial release                                                                                                                     |                           |  
-| v0.2    | 2023-04-24 | **[BREAKING]** Updated vectorSearch configuration properties, enabled existing indexes and all tiers, add efSearch property to hnsw | Central US EUAP, East US 2 EUAP, West Central US, China North 3, China East 2, USGov Virginia, USGov Arizona, West Central US, China North 2, USGov Texas, Central US, East US |  
-
-All other regions should use the v0.1 postman collection and schema. This change log will be updated daily.  
+| v0.2    | 2023-04-24 | **[BREAKING]** Updated vectorSearch configuration properties, enabled existing indexes and all tiers, add efSearch property to hnsw 
 
 Our latest deployment includes a breaking change to the API 2023-07-01 Preview API Version that you must update in your testing.
 
 1. In your index definition, **algorithmConfiguration** has been updated to **vectorSearchConfiguration**
 
-2. In your index definition, we have added a new hnswParamater **efSearch**. This property allows you to tune the size of the dynamic list containing the nearest neighbors, which is used during search time. Increasing this parameter may improve search results, at the expense of slower search. Increasing this parameter eventually leads to diminishing returns. A default value 800 will be used if this is omitted or null. The allowable range will be 100 to 1000.
+2. In your index definition, we have added a new hnswParamater **efSearch**. This property allows you to tune the size of the dynamic list containing the nearest neighbors, which is used during search time. Increasing this parameter may improve search results, at the expense of slower search. Increasing this parameter eventually leads to diminishing returns. A default value 500 will be used if this is omitted or null. The allowable range will be 100 to 1000.
 
 3. In your index definition, **vectorSearch.algorithmConfigurations.algorithm** is now **vectorSearch.algorithmConfigurations.kind**. See below sample of the required updates:
 
