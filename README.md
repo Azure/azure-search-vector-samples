@@ -48,14 +48,14 @@ POST https://{{YOUR-SEARCH-SERVICE-NAME}}.search.windows.net/indexes?api-version
           "retrievable": true,
           "analyzer": "",
           "dimensions": 5,
-          "algorithmConfiguration": "vectorConfig"
+          "vectorSearchConfiguration": "vectorConfig"
         }
       ],
         "vectorSearch": {
             "algorithmConfigurations": [
                 {
                     "name": "vectorConfig",
-                    "algorithm": "hnsw"
+                    "kind": "hnsw"
                 }
             ]
         }
