@@ -4,7 +4,7 @@ Welcome to the private preview of the vector search feature in Azure Cognitive S
 
 Cognitive Search can index vectors, but it doesn't generate them. The documents that you push to your search service must contain vectors within the payload. Alternatively, you can use the Indexer to pull vectors from your data sources such as Blob Storage JSON files or CSVs.
 
-To create vectorized data, you can use any embedding model, but we recommend [Azure OpenAI Embeddings models](https://learn.microsoft.com/azure/cognitive-services/computer-vision/how-to/image-retrieval) or [Cognitive Services Vision Image Retrieval API](https://learn.microsoft.com/azure/cognitive-services/computer-vision/how-to/image-retrieval) for images. The Python and JavaScript samples in this repository call Azure OpenAI to generate text embeddings. You can request [access to Azure OpenAI](https://aka.ms/oai/access) in your Azure subscription to use the demo samples we've provided.
+To create vectorized data, you can use any embedding model, but we recommend [Azure OpenAI Embeddings models](https://learn.microsoft.com/azure/cognitive-services/openai/how-to/embeddings?tabs=console) or [Cognitive Services Vision Image Retrieval API](https://learn.microsoft.com/azure/cognitive-services/computer-vision/how-to/image-retrieval) for images. The Python and JavaScript samples in this repository call Azure OpenAI to generate text embeddings. You can request [access to Azure OpenAI](https://aka.ms/oai/access) in your Azure subscription to use the demo samples we've provided.
 
 ## Pricing
 
@@ -48,14 +48,14 @@ POST https://{{YOUR-SEARCH-SERVICE-NAME}}.search.windows.net/indexes?api-version
           "retrievable": true,
           "analyzer": "",
           "dimensions": 5,
-          "algorithmConfiguration": "vectorConfig"
+          "vectorSearchConfiguration": "vectorConfig"
         }
       ],
         "vectorSearch": {
             "algorithmConfigurations": [
                 {
                     "name": "vectorConfig",
-                    "algorithm": "hnsw"
+                    "kind": "hnsw"
                 }
             ]
         }
