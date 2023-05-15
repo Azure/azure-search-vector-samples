@@ -6,6 +6,9 @@ The code reads the `text-sample.json` file, which contains the input data for wh
 
 The output is a combination of human-readable text and embeddings that can be pushed into a search index.
 
+![Dotnet Vector Video](https://github.com/Azure/cognitive-search-vector-pr/blob/main/demo-dotnet/data/images/dotnet-vector-video.gif?raw=true)  
+
+
 ## Prerequisites
 
 To run this code, you will need the following:

@@ -176,6 +176,40 @@ namespace DotNetVectorDemo
             Console.WriteLine($"Total Results: {count}");
         }
 
+
+        internal static async Task SemanticHybridSearch(SearchClient searchClient, OpenAIClient openAIClient, string query)
+        {
+            // Generate the embedding for the query  
+            var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
+
+            // Perform the vector similarity search  
+            var vector = new SearchQueryVector { K = 3, Fields = "contentVector", Value = queryEmbeddings.ToArray() };
+            var searchOptions = new SearchOptions
+            {
+                Vector = vector,
+                Size = 10,
+                QueryType = SearchQueryType.Semantic,
+                Select = { "title", "content", "category" },
+            };
+
+            SearchResults<SearchDocument> response = await searchClient.SearchAsync<SearchDocument>(query, searchOptions);
+
+            int count = 0;
+            await foreach (SearchResult<SearchDocument> result in response.GetResultsAsync())
+            {
+                count++;
+                Console.WriteLine($"Title: {result.Document["title"]}");
+                Console.WriteLine($"Score: {result.Score}\n");
+                Console.WriteLine($"Content: {result.Document["content"]}");
+                Console.WriteLine($"Category: {result.Document["category"]}\n");
+            }
+            Console.WriteLine($"Total Results: {count}");
+        }
+
+
+
+
+
         internal static SearchIndex GetSampleIndex(string name)
         {
             string vectorSearchConfigName = "my-vector-config";
@@ -206,6 +240,8 @@ namespace DotNetVectorDemo
 
             return searchIndex;
         }
+
+
 
         internal static async Task<List<SearchDocument>> GetSampleDocumentsAsync(OpenAIClient openAIClient, List<Dictionary<string, object>> inputDocuments)
         {
