@@ -350,3 +350,4 @@ MigrationBackup/
 .ionide/
 .env
 demo-dotnet/code/local.settings.json
+local.settings.json
