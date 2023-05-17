@@ -189,7 +189,7 @@ api-key: {{admin-api-key}}
 
 + Documents in the payload consist of fields defined in the index schema. 
 
-+ Vector fields can hold a maximum of 2014 embeddings each, and contain floating point values. The maximum number of embeddings is determined by the output dimensions of the model you're using. In this case, the maximum output dimensions of **text-embedding-ada-002** is 1536.
++ Vector fields contain floating point values. Minimum is 2 and maximum is 2048 embeddings each. Although the model's maximum token limit is 8191, this quickstart stays under the vector field maximum. Dimensions are set to 1536 in this quickstart.
 
 ## Run queries
 
