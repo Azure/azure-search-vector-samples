@@ -183,7 +183,7 @@ publish/
 PublishScripts/
 
 # NuGet Packages
-*.nupkg
+nupkg
 # NuGet Symbol Packages
 *.snupkg
 # The packages folder can be ignored because of Package Restore
@@ -349,3 +349,5 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 .env
+demo-dotnet/code/local.settings.json
+local.settings.json

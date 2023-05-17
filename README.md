@@ -4,7 +4,7 @@ Welcome to the private preview of the vector search feature in Azure Cognitive S
 
 Cognitive Search can index vectors, but it doesn't generate them. The documents that you push to your search service must contain vectors within the payload. Alternatively, you can use the Indexer to pull vectors from your data sources such as Blob Storage JSON files or CSVs.
 
-To create vectorized data, you can use any embedding model, but we recommend [Azure OpenAI Embeddings models](https://learn.microsoft.com/azure/cognitive-services/computer-vision/how-to/image-retrieval) or [Cognitive Services Vision Image Retrieval API](https://learn.microsoft.com/azure/cognitive-services/computer-vision/how-to/image-retrieval) for images. The Python and JavaScript samples in this repository call Azure OpenAI to generate text embeddings. You can request [access to Azure OpenAI](https://aka.ms/oai/access) in your Azure subscription to use the demo samples we've provided.
+To create vectorized data, you can use any embedding model, but we recommend [Azure OpenAI Embeddings models](https://learn.microsoft.com/azure/cognitive-services/openai/how-to/embeddings?tabs=console) or [Cognitive Services Vision Image Retrieval API](https://learn.microsoft.com/azure/cognitive-services/computer-vision/how-to/image-retrieval) for images. The Python and JavaScript samples in this repository call Azure OpenAI to generate text embeddings. You can request [access to Azure OpenAI](https://aka.ms/oai/access) in your Azure subscription to use the demo samples we've provided.
 
 ## Pricing
 
@@ -48,14 +48,14 @@ POST https://{{YOUR-SEARCH-SERVICE-NAME}}.search.windows.net/indexes?api-version
           "retrievable": true,
           "analyzer": "",
           "dimensions": 5,
-          "algorithmConfiguration": "vectorConfig"
+          "vectorSearchConfiguration": "vectorConfig"
         }
       ],
         "vectorSearch": {
             "algorithmConfigurations": [
                 {
                     "name": "vectorConfig",
-                    "algorithm": "hnsw"
+                    "kind": "hnsw"
                 }
             ]
         }
@@ -68,7 +68,7 @@ We provide three demo solutions to get you started.
 
 | Sample | Purpose | Description |
 |--------|---------|-------------|
-| Python | Creates vector representations of images or text | A notebook that calls OpenAI to create vectorized data. We used this notebook to create the sample data for the demo index. A second notebook (text-semantic-kernel-embedding.ipynb) goes one step further by creating and loading the index on Azure Cognitive Search. See the [sample readme](/demo-python/demo-python/readme.md) for instructions on notebook setup. |
+| Python | Creates vector representations of images or text | A notebook that calls OpenAI to create vectorized data. We used this notebook to create the sample data for the demo index. You can revise your copy of the notebook to test vector search with other data and your own schemas. See the [sample readme](/demo-python/readme.md) for instructions on notebook setup. |
 | JavaScript| Creates vector representations of images or text | A node.js version of the Python sample. See the [sample readme](/demo-javascript/readme.md) for instructions on sample setup. |
 | Postman collection | Create, load, and query a search index that contains text and vector fields. | A collection of REST API calls to an Azure Cognitive Search instance. The requests in this collection include an index schema, sample documents, and sample queries. The collection is documented in [Quickstart: Vector search](/docs/vector-search-quickstart.md). Each query demonstrates key scenarios. <p>Use the [Postman app](https://www.postman.com/downloads/) and import the collection.</p> <p>Set collection variables to provide your search service URI and admin key</p> If you're unfamiliar with Postman, see this [Postman/REST quickstart for Cognitive Search](https://learn.microsoft.com/azure/search/search-get-started-rest).|
 

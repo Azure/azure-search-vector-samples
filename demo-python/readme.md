@@ -1,53 +1,48 @@
 # Readme: Generate embeddings using OpenAI with Python
 
-The notebooks in this repository contain Python code used to create vectorized data that can be indexed in a search index. There are two notebooks:
+This repository contains a Python notebook that demonstrates how to generate text embeddings using Azure OpenAI, insert those embeddings into a vector store in Azure Cognitive Search, and perform a wide variety of vector search queries such as vector searches with metadata filtering and hybrid (text + vectors)search. The code uses Azure OpenAI to generate embeddings for title and content fields. You'll need access to Azure OpenAI to run this demo.
 
-+ **text-openai-embedding.ipynb** generates embeddings using the text-embedding-ada-002 model on Azure OpenAI
-+ **demo-python\code\text-semantic-kernel-embedding.ipynb** generates embeddings *and* creates and loads an index on Azure Cognitive Search
+The code reads the `text-sample.json` file, which contains the input data for which embeddings need to be generated.
+
+The output is a combination of human-readable text and embeddings that can be pushed into a search index.
+
+![Python Vector Video](https://github.com/Azure/cognitive-search-vector-pr/blob/main/demo-python/data/images/python-vector-video.gif?raw=true)  
 
 ## Prerequisites
 
 To run this code, you will need the following:
 
-+ An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access)
-
-+ A deployment of the text-embedding-ada-002 embedding model in your Azure OpenAI service. We use API version 2022-12-01 in this demo. For the deployment name, we used the same name as the model, "text-embedding-ada-002".
-
-+ Azure OpenAI connection and model information
-
-  + OpenAI API key
-  + OpenAI embedding model deployment name
-  + OpenAI API version
-
-+ Python (these instructions were tested with version 3.9.x)
+- An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access)
+- A deployment of the `text-embedding-ada-002` embedding model in your Azure OpenAI service. This demo uses API version `2022-12-01`. We used the same name as the model for the deployment name, "text-embedding-ada-002".
+- Azure OpenAI connection and model information:
+  - OpenAI API key
+  - OpenAI embedding model deployment name
+  - OpenAI API version
+- Python (these instructions were tested with version 3.9.x)
 
 You can use [Visual Studio Code with the Python extension](https://code.visualstudio.com/docs/python/python-tutorial) for this demo. 
 
-You don't need Azure Cognitive Search for the first notebook, but for the end-to-end sample, provide the endpoint to your search service (any billable tier) and an API key.
-
-## Set up
+## Setup
 
 1. Clone this repository.
 
-2. Create a .env file in the same directory as the code and include the following variables:
+2. Create a `.env` file in the same directory as the code and include the following variables:
 
    ```
-   OPENAI_SERVICE_NAME=YOUR-OPENAI-SERVICE-NAME
-   DEPLOYMENT_NAME=YOUR-MODEL-DEPLOYMENT-NAME
+   AZURE_SEARCH_SERVICE_ENDPOINT=YOUR-SEARCH-SERVICE-ENDPOINT
+   AZURE_SEARCH_INDEX_NAME=YOUR-SEARCH-SERVICE-INDEX-NAME
+   AZURE_SEARCH_API_KEY=YOUR-SEARCH-SERVICE-ADMIN-KEY
+   OPENAI_ENDPOINT=YOUR-OPENAI-ENDPOINT
+   OPENAI_API_KEY=YOUR-OPENAI-API-KEY
    OPENAI_API_VERSION=YOUR-OPENAI-API-VERSION
    ```
 
 ## Run the Code
 
-1. Use Visual Studio Code or another Python IDE to open a notebook in the code folder. 
+Before running the code, ensure you have the [Jupyter extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) installed in Visual Studio Code.
 
-1. Execute the code in each cell. If you're using the end-to-end sample, provide the search URL and API key as variables inside the notebook.
+To run the code, navigate to the `code` folder and open the azure-search-vector-python-sample.ipynb file in Visual Studio Code and execute the cells by clicking the "Run" button or pressing Shift+Enter.
 
-## Check output
+## Output
 
-The code writes the input_data with the added embeddings and "@search.action" field to the *docVectors.json* file in the output directory. The embeddings can be uploaded to an Azure Cognitive Search index using the 2023-07-01-preview API version of the [Add, Update, or Delete Documents REST API](../docs/rest-api-reference/upload-documents.md). 
-
-+ text-openai-embedding.ipynb outputs "docVectors.json" and "queryVector.json". If you're using the Postman collection quickstart, you can paste the JSON into the body of the Upload documents request and also into the query requests.
-
-+ text-semantic-kernel-embedding.ipynb will create and load a search index containing vector fields on your Azure Cognitive Search service. Search Explorer isn't helpful for vector queries, but if your goal is a published search index, then this notebook can help. Other output includes "sk_docVectors.json" and "sk_queryVector.json" files.
-
+The code writes the `input_data` with the added embeddings and `"@search.action"` field to the *docVectors.json* file in the `output` directory. The embeddings can be uploaded to an Azure Cognitive Search index using the 2023-07-01-preview API version of the [Add, Update, or Delete Documents REST API](../docs/rest-api-reference/upload-documents.md). Next, you can perform multiple query experiences such as pure vector search, vector search with metadata filtering, hybrid search, and Hybrid Search with Semantic Reranking, Answers, Captions, and Highlights powered by Microsoft Bing. 

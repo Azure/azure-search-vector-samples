@@ -9,7 +9,7 @@ This article supplements [Create or Update Index (preview API)](https://learn.mi
 + [**vectorConfiguration**](#vectorsearch) used for configuring a vector search algorithm.
 + [**Collection(Edm.Single)**](#fields) data type, required for a vector field.
 + [**dimensions**](#field) property, required for a vector field.
-+ [**algorithmConfiguration**](#field) property, required for a vector field.
++ [**vectorSearchConfiguration**](#field) property, required for a vector field.
 
 To use vector search, you have to create a new index. An update won't be sufficient.
 
@@ -49,7 +49,7 @@ The body of the request contains a schema definition, which includes the list of
 
 The following JSON is a high-level representation of a schema that supports vector search. A schema requires a key field, and that key field can be searchable, filterable, sortable, and facetable. 
 
-A vector search field is of type `Collection(Edm.Single)`. Because vector fields are not textual, a vector fields can't be used as a key, and it doesn't accept analyzers, normalizers, suggesters, or synonyms. It must have a "dimensions" property and an "algorithmConfiguration" property.
+A vector search field is of type `Collection(Edm.Single)`. Because vector fields are not textual, a vector fields can't be used as a key, and it doesn't accept analyzers, normalizers, suggesters, or synonyms. It must have a "dimensions" property and an "vectorSearchConfiguration" property.
 
 A schema that supports vector search can also support keyword search. Other non-vector fields in the index can use the analyzers, synonyms, and scoring profiles that you include in your index. For more information about parts of the schema not covered in this article., see [Create or Update Index (preview API)](https://learn.microsoft.com/rest/api/searchservice/preview-api/create-or-update-index).
 
@@ -84,7 +84,7 @@ A schema that supports vector search can also support keyword search. Other non-
       "normalizer": "",
       "synonymMaps": "",
       "dimensions": integer,
-      "algorithmConfiguration": "name of vectorSearch configuration"
+      "vectorSearchConfiguration": "name of vectorSearch configuration"
     }
   ],
   "semantic": (optional) { },
@@ -155,7 +155,7 @@ Vector search is implemented at the field level. To support hybrid query scenari
             "searchable": true,
             "retrievable": true,
             "dimensions": 1536,
-            "algorithmConfiguration": "my-vector-config"
+            "vectorSearchConfiguration": "my-vector-config"
         },
         {
             "name": "contentVector",
@@ -163,7 +163,7 @@ Vector search is implemented at the field level. To support hybrid query scenari
             "searchable": true,
             "retrievable": true,
             "dimensions": 1536,
-            "algorithmConfiguration": "my-vector-config"
+            "vectorSearchConfiguration": "my-vector-config"
         }
     ],
     "corsOptions": {
@@ -176,7 +176,7 @@ Vector search is implemented at the field level. To support hybrid query scenari
         "algorithmConfigurations": [
             {
                 "name": "my-vector-config",
-                "algorithm": "hnsw",
+                "kind": "hnsw",
                 "hnswParameters": {
                     "m": 4,
                     "efConstruction": 400,
@@ -377,10 +377,11 @@ A vectorSearch configuration is a part of an index definition that's used to con
     "algorithmConfigurations": [
         {
             "name": "my-vector-config",
-            "algorithm": "hnsw",
+            "kind": "hnsw",
             "hnswParameters": {
                 "m": 4,
                 "efConstruction": 400,
+                "efSearch": 500,
                 "metric": "cosine"
             }
         }
@@ -391,8 +392,8 @@ A vectorSearch configuration is a part of an index definition that's used to con
 |Attribute|Description|  
 |---------------|-----------------|  
 |name|Required. The name of the algorithm configuration. |
-|algorithm| Must be '"hnsw"` for the Hierarchical Navigable Small World (HNSW) algorithm. |
-|hnswParameters | Parameters for "hnsw" include the following: <br><br>"m": Integer. The number of bi-directional links created for every new element during construction. A default value of 4 will be used if this is omitted or null. Larger values lead to denser graphs, improving query performance, but requires more memory and computation. The allowable range is 4 to 10, and the default is 4. </br></br>"efConstruction": Integer. The size of the dynamic list for the nearest neighbors used during indexing. Larger values lead to a better index quality, but requires more memory and computation. A default value of 400 will be used if this is omitted or null. The allowable range is 100 to 1000. </br></br>"metric": String. The similarity metric to use for vector comparisons. For hnsw, the allowed values are "cosine", "euclidean", and "dotProduct". A default value of "cosine" will be used if this is omitted or null. |
+|kind| Must be '"hnsw"` for the Hierarchical Navigable Small World (HNSW) algorithm. |
+|hnswParameters | Parameters for "hnsw" include the following: <br><br>"m": Integer. The number of bi-directional links created for every new element during construction. A default value of 4 will be used if this is omitted or null. Larger values lead to denser graphs, improving query performance, but requires more memory and computation. The allowable range is 4 to 10, and the default is 4. </br></br>"efConstruction": Integer. The size of the dynamic list for the nearest neighbors used during indexing. Larger values lead to a better index quality, but requires more memory and computation. A default value of 400 will be used if this is omitted or null. The allowable range is 100 to 1000. </br></br>"metric": String. The similarity metric to use for vector comparisons. For hnsw, the allowed values are "cosine", "euclidean", and "dotProduct". A default value of "cosine" will be used if this is omitted or null. </br></br>"efSearch": Integer. The size of the dynamic list containing the nearest neighbors, which is used during search time. Increasing this parameter may improve search results, at the expense of slower search. Increasing this parameter leads to diminishing returns. A default value 500 will be used if this is omitted or null. The allowable range will be 100 to 1000. |
 
 ## See also
 
