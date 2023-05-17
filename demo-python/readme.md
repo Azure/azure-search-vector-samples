@@ -1,10 +1,9 @@
 # Readme: Generate embeddings using OpenAI with Python
 
-The notebook in this repository contains Python code used to create vectorized data that can be indexed in a search index. There are no calls to Cognitive Search, but it does use Azure OpenAI to generate embeddings for title and content fields. You'll need access to Azure OpenAI to run this demo. 
+The notebooks in this repository contain Python code used to create vectorized data that can be indexed in a search index. There are two notebooks:
 
-The code reads the text-sample.json file, which contains the input data for which embeddings need to be generated.
-
-When you finish the steps, the output is combination of human readable text and embeddings that can be pushed to a search index.
++ **text-openai-embedding.ipynb** generates embeddings using the text-embedding-ada-002 model on Azure OpenAI
++ **demo-python\code\text-semantic-kernel-embedding.ipynb** generates embeddings *and* creates and loads an index on Azure Cognitive Search
 
 ## Prerequisites
 
@@ -22,11 +21,11 @@ To run this code, you will need the following:
 
 + Python (these instructions were tested with version 3.9.x)
 
-You can use [Visual Studio Code with the Python extension](https://code.visualstudio.com/docs/python/python-tutorial) for this demo. For help setting up the environment, see this [Python quickstart](https://learn.microsoft.com/azure/search/search-get-started-python).
+You can use [Visual Studio Code with the Python extension](https://code.visualstudio.com/docs/python/python-tutorial) for this demo. 
 
-You don't need Azure Cognitive Search for this step.
+You don't need Azure Cognitive Search for the first notebook, but for the end-to-end sample, provide the endpoint to your search service (any billable tier) and an API key.
 
-## Setup
+## Set up
 
 1. Clone this repository.
 
@@ -40,14 +39,15 @@ You don't need Azure Cognitive Search for this step.
 
 ## Run the Code
 
-To run the code, execute the following command from a command line:
+1. Use Visual Studio Code or another Python IDE to open a notebook in the code folder. 
 
-```python main.py```
+1. Execute the code in each cell. If you're using the end-to-end sample, provide the search URL and API key as variables inside the notebook.
 
-This will generate embeddings for the title and content fields of the input data and write the embeddings to the *docVectors.json* file in the output directory.
-
-## Output
+## Check output
 
 The code writes the input_data with the added embeddings and "@search.action" field to the *docVectors.json* file in the output directory. The embeddings can be uploaded to an Azure Cognitive Search index using the 2023-07-01-preview API version of the [Add, Update, or Delete Documents REST API](../docs/rest-api-reference/upload-documents.md). 
 
-You can also generate a query embedding to perform vector searches.
++ text-openai-embedding.ipynb outputs "docVectors.json" and "queryVector.json". If you're using the Postman collection quickstart, you can paste the JSON into the body of the Upload documents request and also into the query requests.
+
++ text-semantic-kernel-embedding.ipynb will create and load a search index containing vector fields on your Azure Cognitive Search service. Search Explorer isn't helpful for vector queries, but if your goal is a published search index, then this notebook can help. Other output includes "sk_docVectors.json" and "sk_queryVector.json" files.
+
