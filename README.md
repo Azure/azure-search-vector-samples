@@ -10,15 +10,15 @@ To create vectorized data, you can use any embedding model, but we recommend [Az
 
 This private preview requires billable resources. You'll need to cover the cost of running Azure Cognitive Search, as well as Azure OpenAI if you choose to use their embedding models.
 
-+ [Azure Cognitive Search pricing](https://azure.microsoft.com/pricing/details/search/#pricing) (see also [Plan and manage costs](https://learn.microsoft.com/azure/search/search-sku-manage-costs)).
++ [Azure Cognitive Search pricing](https://azure.microsoft.com/pricing/details/search/#pricing) for a tier (SKU) that's Basic or higher (see also [Plan and manage costs](https://learn.microsoft.com/azure/search/search-sku-manage-costs)).
 
-+ [Azure OpenAI pricing](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/)
++ [Azure OpenAI pricing](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/) for metered usage of embedding models.
 
 ## Get started
 
-For this private preview, we've enabled vector search support in all Azure Cognitive Search regions and all tiers except Free.
+For this private preview, we've enabled vector search support in all Azure Cognitive Search regions, on all tiers except Free.
 
-You can use an existing search service in a supported tier and region, but you must create a new index.
+You can use an existing billable search service, but you must create a new index. Be sure to review [preview limitations](#private-preview-limitations) and [storage and float limits](#storage-and-float-limits).
 
 ### 1 - Setup
 
@@ -86,7 +86,7 @@ Sample data can be found in the Upload Docs request. It consists of 108 document
 
 When you're ready to extend the quickstart or adapt the collection to you data, you'll need to:
 
-+ Create vector representations for specific fields. Choose fields that have semantic value, such as descriptions or summaries. You can use either the [Python demo](/demo-python/) or [JavaScript demo](/demo-javascript/) to generate embeddings. To use the demos as-is, you'll need [Azure OpenAI](https://aka.ms/oai/access) in your subscription.
++ Create vector representations for specific fields. Choose fields that have semantic value, such as descriptions or summaries. You can use either the [Python demo](/demo-python/readme.md) or [JavaScript demo](/demo-javascript/readme.md) to generate embeddings. To use the demos as-is, you'll need [Azure OpenAI](https://aka.ms/oai/access) in your subscription.
 
 + Create, load, and query your custom index. Use the **2023-07-01-preview** REST API for these operations. We recommend Postman or a similar tool for proof-of-concept testing.
 
@@ -101,6 +101,7 @@ When you're ready to extend the quickstart or adapt the collection to you data, 
 + Service and subscription limits haven't been finalized, but the [API request limits](https://learn.microsoft.com/azure/search/search-limits-quotas-capacity#api-request-limits) do apply. Request payloads cannot exceed 8K for URIs or 16 MB for the request body. The following additional limits apply to this preview:
 
   + Maximum number of vectors fields per index: Subject to [existing index field limits](https://learn.microsoft.com/en-us/azure/search/search-limits-quotas-capacity#index-limits). However, please keep in mind the float limit and index size limitations per SKU.
+  
   + Maximum number of dimensions: 2048
 
 + Index definitions are currently subject to the following limitations:

@@ -2,12 +2,14 @@
 
 Cognitive Search doesn't host vectorization models, so one of your challenges is creating embeddings for query inputs and outputs. You can use any embedding model, but this article assumes Azure OpenAI embeddings models. Demos in the private preview tap the [similarity embedding models](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/models#embeddings-models) of Azure OpenAI.
 
+Dimension attributes have a minimum of 2 and a maximum of 2048 dimensions per vector field.
+
 ## How models are used
 
 + Query inputs will require that you submit user-provided input to an embedding model that quickly converts human readable text into a vector. Optimizing for speed is the objective. 
 
-  + We used **text-embedding-ada-002** to generate embeddings.
-  
+  + We used **text-embedding-ada-002** to generate text embeddings and **Florence Vision API** for image embeddings.
+
   + To increase the success rate of generation, we slowed the rate at which calls to the model are made. For the Python demo, we used [tenacity](https://pypi.org/project/tenacity/).
 
 + Query outputs will be any matching documents found in a search index. Your search index must have been previously loaded with documents having one or more vector fields with embeddings. Whatever model you used for indexing, use the same model for queries.
