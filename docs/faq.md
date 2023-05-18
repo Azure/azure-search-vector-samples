@@ -14,7 +14,7 @@ Vector search works by accepting a query input represented as a vector. The sear
 
 In Cognitive Search, you can index vector data as fields in documents alongside textual and other [types of content](https://learn.microsoft.com/en-us/rest/api/searchservice/supported-data-types). The data type for a vector field is "Collection(Edm.Single)", but other types of vector fields will be supported in the future, like Collection(Edm.Double) and Collection(Edm.Int32). Vector fields can be populated using an [Indexer](https://learn.microsoft.com/en-us/azure/search/search-indexer-overview) or by the [Push API](https://learn.microsoft.com/en-us/azure/search/search-what-is-data-import#pushing-data-to-an-index).
 
-Vector queries can be issued standalone or in combination with other query types including term queries and filters in the same search request.
+Vector queries can be issued standalone or in combination with other query types, including term queries and filters in the same search request.
 
 ## Can Cognitive Search vectorize my content or queries?
 
@@ -36,7 +36,7 @@ No. You must create a new index using the 2023-07-01-preview REST API. Your quer
 
 ## How to enable vector search on a search index?
 
-To enable vector search in an index you will need:
+To enable vector search in an index you will need to:
 
 + Add one or more fields of type **`Collection(Edm.Single)`**, with a **"dimensions"** property and an **"algorithmConfiguration"** property.
 + Add **`vectorSearch`** section to the index definition specifying the configuraiton used by vector search fields, including the parameters of the Approximate Nearest Neighbor algorithm used, like HNSW.

@@ -20,7 +20,7 @@ To run this code, you will need the following:
   - OpenAI API version
 - Python (these instructions were tested with version 3.9.x)
 
-You can use [Visual Studio Code with the Python extension](https://code.visualstudio.com/docs/python/python-tutorial) for this demo. For help setting up the environment, see this [Python quickstart](https://learn.microsoft.com/azure/search/search-get-started-python).
+You can use [Visual Studio Code with the Python extension](https://code.visualstudio.com/docs/python/python-tutorial) for this demo. 
 
 ## Setup
 
@@ -36,6 +36,7 @@ You can use [Visual Studio Code with the Python extension](https://code.visualst
    OPENAI_API_KEY=YOUR-OPENAI-API-KEY
    OPENAI_API_VERSION=YOUR-OPENAI-API-VERSION
    ```
+
 ## Run the Code
 
 Before running the code, ensure you have the [Jupyter extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) installed in Visual Studio Code.
