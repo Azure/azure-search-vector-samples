@@ -8,36 +8,43 @@ import azure.functions as func
 def main(req: func.HttpRequest) -> func.HttpResponse:  
     logging.info('Python HTTP trigger function processed a request.')  
   
-    # Extract imageUrl from request payload  
+    # Extract values from request payload  
     req_body = req.get_body().decode('utf-8')  
     logging.info(f"Request body: {req_body}")  
     request = json.loads(req_body)  
-    imageUrl = request['values'][0]['data']['imageUrl']  
+    values = request['values']  
   
-    # Extract recordId from request payload  
-    recordId = request['values'][0]['recordId']  
-    logging.info(f"Input recordId: {recordId}")  
+    # Process values and generate the response payload  
+    response_values = []  
+    for value in values:  
+        imageUrl = value['data']['imageUrl']  
+        recordId = value['recordId']  
+        logging.info(f"Input imageUrl: {imageUrl}")  
+        logging.info(f"Input recordId: {recordId}")  
   
-    # Get image embeddings  
-    vector = get_image_embeddings(imageUrl)  
+        # Get image embeddings  
+        vector = get_image_embeddings(imageUrl)  
+  
+        # Add the processed value to the response payload  
+        response_values.append({  
+            "recordId": recordId,  
+            "data": {  
+                "vector": vector  
+            },  
+            "errors": None,  
+            "warnings": None  
+        })  
   
     # Create the response object  
     response_body = {  
-        "values": [  
-            {  
-                "recordId": recordId,  
-                "data": {  
-                    "vector": vector  
-                },  
-                "errors": None,  
-                "warnings": None  
-            }  
-        ]  
+        "values": response_values  
     }  
     logging.info(f"Response body: {response_body}")  
   
     # Return the response  
     return func.HttpResponse(json.dumps(response_body), mimetype="application/json")  
+
+
   
 def get_image_embeddings(imageUrl):  
     cogSvcsEndpoint = os.environ["COGNITIVE_SERVICES_ENDPOINT"]  
