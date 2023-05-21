@@ -2,11 +2,13 @@
 
 This repository contains a Python notebook that demonstrates how to generate text embeddings using Azure OpenAI, insert those embeddings into a vector store in Azure Cognitive Search, and perform a wide variety of vector search queries such as vector searches with metadata filtering and hybrid (text + vectors)search. The code uses Azure OpenAI to generate embeddings for title and content fields. You'll need access to Azure OpenAI to run this demo.
 
+This repository also contains a Python notebook that demonstrates how to use the indexer and custom skills to generate embeddings for Azure Cognitive Services Florence Vision API for Image embeddings and perform vector searches form text to image as well as image to image. You'll need access to Azure Cognitive Services to run this demo.
+
 The code reads the `text-sample.json` file, which contains the input data for which embeddings need to be generated.
 
 The output is a combination of human-readable text and embeddings that can be pushed into a search index.
 
-![Python Vector Video](https://github.com/Azure/cognitive-search-vector-pr/blob/main/demo-python/data/images/python-vector-video.gif?raw=true)  
+![Python Vector Video](https://github.com/Azure/cognitive-search-vector-pr/blob/main/demo-python/data/images/python-vector-video.gif?raw=true)
 
 ## Prerequisites
 
@@ -20,7 +22,7 @@ To run this code, you will need the following:
   - OpenAI API version
 - Python (these instructions were tested with version 3.9.x)
 
-You can use [Visual Studio Code with the Python extension](https://code.visualstudio.com/docs/python/python-tutorial) for this demo. 
+You can use [Visual Studio Code with the Python extension](https://code.visualstudio.com/docs/python/python-tutorial) for this demo.
 
 ## Setup
 
@@ -45,4 +47,4 @@ To run the code, navigate to the `code` folder and open the azure-search-vector-
 
 ## Output
 
-The code writes the `input_data` with the added embeddings and `"@search.action"` field to the *docVectors.json* file in the `output` directory. The embeddings can be uploaded to an Azure Cognitive Search index using the 2023-07-01-preview API version of the [Add, Update, or Delete Documents REST API](../docs/rest-api-reference/upload-documents.md). Next, you can perform multiple query experiences such as pure vector search, vector search with metadata filtering, hybrid search, and Hybrid Search with Semantic Reranking, Answers, Captions, and Highlights powered by Microsoft Bing. 
+The code writes the `input_data` with the added embeddings and `"@search.action"` field to the _docVectors.json_ file in the `output` directory. The embeddings can be uploaded to an Azure Cognitive Search index using the 2023-07-01-preview API version of the [Add, Update, or Delete Documents REST API](../docs/rest-api-reference/upload-documents.md). Next, you can perform multiple query experiences such as pure vector search, vector search with metadata filtering, hybrid search, and Hybrid Search with Semantic Reranking, Answers, Captions, and Highlights powered by Microsoft Bing.
