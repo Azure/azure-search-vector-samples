@@ -5,10 +5,10 @@ When using Natural Language Processing (NLP), REST APIs that generate embedding 
 ## Factors to consider when chunking data
 
 When it comes to chunking data, various factors need to be considered to have a successful outcome, such as:
-1.	Type and size of data: Your data type (such as content, catalogue and such) short documents, or long documents, will determine the best approach to chunking your data.
-2.	User queries: Understanding the types of queries your users make will enable you to create chunks that contain the necessary data to respond to their queries.
-3.	Chunk content overlap: The amount of overlap between chunks is important to ensure that the semantics are not lost between one chunk and the other. 
-4.	Large Language Models (LLM) and their performance guidelines: Your end-to-end pipeline's  performance guidelines regarding chunking sizes should be considered to ensure that you use a chunk size that works best for all of them. In other words, if you use
+1. Type and size of data: The type and size of your data, whether it is heavy in content, catalogue data, or short or long documents, will determine the best approach to chunking.
+2. User queries: Understanding the types of queries your users make will enable you to create chunks that contain the necessary data to respond to their queries.
+3. Chunk content overlap: The amount of overlap between chunks may be important to ensure that the semantics are not lost between one chunk and the other.
+3. Large Language Models (LLM) and their performance guidelines: It is important to consider the performance guidelines of your end-to-end pipeline's large language models regarding chunking sizes. This will ensure that you use a chunk size that works best for all of them. For instance, if you use models for summarization and embeddings, you need to make sure to utilize an optimal chunk size that works for both and adjust to the chunk size recommended sizes for better performance.
 
 ## Common chunking techniques
 
