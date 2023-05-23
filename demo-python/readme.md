@@ -21,6 +21,29 @@ To run this code, you will need the following:
   - OpenAI embedding model deployment name
   - OpenAI API version
 - Python (these instructions were tested with version 3.9.x)
+- Connect to [Azure SDK Python Dev Feed](https://dev.azure.com/azure-sdk/public/_artifacts/feed/azure-sdk-for-python/connect/pip) to use the alpha version of the azure-search-documents pip package.
+  - [Download Python](https://www.python.org/downloads/)
+  - Update Pip: `python -m pip install --upgrade pip`
+  - Install the keyring `pip install keyring artifacts-keyring`
+  - If you're using Linux, ensure you've installed the [prerequisites](https://pypi.org/project/artifacts-keyring/), which are required for artifacts-keyring.
+  - Add a `pip.ini` (Windows) or `pip.conf` (Mac/Linux) file to your virtualenv or where Python is located on your machine:
+  ```plaintext
+  [global]
+  index-url=https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-python/pypi/simple/
+  ```
+  - For example, on my machine, I placed mine in the following directory: `C:\Users\fsunavala\AppData\Local\Programs\Python\Python39\pip.ini`
+  - **Note**: Be sure you don't save it as a `.txt` file
+- Installation steps if using Poetry:
+  - Install Poetry by following the instructions at https://python-poetry.org/docs/.
+    Navigate to your project folder containing the `pyproject.toml` file.
+  - Run the following command to configure Poetry to use the Azure SDK Python dev feed:
+  ```
+  poetry config repositories.azure-sdk-for-python https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-python/pypi/simple/
+  ```
+  - To install the azure-search-documents package from the dev feed, run the following command:
+  ```
+  poetry add azure-search-documents==11.5.0-alpha.20230522.2
+  ```
 
 You can use [Visual Studio Code with the Python extension](https://code.visualstudio.com/docs/python/python-tutorial) for this demo.
 
@@ -30,7 +53,7 @@ You can use [Visual Studio Code with the Python extension](https://code.visualst
 
 2. Create a `.env` file in the same directory as the code and include the following variables:
 
-   ```
+   ```plaintext
    AZURE_SEARCH_SERVICE_ENDPOINT=YOUR-SEARCH-SERVICE-ENDPOINT
    AZURE_SEARCH_INDEX_NAME=YOUR-SEARCH-SERVICE-INDEX-NAME
    AZURE_SEARCH_API_KEY=YOUR-SEARCH-SERVICE-ADMIN-KEY
@@ -43,7 +66,7 @@ You can use [Visual Studio Code with the Python extension](https://code.visualst
 
 Before running the code, ensure you have the [Jupyter extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) installed in Visual Studio Code.
 
-To run the code, navigate to the `code` folder and open the azure-search-vector-python-sample.ipynb file in Visual Studio Code and execute the cells by clicking the "Run" button or pressing Shift+Enter.
+To run the code, navigate to the `code` folder and open the `azure-search-vector-python-sample.ipynb` file in Visual Studio Code and execute the cells by clicking the "Run" button or pressing Shift+Enter.
 
 ## Output
 
