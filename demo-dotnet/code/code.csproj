@@ -6,12 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-    <RestoreSources>$(MSBuildThisFileDirectory)../build;https://api.nuget.org/v3/index.json</RestoreSources>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.5" />
     <PackageReference Include="Azure.Identity" Version="1.9.0" />
-    <PackageReference Include="Azure.Search.Documents" Version="11.5.0-alpha.20230510.3" />
+    <PackageReference Include="Azure.Search.Documents" Version="11.5.0-alpha.20230522.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="OpenAI.Api" Version="1.0.0" />
   </ItemGroup>

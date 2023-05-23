@@ -6,8 +6,7 @@ The code reads the `text-sample.json` file, which contains the input data for wh
 
 The output is a combination of human-readable text and embeddings that can be pushed into a search index.
 
-![Dotnet Vector Video](https://github.com/Azure/cognitive-search-vector-pr/blob/main/demo-dotnet/data/images/dotnet-vector-video.gif?raw=true)  
-
+![Dotnet Vector Video](https://github.com/Azure/cognitive-search-vector-pr/blob/main/demo-dotnet/data/images/dotnet-vector-video.gif?raw=true)
 
 ## Prerequisites
 
@@ -20,8 +19,34 @@ To run this code, you will need the following:
   - OpenAI embedding model deployment name
   - OpenAI API version
 - .NET 5.0 SDK or later
+- Connect to [Azure SDK .NET Dev Feed](https://dev.azure.com/azure-sdk/public/_artifacts/feed/azure-sdk-for-net/NuGet/Azure.Search.Documents/overview/11.5.0-alpha.20230522.2) to use the alpha version of the Azure Search Documents .NET SDK nuget package.
+  - [Download and install the .NET Core SDK (2.1.400+)](https://dotnet.microsoft.com/download)
+  - [Download and install the credential provider](https://github.com/microsoft/artifacts-credprovider#azure-artifacts-credential-provider)
+  - Verify that you have a `nuget.config` file in the same folder as your `.csproj` or `.sln file`. If not, paste the following content into a `nuget.config` file:
 
-You can use [Visual Studio Code with the Python extension](https://code.visualstudio.com/docs/python/python-tutorial) for this demo. For help setting up the environment, see this [Python quickstart](https://learn.microsoft.com/azure/search/search-get-started-python).
+  ```xml
+  <?xml version="1.0" encoding="utf-8"?>
+  <configuration>
+    <packageSources>
+      <clear />
+      <add key="azure-sdk-for-net" value="https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-net/nuget/v3/index.json" />
+      </packageSources>
+  </configuration>
+  ```
+
+  - Restore packages (using the interactive flag, which allows dotnet to prompt you for credentials) by running the following command in the VS Code Terminal:
+
+  ```
+  dotnet restore --interactive
+  ```
+
+  - **Note**: You may be prompted to install the Azure Artifacts credential provider if it's not already installed. Follow the prompts to complete the installation.
+
+  - Once the packages are restored, you can install the `Azure.Search.Documents` package with the desired version by running the following command in the terminal:
+
+  ```
+  dotnet add package Azure.Search.Documents --version 11.5.0-alpha.20230522.2
+  ```
 
 You can use [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Studio Code with the C# extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) for this demo.
 
@@ -31,7 +56,7 @@ You can use [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Stud
 
 2. Create a `local.settings.json` file in the same directory as the code and include the following variables:
 
-   ```
+   ```plaintext
    {
     "AZURE_SEARCH_SERVICE_ENDPOINT": "YOUR-SEARCH-SERVICE-ENDPOINT",
     "AZURE_SEARCH_INDEX_NAME": "YOUR-SEARCH-SERVICE-INDEX-NAME",

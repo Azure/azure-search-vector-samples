@@ -38,7 +38,7 @@ No. You must create a new index using the 2023-07-01-preview REST API. Your quer
 
 To enable vector search in an index you will need to:
 
-+ Add one or more fields of type **`Collection(Edm.Single)`**, with a **"dimensions"** property and an **"algorithmConfiguration"** property.
++ Add one or more fields of type **`Collection(Edm.Single)`**, with a **"dimensions"** property and an **"vectorSearchConfiguration"** property.
 + Add **`vectorSearch`** section to the index definition specifying the configuraiton used by vector search fields, including the parameters of the Approximate Nearest Neighbor algorithm used, like HNSW.
 + Use the **2023-07-01-Preview** API verison.
 + Index documents with vector content using an [Indexer](https://learn.microsoft.com/en-us/azure/search/search-indexer-overview) or the [Push API](https://learn.microsoft.com/en-us/azure/search/search-what-is-data-import#pushing-data-to-an-index).
