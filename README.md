@@ -30,7 +30,7 @@ If you fork or clone this repo, help us protect the private preview status of th
 To verify feature availability, issue a REST call that creates a new vector search index using the new preview REST API. A successful response confirms feature availability.
 
 ```http
-POST https://{{YOUR-SEARCH-SERVICE-NAME}}.search.windows.net/indexes?api-version=2023-07-01-preview
+POST https://{{YOUR-SEARCH-SERVICE-NAME}}.search.windows.net/indexes?api-version=2023-07-01-Preview
   Content-Type: application/json
   api-key: {{YOUR-ADMIN-API-KEY}}
     {  
@@ -84,7 +84,7 @@ Sample data can be found in the Upload Docs request. It consists of 108 document
 
 1. Import the collection into Postman.
 1. In collection variables, provide your search service URI, an admin API key, an index name.
-1. Run each request in sequence using API version: **2023-07-01-preview**.
+1. Run each request in sequence using API version: **2023-07-01-Preview**.
 
 ## 4 - Try it with your data
 
@@ -92,11 +92,11 @@ When you're ready to extend the quickstart or adapt the collection to you data, 
 
 + Create vector representations for specific fields. Choose fields that have semantic value, such as descriptions or summaries. You can useany of the demos currently available in .NET, Python, and JavaScript to generate embeddings. To use the demos as-is, you'll need [Azure OpenAI](https://aka.ms/oai/access) in your subscription.
 
-+ Create, load, and query your custom index. Use the **2023-07-01-preview** REST API for these operations. We recommend Postman or a similar tool for proof-of-concept testing.
++ Create, load, and query your custom index. Use the **2023-07-01-Preview** REST API for these operations. We recommend Postman or a similar tool for proof-of-concept testing.
 
 ## Private preview limitations
 
-+ This feature is only available via indexes and queries that target **2023-07-01-preview** REST API. There is no Portal support at this time. If you view or query a search index that has vector fields, the portal treats them as strings and any queries will be scored using BM25.
++ This feature is only available via indexes and queries that target **2023-07-01-Preview** REST API. There is no Portal support at this time. If you view or query a search index that has vector fields, the portal treats them as strings and any queries will be scored using BM25.
 + You can either create a new index or add a vector field to an existing index but you must target the preview API. 
 + Your search service must be a billable tier. If the search service is already billable, there is no additional charge for the vector search feature.
 
