@@ -122,20 +122,22 @@ When you're ready to extend the quickstart or adapt the collection to you data, 
 
 ## Storage and vector index size limits
 
-The size of your vector index in memory is restricted based on the reserved memory for the chosen SKU. It is calculated **per partition** and is a hard limit. The storage and vector index size quotas are not separate quotas; vector indexes share the same underlying storage quota.
+The size of your vector index in memory is restricted based on the reserved memory for the chosen SKU. It is calculated **per partition** and is a hard limit. The storage and vector index size quotas are not separate quotas; vector indexes share the same underlying storage quota. For example, if storage quota is exhausted but there is remaining vector quota, you won't be able to index any more documents, regardless if they're vector documents, until you scale up in partitions or delete some documents.
 
-The limits are set conservatively and are preliminary during this period. They may change. 
+The limits are set conservatively and are preliminary during this period. We are still investigating performance if the limits are raised.
 
-An approximate translation into the number of floating point numbers is provided. For example, 100 documents with a single, 1,536-dimensional vector field consume in total 100x1536=153,600 floats. 1,000 documents with two 768-dimensional vector fields, consume 2x1000x768=1,536,000 floats.
+An approximate translation into the number of floating point numbers is provided. **This is not the same number as vector dimensionality.** The dimensionality of a vector field affects how many floating point numbers are contained in one vector embedding. 
 
-| SKU	| Storage quota (GB)| Vector index size quota per partition (GB) | Approx. floats per partition (million) |
+For example, using the most popular OpenAI model with 1,536 dimensions means one document would consume 1,536 floats. Similarily, 100 documents with a single, 1,536-dimensional vector field would consume in total 100 docs x 1536 floats/doc = 153,600 floats. 1,000 documents with two 768-dimensional vector fields, consume 1000 docs x 2 fields x 768 floats/doc = 1,536,000 floats.
+
+| SKU	| Storage quota (GB)| Vector index size quota per partition (GB) | Approx. floats per partition |
 |--|--|--|--|
-| Basic | 2 | 0.5 | 134 |
-| S1 | 25 | 1 | 268 |
-| S2 | 100 | 6 | 1,611 |
-| S3 | 200 | 12 | 3,221 |
-| L1 | 1,000 | 12 | 3,221 |
-| L2 | 2,000 | 36 | 9,664 |
+| Basic | 2 | 0.5 | 134 million |
+| S1 | 25 | 1 | 268 million |
+| S2 | 100 | 6 | 1,611 million |
+| S3 | 200 | 12 | 3,221 million |
+| L1 | 1,000 | 12 | 3,221 million |
+| L2 | 2,000 | 36 | 9,664 million |
 
 ## Contact us
 
