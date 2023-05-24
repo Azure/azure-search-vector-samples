@@ -118,7 +118,7 @@ When you're ready to extend the quickstart or adapt the collection to you data, 
   + Sorting ($orderby) and pagination ($skip) are not supported for hybrid queries.
   + Facets ($facet) and count ($count) are not supported for vector and hybrid queries.
 
-+ There is no official public documentation or samples beyond what you'll find in this private repository. Please contact us with any questions or concerns.
++ There is no official public documentation or samples beyond what you'll find in this GitHub repository. Please contact us with any questions or concerns.
 
 ## Storage and vector index size limits
 
@@ -130,7 +130,7 @@ An approximate translation into the number of floating point numbers is provided
 
 For example, using the most popular OpenAI model with 1,536 dimensions means one document would consume 1,536 floats. Similarily, 100 documents with a single, 1,536-dimensional vector field would consume in total 100 docs x 1536 floats/doc = 153,600 floats. 1,000 documents with two 768-dimensional vector fields, consume 1000 docs x 2 fields x 768 floats/doc = 1,536,000 floats.
 
-| SKU	| Storage quota (GB)| Vector index size quota per partition (GB) | Approx. floats per partition |
+| Tier (SKU)	| Storage quota (GB)| Vector index size quota per partition (GB) | Approx. floats per partition |
 |--|--|--|--|
 | Basic | 2 | 0.5 | 134 million |
 | S1 | 25 | 1 | 268 million |
