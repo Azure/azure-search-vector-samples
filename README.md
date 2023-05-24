@@ -120,21 +120,22 @@ When you're ready to extend the quickstart or adapt the collection to you data, 
 
 + There is no official public documentation or samples beyond what you'll find in this private repository. Please contact us with any questions or concerns.
 
-## Storage and float limits
+## Storage and vector index size limits
 
-Float limits refers to how many floats can be indexed on a single partition.
-For example, 100 documents with a single, 1,536-dimensional vector field consume in total 100x1536=153,600 floats. 1000 documents with two 768-dimensional vector fields, consume 2x1000x768=1,536,000 floats.
+The size of your vector index in memory is restricted based on the reserved memory for the chosen SKU. It is calculated **per partition** and is a hard limit. The storage and vector index size quotas are not separate quotas; vector indexes share the same underlying storage quota.
 
-The floats limit is a soft limit. It means that in some cases you will be able to exceed the limit but indexing will always succeed as long as you are below the limit.
+The limits are set conservatively and are preliminary during this period. They may change. 
 
-| SKU	| Storage quota (GB)| Floats limit per partition (million) |
-|--|--|--|
-| Basic | 2 | 100 |
-| S1 | 25 | 250 |
-| S2 | 100 | 1000 |
-| S3 | 200 | 2000 |
-| L1 | 1000 | 2000 |
-| L2 | 2000 | 6000 |
+An approximate translation into the number of floating point numbers is provided. For example, 100 documents with a single, 1,536-dimensional vector field consume in total 100x1536=153,600 floats. 1,000 documents with two 768-dimensional vector fields, consume 2x1000x768=1,536,000 floats.
+
+| SKU	| Storage quota (GB)| Vector index size quota per partition (GB) | Approx. floats per partition (million) |
+|--|--|--|--|
+| Basic | 2 | 0.5 | 134 |
+| S1 | 25 | 1 | 168 |
+| S2 | 100 | 6 | 1,611 |
+| S3 | 200 | 12 | 3,221 |
+| L1 | 1,000 | 12 | 3,221 |
+| L2 | 2,000 | 36 | 9,664 |
 
 ## Contact us
 
