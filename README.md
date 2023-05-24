@@ -30,7 +30,7 @@ If you fork or clone this repo, help us protect the private preview status of th
 To verify feature availability, issue a REST call that creates a new vector search index using the new preview REST API. A successful response confirms feature availability.
 
 ```http
-POST https://{{YOUR-SEARCH-SERVICE-NAME}}.search.windows.net/indexes?api-version=2023-07-01-preview
+POST https://{{YOUR-SEARCH-SERVICE-NAME}}.search.windows.net/indexes?api-version=2023-07-01-Preview
   Content-Type: application/json
   api-key: {{YOUR-ADMIN-API-KEY}}
     {  
@@ -84,7 +84,7 @@ Sample data can be found in the Upload Docs request. It consists of 108 document
 
 1. Import the collection into Postman.
 1. In collection variables, provide your search service URI, an admin API key, an index name.
-1. Run each request in sequence using API version: **2023-07-01-preview**.
+1. Run each request in sequence using API version: **2023-07-01-Preview**.
 
 ## 4 - Try it with your data
 
@@ -92,11 +92,11 @@ When you're ready to extend the quickstart or adapt the collection to you data, 
 
 + Create vector representations for specific fields. Choose fields that have semantic value, such as descriptions or summaries. You can useany of the demos currently available in .NET, Python, and JavaScript to generate embeddings. To use the demos as-is, you'll need [Azure OpenAI](https://aka.ms/oai/access) in your subscription.
 
-+ Create, load, and query your custom index. Use the **2023-07-01-preview** REST API for these operations. We recommend Postman or a similar tool for proof-of-concept testing.
++ Create, load, and query your custom index. Use the **2023-07-01-Preview** REST API for these operations. We recommend Postman or a similar tool for proof-of-concept testing.
 
 ## Private preview limitations
 
-+ This feature is only available via indexes and queries that target **2023-07-01-preview** REST API. There is no Portal support at this time. If you view or query a search index that has vector fields, the portal treats them as strings and any queries will be scored using BM25.
++ This feature is only available via indexes and queries that target **2023-07-01-Preview** REST API. There is no Portal support at this time. If you view or query a search index that has vector fields, the portal treats them as strings and any queries will be scored using BM25.
 + You can either create a new index or add a vector field to an existing index but you must target the preview API. 
 + Your search service must be a billable tier. If the search service is already billable, there is no additional charge for the vector search feature.
 
@@ -120,21 +120,24 @@ When you're ready to extend the quickstart or adapt the collection to you data, 
 
 + There is no official public documentation or samples beyond what you'll find in this private repository. Please contact us with any questions or concerns.
 
-## Storage and float limits
+## Storage and vector index size limits
 
-Float limits refers to how many floats can be indexed on a single partition.
-For example, 100 documents with a single, 1,536-dimensional vector field consume in total 100x1536=153,600 floats. 1000 documents with two 768-dimensional vector fields, consume 2x1000x768=1,536,000 floats.
+The size of your vector index in memory is restricted based on the reserved memory for the chosen SKU. It is calculated **per partition** and is a hard limit. The storage and vector index size quotas are not separate quotas; vector indexes share the same underlying storage quota. For example, if storage quota is exhausted but there is remaining vector quota, you won't be able to index any more documents, regardless if they're vector documents, until you scale up in partitions or delete some documents.
 
-The floats limit is a soft limit. It means that in some cases you will be able to exceed the limit but indexing will always succeed as long as you are below the limit.
+The limits are set conservatively and are preliminary during this period. We are still investigating performance if the limits are raised.
 
-| SKU	| Storage quota (GB)| Floats limit per partition (million) |
-|--|--|--|
-| Basic | 2 | 100 |
-| S1 | 25 | 250 |
-| S2 | 100 | 1000 |
-| S3 | 200 | 2000 |
-| L1 | 1000 | 2000 |
-| L2 | 2000 | 6000 |
+An approximate translation into the number of floating point numbers is provided. **This is not the same number as vector dimensionality.** The dimensionality of a vector field affects how many floating point numbers are contained in one vector embedding. 
+
+For example, using the most popular OpenAI model with 1,536 dimensions means one document would consume 1,536 floats. Similarily, 100 documents with a single, 1,536-dimensional vector field would consume in total 100 docs x 1536 floats/doc = 153,600 floats. 1,000 documents with two 768-dimensional vector fields, consume 1000 docs x 2 fields x 768 floats/doc = 1,536,000 floats.
+
+| SKU	| Storage quota (GB)| Vector index size quota per partition (GB) | Approx. floats per partition |
+|--|--|--|--|
+| Basic | 2 | 0.5 | 134 million |
+| S1 | 25 | 1 | 268 million |
+| S2 | 100 | 6 | 1,611 million |
+| S3 | 200 | 12 | 3,221 million |
+| L1 | 1,000 | 12 | 3,221 million |
+| L2 | 2,000 | 36 | 9,664 million |
 
 ## Contact us
 
