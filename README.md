@@ -131,7 +131,7 @@ An approximate translation into the number of floating point numbers is provided
 | SKU	| Storage quota (GB)| Vector index size quota per partition (GB) | Approx. floats per partition (million) |
 |--|--|--|--|
 | Basic | 2 | 0.5 | 134 |
-| S1 | 25 | 1 | 168 |
+| S1 | 25 | 1 | 268 |
 | S2 | 100 | 6 | 1,611 |
 | S3 | 200 | 12 | 3,221 |
 | L1 | 1,000 | 12 | 3,221 |
