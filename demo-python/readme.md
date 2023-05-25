@@ -1,6 +1,6 @@
 # Readme: Generate embeddings using OpenAI with Python
 
-This repository contains a Python notebook that demonstrates how to generate text embeddings using Azure OpenAI, insert those embeddings into a vector store in Azure Cognitive Search, and perform a wide variety of vector search queries such as vector searches with metadata filtering and hybrid (text + vectors)search. The code uses Azure OpenAI to generate embeddings for title and content fields. You'll need access to Azure OpenAI to run this demo.
+This repository contains a Python notebook that demonstrates how to generate text embeddings using Azure OpenAI, insert those embeddings into a vector store in Azure Cognitive Search, and perform a wide variety of vector search queries, such as vector searches with metadata filtering and hybrid (text + vectors) search. The code uses Azure OpenAI to generate embeddings for title and content fields. You'll need access to Azure OpenAI to run this demo.
 
 This repository also contains a Python notebook that demonstrates how to use the indexer and custom skills to generate embeddings for Azure Cognitive Services Florence Vision API for Image embeddings and perform vector searches form text to image as well as image to image. You'll need access to Azure Cognitive Services to run this demo.
 
