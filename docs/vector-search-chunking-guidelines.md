@@ -1,90 +1,97 @@
 # General guidelines for data chunking to generate embedding vectors
 
-When using Natural Language Processing (NLP), REST APIs that generate embedding vectors for text fragments, like [Azure OpenAI]( https://learn.microsoft.com/azure/cognitive-services/openai/how-to/embeddings), have a fixed length limit for their input text. It is critical to validate that the input text is within the limit before making a request. Based on this, data needs to be partitioned into smaller pieces and techniques must be used to ensure this is done efficiently for effective search across these pieces. This technique is called chunking, which is the process of dividing data into smaller portions that can be processed by Large Language Models (LLM).
+When using Natural Language Processing (NLP), the client libraries and REST APIs used to generate embedding vectors for text fragments have maximum input limits. For example, the maximum length of input text for the [Azure OpenAI](https://learn.microsoft.com/azure/cognitive-services/openai/how-to/embeddings) embedding models is 2048 tokens (equivalent to around 2-3 pages of text). If you're using these models to generate embeddings, it's critical that the input text stays under the limit. Partitioning your content into chunks ensures that your data can be processed by the Large Language Models (LLM) used for indexing and queries.
+
+There isn't native chunking capability in neither Cognitive Search or Azure OpenAI, so if you have large documents, you'll need to insert a chunking step into indexing and query workflows that breaks up large text. On the development side, we are working with these libraries:
+
++ [LangChain](https://python.langchain.com/en/latest/index.html)
++ [Semantic Kernel](https://github.com/microsoft/semantic-kernel)
+
+NOTE: It's on the roadmap to document chunking patterns and provide a sample, but that content isn't available at this time.
 
 ## Factors to consider when chunking data
 
-When it comes to chunking data, various factors need to be considered to have a successful outcome, such as:
-1. Type and size of data: The type and size of your data, whether it is heavy in content, catalogue data, or short or long documents, will determine the best approach to chunking.
-2. User queries: Understanding the types of queries your users make will enable you to create chunks that contain the necessary data to respond to their queries.
-3. Chunk content overlap: The amount of overlap between chunks may be important to ensure that the semantics are not lost between one chunk and the other.
-3. Large Language Models (LLM) and their performance guidelines: It is important to consider the performance guidelines of your end-to-end pipeline's large language models regarding chunking sizes. This will ensure that you use a chunk size that works best for all of them. For instance, if you use models for summarization and embeddings, you need to make sure to utilize an optimal chunk size that works for both and adjust to the chunk size recommended sizes for better performance.
+When it comes to chunking data, think about these factors:
+
+1. Shape and density of your documents. If you need intact text or passages, larger chunks and variable chunking that preserves sentence structure can produce better results.
+
+1. User queries: Larger chunks and overlapping strategies help preserve context and semantic richness for queries that target specific information.
+
+1. Large Language Models (LLM) have performance guidelines for chunk size. you'll need to set a chunk size that works best for all of the models you're using. For instance, if you use models for summarization and embeddings, choose an optimal chunk size that works for both.
 
 ## Common chunking techniques
 
 Here are some common chunking techniques, starting with the most widely used method:
-1.	Fixed-size chunks: This technique involves defining a fixed size for the chunks. A small chunk size that contains semantically meaningful paragraphs (e.g., 200 words) and allows for some overlap (e.g., 10-15% of the content) can produce good chunks as input for embedding vector generators.
-1.	Variable-sized chunks based on content: This technique involves chunking the data based on the content, such as by separating into sentences using punctuation marks or end-of-line markers or using Natural Language Processing (NLP) libraries. Markdown language structure can also be used to split the data.
-1.	Combining chunking techniques: Different techniques can be mixed or tried for different scenarios. For example, when dealing with large documents, creating text chunks that append the document title with data located in the middle of the document could help prevent context loss.
+
+1. Fixed-size chunks: Define a fixed size that's sufficient for semantically meaningful paragraphs (for example, 200 words) and allows for some overlap (for example, 10-15% of the content) can produce good chunks as input for embedding vector generators.
+
+1. Variable-sized chunks based on content: Partition your data based on content characteristics, such as end-of-sentence punctuation marks, end-of-line markers, or using features in the Natural Language Processing (NLP) libraries. Markdown language structure can also be used to split the data.
+
+1. Customize or iterate over one of the above techniques. For example, when dealing with large documents, you might use variable-sized chunks, but also append the document title to chunks from the middle of the document to prevent context loss.
 
 ## Content overlap considerations
 
-When chunking data is generally recommended to start testing with an overlap of approximately 10% and then adjust as needed. A 10-15% overlap is typically sufficient for most cases. For example, if you have a fixed chunk size of 256 tokens, you can begin testing with an overlap of 25 tokens. This will help in some cases prevent the semantics of the text from being lost between chunks. It is important to note that the specific amount of overlap needed may vary depending on the type of data being used and the specific use case. Therefore, it is recommended to experiment with different overlap percentages to find the best approach for your specific scenario.
+When chunking data, overlapping a small amount of text between chunks can help preserve context. We recommend starting with an overlap of approximately 10%. For example, given a fixed chunk size of 256 tokens, you would begin testing with an overlap of 25 tokens. The actual amount of overlap varies depending on the type of data and the specific use case, but we have found that 10-15% works for many scenarios.
 
 ## Simple approach of how to create chunks with sentences
 
-This section has the logic of a simple approach of creating chunks with sentences. For the sake of this example and to simplify the demonstration of how this works, tokens will be equal to words and this is language agnostic. This is not generally the case when tokenizing sentences. These are the steps and the logic used:
-1. Use heuristics to identify individual sentences within a lengthy text phrase, where:
-    ```
-    Input = text_to_chunk(string)
-    Output = sentences(list[string])
-    ```
-   Text to chunk: 
-   ```
-   Barcelona is a city in Spain. It is close to the sea and /n the mountain /n You can both ski in winter and swim in summer.
-   ```
-   How the text is chunked:
-   
-   - Sentence 1 contains 6 words:
-     ```
-     Barcelona is a city in Spain.
-     ```
-   - Sentence 2 contains 9 words:
-     ```
-     It is close to the sea and /n the mountain
-     ```
-   - Sentence 3 contains 10 words:
-     ```
-     You can both ski in winter and swim in summer
-     ```
-2. Create chunks by concatenating the sentences:
+This section demonstrates the logic of creating chunks out of sentences. For this example, assume the following:
 
-    a) **No overlap approach**:
-       
-       Input = sentences(list[string])
-       Output = chunks(list[string])
-       
-    Logic:
-    - Iterate through sentences and concatenate text until the maximum number of tokens is reached. The last sentence should go in the next chunk.
-    - If a sentence is bigger than the maximum number of chunks, truncate to a maximimum amount of tokens and put the rest in the next chunk.
++ Tokens are equal to words.
++ Input = `text_to_chunk(string)`
++ Output = `sentences(list[string])`
 
-        Example with the text above:
-        With maximum tokens = 10, these are the chunks created:
-        
-        ```
-        Barcelona is a city in Spain.
-        It is close to the sea and the mountain.
-        You can both ski in winter and swim in summer.
-        ```
-        With maximum tokens = 16, these are the chunks created:
-        ```
-        Barcelona is a city in Spain. It is close to the sea and the mountain. 
-        You can both ski in winter and swim in summer.
-        ```
-        
-        With maximum tokens = 6, these are the chunks created:
-        ```
-        Barcelona is a city in Spain.
-        It is close to the sea. 
-        and the mountain. 
-        You can both ski in winter.
-        and swim in summer.
-        ```
-        
-        b) **With overlap approach:**
-        
-           Follow the same logic with no overlap approach, except that you create an overlap between chunks according to certain ratio.
-           
+### Sample input
+
+`"Barcelona is a city in Spain. It is close to the sea and /n the mountains. /n You can both ski in winter and swim in summer."`
+
++ Sentence 1 contains 6 words: `"Barcelona is a city in Spain."`
++ Sentence 2 contains 9 words: `"It is close to the sea /n and the mountains. /n"`
++ Sentence 3 contains 10 words: `"You can both ski in winter and swim in summer."`
+
+### Approach 1: Sentence chunking with "no overlap"
+
+Given a maximum number of tokens, iterate through the sentences and concatenate sentences until the maximum token length is reached. If a sentence is bigger than the maximum number of chunks, truncate to a maximimum amount of tokens, and put the rest in the next chunk.
+
+NOTE: The examples ignore the newline `/n` character because it's not a token, but if the package or library detects new lines, then you'd see those line breaks here.
+
+**Example: maximum tokens = 10**
+
+```
+Barcelona is a city in Spain.
+It is close to the sea /n and the mountains. /n
+You can both ski in winter and swim in summer.
+```
+
+**Example: maximum tokens = 16**
+
+```
+Barcelona is a city in Spain. It is close to the sea /n and the mountain. /n
+You can both ski in winter and swim in summer.
+```
+    
+**Example: maximum tokens = 6**
+
+```
+Barcelona is a city in Spain.
+It is close to the sea /n
+and the mountains. /n
+You can both ski in winter
+and swim in summer.
+```
+
+### Approach 2: Sentence chunking with "10% overlap"
+
+Follow the same logic with no overlap approach, except that you create an overlap between chunks according to certain ratio.
+A 10% overlap on maximum tokens of 10 is one token.
+
+**Example: maximum tokens = 10**
+
+```
+Barcelona is a city in Spain.
+Spain. It is close to the sea /n and the mountains. /n 
+mountains. /n You can both ski in winter and swim in summer.
+```
 
 ## Learn more about embedding models in Azure OpenAI
 
