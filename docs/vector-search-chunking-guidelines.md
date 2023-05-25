@@ -1,11 +1,11 @@
 # General guidelines for data chunking to generate embedding vectors
 
-When using Natural Language Processing (NLP), the client libraries and REST APIs used generate embedding vectors for text fragments have maximum input limits. For example, the maximum length of input text for the [Azure OpenAI](https://learn.microsoft.com/azure/cognitive-services/openai/how-to/embeddings) embedding models is 2048 tokens (equivalent to around 2-3 pages of text). If you're using these models to generate embeddings, it's critical that the input text stays under the limit. Partitioning your content into chunks ensures that your data can be processed by the Large Language Models (LLM) used for indexing and queries.
+When using Natural Language Processing (NLP), the client libraries and REST APIs used to generate embedding vectors for text fragments have maximum input limits. For example, the maximum length of input text for the [Azure OpenAI](https://learn.microsoft.com/azure/cognitive-services/openai/how-to/embeddings) embedding models is 2048 tokens (equivalent to around 2-3 pages of text). If you're using these models to generate embeddings, it's critical that the input text stays under the limit. Partitioning your content into chunks ensures that your data can be processed by the Large Language Models (LLM) used for indexing and queries.
 
-There isn't native chunking capability in Neither Cognitive Search or Azure OpenAI, so if you have large documents, you'll need to insert a chunking step into indexing and query workflows that breaks up large text. On the development side, we are working with these libraries:
+There isn't native chunking capability in neither Cognitive Search or Azure OpenAI, so if you have large documents, you'll need to insert a chunking step into indexing and query workflows that breaks up large text. On the development side, we are working with these libraries:
 
 + [LangChain](https://python.langchain.com/en/latest/index.html)
-+ [Semantic Kernal](https://github.com/microsoft/semantic-kernel)
++ [Semantic Kernel](https://github.com/microsoft/semantic-kernel)
 
 NOTE: It's on the roadmap to document chunking patterns and provide a sample, but that content isn't available at this time.
 
