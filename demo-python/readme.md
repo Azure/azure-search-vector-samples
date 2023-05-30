@@ -31,7 +31,7 @@ To run this code, you will need the following:
   [global]
   index-url=https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-python/pypi/simple/
   ```
-  - For example, on my machine, I placed mine in the following directory: `C:\Users\fsunavala\AppData\Local\Programs\Python\Python39\pip.ini`
+  - For example, on my machine, I placed mine in the following directory: `%AppData%\pip\pip.ini`
   - **Note**: Be sure you don't save it as a `.txt` file
 - Installation steps if using Poetry:
   - Install Poetry by following the instructions at https://python-poetry.org/docs/.
