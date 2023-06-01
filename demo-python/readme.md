@@ -42,7 +42,7 @@ To run this code, you will need the following:
   ```
   - To install the azure-search-documents package from the dev feed, run the following command:
   ```
-  poetry add azure-search-documents==11.5.0-alpha.20230522.2
+  poetry add azure-search-documents==11.4.0a20230509004
   ```
 
 You can use [Visual Studio Code with the Python extension](https://code.visualstudio.com/docs/python/python-tutorial) for this demo.
