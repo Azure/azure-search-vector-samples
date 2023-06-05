@@ -146,7 +146,7 @@ For the private preview, we're providing the following documentation:
 - This readme covers installation and introduces you to the private preview.
 - This [FAQ](/docs/faq.md) answers basic questions about feature capabilities.
 - The .NET, Python, and JavaScript demos have readme files for setting up and running the demo code.
-- REST API reference in the [/docs folder](/docs/rest-api-reference/rest-api-reference.md).
+- REST API reference in the [/docs folder](/docs/rest-api-reference/api-reference-overview.md).
 - Concept docs and How-to's for the main scenarios can be found in the [/docs folder](/docs/).
 - For updates to features and samples, see this [change list](changelist.md)
 
