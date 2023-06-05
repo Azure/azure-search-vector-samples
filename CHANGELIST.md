@@ -13,7 +13,7 @@ Our latest deployment includes a breaking change to the 2023-07-01-preview REST 
 
 1. In index definitions, "algorithmConfiguration" has been changed to "vectorSearchConfiguration".
 
-2. In index definitions, we added a new "hnswParamater": "efSearch". This property allows you to tune the size of the dynamic list containing the nearest neighbors, which is used during search time. Increasing this parameter may improve the quality search results, at the expense of performance. Increasing this parameter to larger values eventually leads to diminishing returns. A default value 500 will be used if the paramater is omitted or null. The allowable range is 100 to 1000.
+2. In index definitions, we added a new "hnswParameter": "efSearch". This property allows you to tune the size of the dynamic list containing the nearest neighbors, which is used during search time. Increasing this parameter may improve the quality search results, at the expense of performance. Increasing this parameter to larger values eventually leads to diminishing returns. A default value 500 will be used if the parameter is omitted or null. The allowable range is 100 to 1000.
 
 3. In index definitions, "vectorSearch.algorithmConfigurations.algorithm" is now "vectorSearch.algorithmConfigurations.kind". 
 
