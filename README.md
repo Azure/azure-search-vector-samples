@@ -90,7 +90,7 @@ Sample data can be found in the Upload Docs request. It consists of 108 document
 
 When you're ready to extend the quickstart or adapt the collection to you data, you'll need to:
 
-- Create vector representations for specific fields. Choose fields that have semantic value, such as descriptions or summaries. You can useany of the demos currently available in .NET, Python, and JavaScript to generate embeddings. To use the demos as-is, you'll need [Azure OpenAI](https://aka.ms/oai/access) in your subscription.
+- Create vector representations for specific fields. Choose fields that have semantic value, such as descriptions or summaries. You can use any of the demos currently available in .NET, Python, and JavaScript to generate embeddings. To use the demos as-is, you'll need [Azure OpenAI](https://aka.ms/oai/access) in your subscription.
 
 - Create, load, and query your custom index. Use the **2023-07-01-Preview** REST API for these operations. We recommend Postman or a similar tool for proof-of-concept testing.
 
@@ -146,7 +146,7 @@ For the private preview, we're providing the following documentation:
 - This readme covers installation and introduces you to the private preview.
 - This [FAQ](/docs/faq.md) answers basic questions about feature capabilities.
 - The .NET, Python, and JavaScript demos have readme files for setting up and running the demo code.
-- REST API reference in the [/docs folder](/docs/rest-api-reference/rest-api-reference.md).
+- REST API reference in the [/docs folder](/docs/rest-api-reference/api-reference-overview.md).
 - Concept docs and How-to's for the main scenarios can be found in the [/docs folder](/docs/).
 - For updates to features and samples, see this [change list](changelist.md)
 
