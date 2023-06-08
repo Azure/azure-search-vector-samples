@@ -33,6 +33,11 @@ Here are some common chunking techniques, starting with the most widely used met
 
 When chunking data, overlapping a small amount of text between chunks can help preserve context. We recommend starting with an overlap of approximately 10%. For example, given a fixed chunk size of 256 tokens, you would begin testing with an overlap of 25 tokens. The actual amount of overlap varies depending on the type of data and the specific use case, but we have found that 10-15% works for many scenarios.
 
+## Chunking and vector embedding generation sample
+
+A [Cognitive Search custom skill](https://learn.microsoft.com/azure/search/cognitive-search-custom-skill-web-api) has been added to the [Power skill repo](https://github.com/Azure-Samples/azure-search-power-skills/tree/main#readme) with a [fixed-sized chunking and embedding generation sample](https://github.com/Azure-Samples/azure-search-power-skills/blob/main/Vector/EmbeddingGenerator/README.md) to demonstrate both chunking and vector embedding generation using [Azure OpenAI](https://learn.microsoft.com/azure/cognitive-services/openai/) Embedding model.
+
+
 ## Simple approach of how to create chunks with sentences
 
 This section demonstrates the logic of creating chunks out of sentences. For this example, assume the following:
