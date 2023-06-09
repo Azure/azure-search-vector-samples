@@ -32,9 +32,24 @@ For vector queries, *we've provided the embeddings for every query input*, but y
 
 1. Start Postman and import the collection.
 
-1. Edit the collection's variables to use your search service name, API key, and index name.
+1. Edit the collection's variables to set valid values for Azure Cognitive Search and Azure OpenAI. In Postman, right-click the collection and select **Edit**.
 
-You're now ready to send the requests to your search service.
+1. Select **Variables** from the list of actions at the top of the page. Into **Current value**, provide the following values. Required and recommended values are specified.
+
+    | Variable | Current value |
+    |----------|---------------|
+    | index-name | *index names are lower-case, no spaces, and cannot start or end with dashes* |
+    | search-service-name | *from Azure portal, get just the name of the service, not the full URL* |
+    | search-api-version | 2023-07-23-preview |
+    | search-api-key | *provide an admin key* |
+    | openai-api-key | *find this value in Azure portal* |
+    | openai-service-name | *find this value in Azure portal* |
+    | openai-deployment-name | *find this value in Azure portal. This is the user-defined name of your deployment.* |
+    | openai-api-version | 2023-05-15 |
+
+1. Save your changes.
+
+You're now ready to send the requests to your search service. For each request, select the blue **Send** button. When you see a success message, move on to the next request.
 
 ## Create an index
 
@@ -43,11 +58,11 @@ Use the [Create or Update Index](/docs/rest-api-reference/create-or-update-index
 The index schema is organized around a product catalog scenario. Sample data consists of titles, categories, and descriptions of 108 Azure services. This schema includes fields for vector and traditional keyword search, with configurations for vector and semantic search.
 
 ```http
-PUT https://{{search-service-name}}.search.windows.net/indexes/{{index}}?api-version={{api-version}}
+PUT https://{{search-service-name}}.search.windows.net/indexes/{{index-name}}?api-version={{api-version}}
 Content-Type: application/json
 api-key: {{admin-api-key}}
 {
-    "name": "{{index}}",
+    "name": "{{index-name}}",
     "fields": [
         {
             "name": "id",
