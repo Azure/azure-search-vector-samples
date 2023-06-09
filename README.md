@@ -159,7 +159,6 @@ For the private preview, we're providing the following documentation:
 - [Azure Search Vector Search Demo Web App Template](https://github.com/farzad528/azure-search-vector-search-demo) A Vector Search Demo React Web App Template using Azure OpenAI for Text Search and Cognitive Services Florence Vision API for Image Search.
 - [Azure Cognitive Search Documentation](https://learn.microsoft.com/azure/search/)
 - [Azure OpenAI Service Documentation](https://learn.microsoft.com/azure/cognitive-services/openai/)
-- [Azure OpenAI Service Documentation](https://learn.microsoft.com/azure/cognitive-services/openai/)
 - [Cognitive Services Computer Vision Documentation](https://learn.microsoft.com/azure/cognitive-services/computer-vision/)
 
 ## Contact us
