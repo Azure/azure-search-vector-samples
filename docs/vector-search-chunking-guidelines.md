@@ -7,7 +7,6 @@ There isn't native chunking capability in neither Cognitive Search or Azure Open
 + [LangChain](https://python.langchain.com/en/latest/index.html)
 + [Semantic Kernel](https://github.com/microsoft/semantic-kernel)
 
-NOTE: It's on the roadmap to document chunking patterns and provide a sample, but that content isn't available at this time.
 
 ## Factors to consider when chunking data
 
