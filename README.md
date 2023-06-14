@@ -21,7 +21,7 @@ This private preview requires billable resources. You'll need to cover the cost 
 
 For this private preview, we've enabled vector search support in all Azure Cognitive Search regions, on all tiers except Free.
 
-You can use an existing billable search service, but you must create a new index. Be sure to review [preview limitations](#private-preview-limitations) and [storage and float limits](#storage-and-float-limits).
+You can use an existing billable search service, but you must create a new index. Be sure to review [preview limitations](#private-preview-limitations) and [storage and vector index size limits](#storage-and-vector-index-size-limits).
 
 ### 1 - Setup
 
