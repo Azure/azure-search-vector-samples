@@ -40,7 +40,7 @@ For vector queries, *we've provided the embeddings for every query input*, but y
     |----------|---------------|
     | index-name | *index names are lower-case, no spaces, and cannot start or end with dashes* |
     | search-service-name | *from Azure portal, get just the name of the service, not the full URL* |
-    | search-api-version | 2023-07-23-preview |
+    | search-api-version | 2023-07-01-preview |
     | search-api-key | *provide an admin key* |
     | openai-api-key | *find this value in Azure portal* |
     | openai-service-name | *find this value in Azure portal* |
