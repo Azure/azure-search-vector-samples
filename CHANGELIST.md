@@ -7,6 +7,7 @@ As the private preview progresses, we'll have updates on bugs or behavior change
 | v0.1    | 2023-04-06 | Initial release | All |  
 | v0.2    | 2023-04-24 | **[BREAKING]** Updated "vectorSearch" configuration properties, enabled on existing indexes and all tiers, add "efSearch" property to "hnsw". | All | 
 | NA      | 2023-06-09 | Removed obsolete Postman collection (v0.1) | NA |
+| NA      | 2023-07-07 | Private preview is concluded. Vector search is now in public preview. | All |
 
 ## v0.2 changes
 
