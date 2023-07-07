@@ -48,6 +48,6 @@ For query vectorization, run the following command:
 
 ## Output
 
-The code writes the input_data with the added embeddings and "@search.action" field to the *docVectors.json* file in the output directory. The embeddings can be uploaded to an Azure Cognitive Search index using the 2023-07-01-preview API version of the [Add, Update, or Delete Documents REST API](../docs/rest-api-reference/upload-documents.md).
+The code writes the input_data with the added embeddings and "@search.action" field to the *docVectors.json* file in the output directory. The embeddings can be uploaded to an Azure Cognitive Search index using the 2023-07-01-preview API version of the [Add, Update, or Delete Documents REST API](https://learn.microsoft.com/rest/api/searchservice/preview-api/add-update-delete-documents).
 
 You can also generate a query embedding to perform vector searches.
