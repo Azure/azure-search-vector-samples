@@ -26,9 +26,9 @@ namespace DotNetVectorDemo
             var serviceEndpoint = configuration["AZURE_SEARCH_SERVICE_ENDPOINT"] ?? string.Empty;
             var indexName = configuration["AZURE_SEARCH_INDEX_NAME"] ?? string.Empty;
             var key = configuration["AZURE_SEARCH_ADMIN_KEY"] ?? string.Empty;
-            var openaiApiKey = configuration["OPENAI_API_KEY"] ?? string.Empty;
-            var openaiEndpoint = configuration["OPENAI_ENDPOINT"] ?? string.Empty;
-            var modelDeploymentName = configuration["OPENAI_EMBEDDING_DEPLOYED_MODEL"] ?? string.Empty;
+            var openaiApiKey = configuration["AZURE_OPENAI_API_KEY"] ?? string.Empty;
+            var openaiEndpoint = configuration["AZURE_OPENAI_ENDPOINT"] ?? string.Empty;
+            var modelDeploymentName = configuration["AZURE_OPENAI_EMBEDDING_DEPLOYED_MODEL"] ?? string.Empty;
 
             // Initialize OpenAI client  
             var credential = new AzureKeyCredential(openaiApiKey);
@@ -101,7 +101,7 @@ namespace DotNetVectorDemo
             var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
 
             // Perform the vector similarity search  
-            var vector = new SearchQueryVector { K = 3, Fields = "contentVector", Value = queryEmbeddings.ToArray() };
+            var vector = new SearchQueryVector { KNearestNeighborsCount = 3, Fields = "contentVector", Value = queryEmbeddings.ToArray() };
             var searchOptions = new SearchOptions
             {
                 Vector = vector,
@@ -129,7 +129,7 @@ namespace DotNetVectorDemo
             var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
 
             // Perform the vector similarity search  
-            var vector = new SearchQueryVector { K = 3, Fields = "contentVector", Value = queryEmbeddings.ToArray() };
+            var vector = new SearchQueryVector { KNearestNeighborsCount = 3, Fields = "contentVector", Value = queryEmbeddings.ToArray() };
             var searchOptions = new SearchOptions
             {
                 Vector = vector,
@@ -159,7 +159,7 @@ namespace DotNetVectorDemo
             var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
 
             // Perform the vector similarity search  
-            var vector = new SearchQueryVector { K = 3, Fields = "contentVector", Value = queryEmbeddings.ToArray() };
+            var vector = new SearchQueryVector { KNearestNeighborsCount = 3, Fields = "contentVector", Value = queryEmbeddings.ToArray() };
             var searchOptions = new SearchOptions
             {
                 Vector = vector,
@@ -190,7 +190,7 @@ namespace DotNetVectorDemo
                 var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
 
                 // Perform the vector similarity search    
-                var vector = new SearchQueryVector { K = 3, Fields = "contentVector", Value = queryEmbeddings.ToArray() };
+                var vector = new SearchQueryVector { KNearestNeighborsCount = 3, Fields = "contentVector", Value = queryEmbeddings.ToArray() };
                 var searchOptions = new SearchOptions
                 {
                     Vector = vector,
@@ -260,7 +260,7 @@ namespace DotNetVectorDemo
                 {
                     AlgorithmConfigurations =
                 {
-                    new VectorSearchAlgorithmConfiguration(vectorSearchConfigName, "hnsw")
+                    new HnswVectorSearchAlgorithmConfiguration(vectorSearchConfigName)
                 }
                 },
                 SemanticSettings = new()
@@ -289,10 +289,16 @@ namespace DotNetVectorDemo
                 new SimpleField("id", SearchFieldDataType.String) { IsKey = true, IsFilterable = true, IsSortable = true, IsFacetable = true },
                 new SearchableField("title") { IsFilterable = true, IsSortable = true },
                 new SearchableField("content") { IsFilterable = true },
+                new SearchField("titleVector", SearchFieldDataType.Collection(SearchFieldDataType.Single))
+                {
+                    IsSearchable = true,
+                    VectorSearchDimensions = ModelDimensions,
+                    VectorSearchConfiguration = vectorSearchConfigName
+                },
                 new SearchField("contentVector", SearchFieldDataType.Collection(SearchFieldDataType.Single))
                 {
                     IsSearchable = true,
-                    Dimensions = 1536,
+                    VectorSearchDimensions = ModelDimensions,
                     VectorSearchConfiguration = vectorSearchConfigName
                 },
                 new SearchableField("category") { IsFilterable = true, IsSortable = true, IsFacetable = true }
