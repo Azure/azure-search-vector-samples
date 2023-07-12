@@ -1,0 +1,13 @@
+{% extends 'content.html' %}
+
+{% block header %}
+    {{ "You're signed in, " + g.identity_context_data.username + "!" if g.identity_context_data.authenticated else "You're not signed in."}}
+{% endblock %}
+
+{% block text %}
+    {% if not g.identity_context_data.authenticated %}
+        Use the button on the top right to sign in. <br/>
+    {% else %}
+        Drag and drop PDFs to upload them and ask questions about them. Only you can see the PDFs you upload.
+    {% endif %}
+{% endblock %}

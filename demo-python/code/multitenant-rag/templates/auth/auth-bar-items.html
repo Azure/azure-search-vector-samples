@@ -1,0 +1,9 @@
+<ul class="nav navbar-nav navbar-right">
+    {% if g.identity_context_data.authenticated %}
+        <li>
+            <a class="btn btn-warning" href="{{ ms_id_url_for('sign_out') }}">Sign Out</a>
+        </li>
+    {% else %}
+        <li><a class="btn btn-success" href="{{ ms_id_url_for('sign_in') }}">Sign In</a></li>
+    {% endif %}
+</ul>

@@ -1,0 +1,108 @@
+{% extends 'layout.html' %}
+
+{% block banner_text %}
+    {% block title %}
+        {{ config['SAMPLE_DESCRIPTION'] }}
+    {% endblock %}
+{% endblock %}
+
+{% block body %}
+<div class="card">
+    <h5 class="card-header">
+        {% block header%} {% endblock %}
+    </h5>
+    <div class="card-body">
+        <p class="card-text">
+            {% block text %} {% endblock %}
+        </p>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block flash_messages %}
+
+{% endblock %}
+
+{% block footer %}
+    {% set app_cfg = config.get('MS_ID_WEB_CONFIGS') %}
+    {% set client_id = app_cfg.client.client_id %}
+    {% if g.identity_context_data.authenticated %}
+        <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+        <script>
+            function handleDrop(e) {
+                e.preventDefault();
+                var file = e.dataTransfer.files[0];
+                var formData = new FormData();
+                formData.append('pdf_file', file, file.name); // Append the file with its name
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/upload', true);
+                xhr.onload = function () {
+                    if (xhr.status != 200) {
+                        alert('File upload failed');
+                    }
+                };
+                xhr.send(formData);
+            }
+        
+            function handleDragOver(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            var socket = io.connect('http://localhost:5000/updates');
+
+            socket.on('server_update', function(data) {
+                console.log('Received server update:', data);
+                if ('message' in data) {
+                    // Select the paragraph element by its id
+                    var paragraph = document.getElementById('message');
+                    // Update the text content of the paragraph
+                    paragraph.textContent = data['message']
+                }
+            });
+
+            function askQuestion(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                var question = document.getElementById('question').value;
+                socket.emit('ask_question', { question: question });
+            }
+
+            socket.on('answer_received', function(data) {
+                var answer = data.answer;
+                var sources = data.sources;
+                // Update the UI with the answer
+                document.getElementById('answer').innerHTML = answer;
+                var formattedMessage = "Sources:<br>";
+                sources.forEach(function(item) {
+                    formattedMessage += item.document_title + ", Page " + item.page + "<br>";
+                });
+                document.getElementById('citations').innerHTML = formattedMessage;
+            });
+        </script>
+        <form method="post" action="{{ url_for('reset') }}">
+            <button type="submit" class="reset-button">Reset Index</button>
+        </form>
+
+        <div id="dropArea" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+            <p>Drag and drop a PDF file here.</p>
+        </div>
+
+        <div id="metadata">
+            <p id="totalDocumentCountText">Total Document Count: {{ g.user_documents_count }}</p>
+            <p id="message"></p>
+        </div>
+
+        <form onsubmit="askQuestion(event);">
+            <label for="question">Ask a question:</label>
+            <input class="expanding-input" type="text" id="question" required>
+            <button type="submit">Submit</button>
+        </form>
+
+        <p id="answer"></p>
+        <p id="citations"></p>
+    {% endif %}
+
+{% endblock %}
+
