@@ -1,4 +1,4 @@
-# Readme: Generate embeddings using OpenAI with node.js
+# Readme: Generate embeddings using OpenAI with Node.js
 
 The JavaScript demo in this repository is used to create vectorized data that can be indexed in a search index. There are no calls to Cognitive Search, but it does call Azure OpenAI. You'll need access to Azure OpenAI in your Azure subscription to run this demo.
 
@@ -26,28 +26,31 @@ You don't need Azure Cognitive Search for this step.
 
 1. Clone this repository.
 
-2. Create a .env file in the same directory as the code and include the following variables:
+1. Create a .env file in the *demo-javascript* directory and include the following variables:
 
    ```
-   OPENAI_SERVICE_NAME=YOUR-OPENAI-SERVICE-NAME
-   DEPLOYMENT_NAME=YOUR-MODEL-DEPLOYMENT-NAME
-   OPENAI_API_VERSION=YOUR-OPENAI-API-VERSION
+   AZURE_OPENAI_SERVICE_NAME=YOUR-AZURE-OPENAI-SERVICE-NAME
+   AZURE_OPENAI_DEPLOYMENT_NAME=YOUR-AZURE-OPENAI-DEPLOYMENT-NAME
+   AZURE_OPENAI_API_VERSION=YOUR-AZURE-OPENAI-API-VERSION
+   AZURE_OPENAI_API_KEY=YOUR-AZURE-OPENAI-API-KEY
    ```
 
-## Run the Code
+1. Install npm dependencies:
+   ```
+   cd demo-javascript/code
+   npm install
+   ```
 
-To run the code, execute the following command from a command line:
+## Run the code
 
-For document vectorization, run the following command:
+### Document vectorization
 ```node docs-text-openai-embeddings.js```
 
-This will generate embeddings for the title and content fields of the input data and write the embeddings to the *docVectors.json* file in the output directory.
+This will generate embeddings for the title and content fields of the input data (*data/text-sample.json*), and add the embeddings and "@search.action" field to *output/docVectors.json*. The embeddings can be uploaded to an Azure Cognitive Search index using the 2023-07-01-preview API version of the [Add, Update, or Delete Documents REST API](https://learn.microsoft.com/rest/api/searchservice/preview-api/add-update-delete-documents)
 
-For query vectorization, run the following command:
+### Query vectorization
 ```node query-text-openai-embedding.js```
 
-## Output
+This will generate a query embedding, to perform vector searches. 
 
-The code writes the input_data with the added embeddings and "@search.action" field to the *docVectors.json* file in the output directory. The embeddings can be uploaded to an Azure Cognitive Search index using the 2023-07-01-preview API version of the [Add, Update, or Delete Documents REST API](https://learn.microsoft.com/rest/api/searchservice/preview-api/add-update-delete-documents).
-
-You can also generate a query embedding to perform vector searches.
+Modify the *userQuery* variable in query-text-openai-embedding.js to customize the query.
