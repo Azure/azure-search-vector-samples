@@ -1,6 +1,6 @@
-# Readme: Generate embeddings using OpenAI with Node.js
+# Readme: Vector search demos using Node.js and Azure Cognitive Search
 
-The JavaScript demo in this repository is used to create vectorized data that can be indexed in a search index. 
+The JavaScript demo in this repository is used to create vectorized data that can be indexed in a search index on Azure Cognitive Search.
 
 | Samples | Description |
 |---------|-------------|
@@ -10,7 +10,7 @@ The JavaScript demo in this repository is used to create vectorized data that ca
 
 ## Prerequisites
 
-To run programs, you will need the following:
+To run the programs, you'll need the following:
 
 + An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access). You must have the Azure OpenAI service name and an API key.
 
@@ -51,7 +51,7 @@ You can use [Visual Studio Code with the JavaScript extension](https://code.visu
    npm install
    ```
 
-## Run the code
+## Run the vectorization code
 
 ### Document vectorization
 
@@ -87,7 +87,7 @@ Run the following program to generate a query embedding and execute vector queri
 
 Modify the `userQuery` variable in `query-text-openai-embedding.js` to customize the query.
 
-## Run the end-to-end sample
+## Run the end-to-end sample program
 
 1. Modify the `.env` file in the `demo-javascript` directory to have the following variables
 
@@ -111,9 +111,9 @@ Modify the `userQuery` variable in `query-text-openai-embedding.js` to customize
    + Azure Cognitive Search admin API key can be found in the **Keys** page in the Azure portal.
    + Azure Cognitive Search index name should be unique, and start with a lowercase letter (no spaces or slashes).
 
-This end-to-end JavaScript sample shows you how to create a search index, generate documents embeddings, and upload them to an index. It also demonstrates several vector queries. It attemps to run a hybrid query that invokes semantic search. If you want that query to run, be sure to enable semantic search on your search service.
+   This end-to-end JavaScript sample shows you how to create a search index, generate documents embeddings, and upload them to an index. It also demonstrates several vector queries. It attemps to run a hybrid query that invokes semantic search. If you want that query to run, be sure to enable semantic search on your search service.
 
-All code is one file, split among functions, on purpose. Though the file is longer this way, the code is easier to follow when it's all together.
+   All code is one file, split among functions, on purpose. Though the file is longer this way, the code is easier to follow when it's all together.
 
 1. Run `npm install` if you haven't already.
 
