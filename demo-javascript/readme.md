@@ -14,13 +14,13 @@ To run the programs, you'll need the following:
 
 + An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access). You must have the Azure OpenAI service name and an API key.
 
-+ A deployment of the text-embedding-ada-002 embedding model in your Azure OpenAI service. We use API version 2023-05-15 in this demo. For the deployment name, the deployment name is the same as the model, "text-embedding-ada-002".
++ A deployment of the **text-embedding-ada-002** embedding model. We use API version 2023-05-15 in this demo. For the deployment name, the deployment name is the same as the model, "text-embedding-ada-002".
 
 + Model capacity should be sufficient to handle the load (108 documents, 2 vector fields, 1536 dimensions, 4 bytes per token). We successfully tested this sample on a deployment model having a 239K tokens per minute rate limit.
 
 + Node.js (these instructions were tested with version Node.js version 16.0)
 
-+ For the end-to-end sample, you also need a Cognitive Search service. Provide the full endpoint, an Admin API key, and an index name as environment variables.
++ For the end-to-end sample, you also need an Azure Cognitive Search service. Provide the full endpoint, an Admin API key, and an index name as environment variables.
 
 You can use [Visual Studio Code with the JavaScript extension](https://code.visualstudio.com/docs/nodejs/extensions) for this demo. For help setting up the environment, see this [JavaScript quickstart](https://learn.microsoft.com/azure/search/search-get-started-javascript).
 
@@ -149,3 +149,6 @@ You can search the output for other query outcomes:
 + `Cross-field vector search results:`
 + `Vector search with filter results:`
 + `Hybrid search results:` (requires semantic search)
+
+
+You can also use the Azure portal to explore the index definition or delete the index if you no longer need it.
