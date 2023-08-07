@@ -16,7 +16,7 @@ To run this code, you'll need the following:
 
 + A deployment of the **text-embedding-ada-002** embedding model. We use API version 2023-05-15 in this demo. For the deployment name, the deployment name is the same as the model, "text-embedding-ada-002".
 
-+ Model capacity should be sufficient to handle the load (108 documents, 2 vector fields, 1536 dimensions, 4 bytes per token). We successfully tested this sample on a deployment model having a 239K tokens per minute rate limit.
++ Model capacity should be sufficient to handle the load. We successfully tested this sample on a deployment model having a 33K tokens per minute rate limit.
 
 + Azure SDK for .NET 5.0 or later.
 
@@ -42,6 +42,20 @@ You can use [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Stud
    }
    ```
 
+   Here's an example with fictitious values:
+
+   ```json
+   {
+    "AZURE_SEARCH_SERVICE_ENDPOINT": "https://demo-srch-eastus.search.windows.net",
+    "AZURE_SEARCH_INDEX_NAME": "demo-vector-idx",
+    "AZURE_SEARCH_ADMIN_KEY": "000000000000000000000000000000000",
+    "AZURE_OPENAI_ENDPOINT": "https://demo-openai-southcentralus.openai.azure.com/",
+    "AZURE_OPENAI_API_KEY": "0000000000000000000000000000000000",
+    "AZURE_OPENAI_API_VERSION": "2023-05-15",
+    "AZURE_OPENAI_EMBEDDING_DEPLOYED_MODEL": "text-embedding-ada-002"
+   }
+   ```
+
 ## Run the code
 
 Before running the code, ensure you have the .NET SDK installed on your machine.
@@ -50,20 +64,32 @@ Before running the code, ensure you have the .NET SDK installed on your machine.
 
 1. Navigate to the `demo-dotnet/code` folder in your terminal and execute the following comman to verify .Net 5.0 or later is installed:
 
-   ```
+   ```bash
    dotnet build
    ```
 
 1. Run the program:
 
-   ```
+   ```bash
    dotnet run
    ```
 
-1. When prompted, select "Y" to create and load the index. After the index is created, you're prompted to choose a query type, such as single vector query or a hybrid query. The program calls Azure OpenAI to convert your query string into a vector.
+1. When prompted, select "Y" to create and load the index. Wait for the query prompt.
 
-   Sample data is 108 descriptions of Azure services, so your query should be about Azure. For example, "what Azure services support full text search" or "what product has OCR".
+1. Choose a query type, such as single vector query or a hybrid query. The program calls Azure OpenAI to convert your query string into a vector.
+
+   Sample data is 108 descriptions of Azure services, so your query should be about Azure. For example, for a vector query, type in "what Azure services support full text search" or "what product has OCR".
 
 ## Output
 
 Output is a search index. You can use the Azure portal to explore the index definition or delete the index if you no longer need it.
+
+## Troubleshoot errors
+
+If you get error 429 from Azure OpenAI, it means the resource is over capacity:
+
++ Check the Activity Log of the Azure OpenAI service to see what else might be running.
+
++ Check the Tokens Per Minute (TPM) on the deployed model. On a system that isn't running other jobs, a TPM of 33K or higher should be sufficient to generate vectors for the sample data. You can try a model with more capacity if 429 errors persist.
+
++ Review these articles for information on rate limits: [Understanding rate limits](https://learn.microsoft.com/azure/ai-services/openai/how-to/quota?tabs=rest#understanding-rate-limits) and [A Guide to Azure OpenAI Service's Rate Limits and Monitoring](https://clemenssiebler.com/posts/understanding-azure-openai-rate-limits-monitoring/).
