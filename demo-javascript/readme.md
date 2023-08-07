@@ -4,7 +4,7 @@ The JavaScript demo in this repository is used to create vectorized data that ca
 
 | Samples | Description |
 |---------|-------------|
-| **azure-search-vector-sample.js** | End-to-end sample. It uses **@azure/search-documents 12.0.0-beta.2** in the Azure SDK for JavaScript. It calls Azure OpenAI and Azure Cognitive Search. |
+| **azure-search-vector-sample.js** | [End-to-end sample](#run-the-end-to-end-sample-program). It uses **@azure/search-documents 12.0.0-beta.2** in the Azure SDK for JavaScript. It calls Azure OpenAI and Azure Cognitive Search. |
 | **docs-text-openai-embeddings.js** | Generates embeddings for an index. Input is `data\text-sample.json`. Output is sent to `output\docVectors.json`. The output is usable as a request payload on a document upload action to Cognitive Search, but there are no calls to Cognitive Search in this code. |
 | **query-text-openai-embeddings.js** | Generates an embedding for a query. Output is a vector that can be pasted into a vector query request. There are no calls to Cognitive Search in this code. |
 
@@ -16,7 +16,7 @@ To run the programs, you'll need the following:
 
 + A deployment of the **text-embedding-ada-002** embedding model. We use API version 2023-05-15 in this demo. For the deployment name, the deployment name is the same as the model, "text-embedding-ada-002".
 
-+ Model capacity should be sufficient to handle the load (108 documents, 2 vector fields, 1536 dimensions, 4 bytes per token). We successfully tested this sample on a deployment model having a 239K tokens per minute rate limit.
++ Model capacity should be sufficient to handle the load. We successfully tested this sample on a deployment model having a 33K tokens per minute rate limit.
 
 + Node.js (these instructions were tested with version Node.js version 16.0)
 
@@ -30,7 +30,7 @@ You can use [Visual Studio Code with the JavaScript extension](https://code.visu
 
 1. Create a .env file in the *demo-javascript* directory and include the following variables
 
-   ```
+   ```bash
    AZURE_OPENAI_SERVICE_NAME=YOUR-AZURE-OPENAI-SERVICE-NAME
    AZURE_OPENAI_DEPLOYMENT_NAME=YOUR-AZURE-OPENAI-DEPLOYMENT-NAME
    AZURE_OPENAI_API_VERSION=YOUR-AZURE-OPENAI-API-VERSION
@@ -52,6 +52,8 @@ You can use [Visual Studio Code with the JavaScript extension](https://code.visu
    ```
 
 ## Run the vectorization code
+
+This section explains how to run the separate vectorization programs that call Azure OpenAI. One program generates embeddings for a documents payload for indexing. The second program generates an embedding for a vector query.
 
 ### Document vectorization
 
@@ -91,7 +93,7 @@ Modify the `userQuery` variable in `query-text-openai-embedding.js` to customize
 
 1. Modify the `.env` file in the `demo-javascript` directory to have the following variables
 
-   ```
+   ```bash
    AZURE_OPENAI_SERVICE_NAME=YOUR-AZURE-OPENAI-SERVICE-NAME
    AZURE_OPENAI_DEPLOYMENT_NAME=YOUR-AZURE-OPENAI-DEPLOYMENT-NAME
    AZURE_OPENAI_API_VERSION=YOUR-AZURE-OPENAI-API-VERSION
@@ -115,7 +117,12 @@ Modify the `userQuery` variable in `query-text-openai-embedding.js` to customize
 
    All code is one file, split among functions, on purpose. Though the file is longer this way, the code is easier to follow when it's all together.
 
-1. Run `npm install` if you haven't already.
+1. Select **Terminal** and **New Terminal** to get a command line prompt. Install `npm` dependencies:
+
+   ```bash
+   cd demo-javascript/code
+   npm install
+   ```
 
 1. Run `node azure-search-vector-sample.js` to execute the program. The code takes several minutes to run. It creates index, loads the raw sample data, generates embeddings, loads the index with vector and non-vector content, and then begins a series of vector queries.
 
@@ -150,5 +157,14 @@ You can search the output for other query outcomes:
 + `Vector search with filter results:`
 + `Hybrid search results:` (requires semantic search)
 
-
 You can also use the Azure portal to explore the index definition or delete the index if you no longer need it.
+
+## Troubleshoot errors
+
+If you get error 429 from Azure OpenAI, it means the resource is over capacity:
+
++ Check the Activity Log of the Azure OpenAI service to see what else might be running.
+
++ Check the Tokens Per Minute (TPM) on the deployed model. On a system that isn't running other jobs, a TPM of 33K or higher should be sufficient to generate vectors for the sample data. You can try a model with more capacity if 429 errors persist.
+
++ Review these articles for information on rate limits: [Understanding rate limits](https://learn.microsoft.com/azure/ai-services/openai/how-to/quota?tabs=rest#understanding-rate-limits) and [A Guide to Azure OpenAI Service's Rate Limits and Monitoring](https://clemenssiebler.com/posts/understanding-azure-openai-rate-limits-monitoring/).
