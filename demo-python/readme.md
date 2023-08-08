@@ -15,7 +15,7 @@ The output is a combination of human-readable text and embeddings that can be pu
 To run this code, you will need the following:
 
 - An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access)
-- A deployment of the `text-embedding-ada-002` embedding model in your Azure OpenAI service. This demo uses API version `2022-12-01`. We used the same name as the model for the deployment name, "text-embedding-ada-002".
+- A deployment of the `text-embedding-ada-002` embedding model in your Azure OpenAI service. This demo uses API version `2023-05-15`. We used the same name as the model for the deployment name, "text-embedding-ada-002".
 - Azure OpenAI connection and model information:
   - OpenAI API key
   - OpenAI embedding model deployment name
@@ -28,7 +28,7 @@ You can use [Visual Studio Code with the Python extension](https://code.visualst
 
 1. Clone this repository.
 
-2. Create a `.env` file in the same directory as the code and include the following variables:
+1. Create a `.env` file in the same directory as the code and include the following variables:
 
    ```plaintext
    AZURE_SEARCH_SERVICE_ENDPOINT=YOUR-SEARCH-SERVICE-ENDPOINT
@@ -48,3 +48,13 @@ To run the code, navigate to the `code` folder and open the `azure-search-vector
 ## Output
 
 The code writes the `input_data` with the added embeddings to the _docVectors.json_ file in the `output` directory. The embeddings can be uploaded to an Azure Cognitive Search index using the 2023-07-01-preview API version of the [Add, Update, or Delete Documents REST API](https://learn.microsoft.com/rest/api/searchservice/preview-api/add-update-delete-documents). Next, you can perform multiple query experiences such as pure vector search, vector search with metadata filtering, hybrid search, and Hybrid Search with Semantic Reranking, Answers, Captions, and Highlights powered by Microsoft Bing.
+
+## Troubleshoot errors
+
+If you get error 429 from Azure OpenAI, it means the resource is over capacity:
+
+- Check the Activity Log of the Azure OpenAI service to see what else might be running.
+
+- Check the Tokens Per Minute (TPM) on the deployed model. On a system that isn't running other jobs, a TPM of 33K or higher should be sufficient to generate vectors for the sample data. You can try a model with more capacity if 429 errors persist.
+
+- Review these articles for information on rate limits: [Understanding rate limits](https://learn.microsoft.com/azure/ai-services/openai/how-to/quota?tabs=rest#understanding-rate-limits) and [A Guide to Azure OpenAI Service's Rate Limits and Monitoring](https://clemenssiebler.com/posts/understanding-azure-openai-rate-limits-monitoring/).
