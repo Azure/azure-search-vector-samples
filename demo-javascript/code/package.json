@@ -1,0 +1,12 @@
+{
+  "name": "text-openai-embedding-js",
+  "version": "1.0.0",
+  "description": "The JavaScript demo in this repository is used to create vectorized data that can be indexed in a search index. There are no calls to Cognitive Search, but it does call Azure OpenAI. You'll need access to Azure OpenAI in your Azure subscription to run this demo.",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@azure/search-documents": "^12.0.0-beta.2",
+    "axios": "^1.4.0",
+    "dotenv": "^16.3.1"
+  }
+}
