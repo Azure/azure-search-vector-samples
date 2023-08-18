@@ -101,10 +101,9 @@ namespace DotNetVectorDemo
             var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
 
             // Perform the vector similarity search  
-            var vector = new SearchQueryVector { KNearestNeighborsCount = 3, Fields = "contentVector", Value = queryEmbeddings.ToArray() };
             var searchOptions = new SearchOptions
             {
-                Vector = vector,
+                Vectors = { new() { Value = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
                 Size = k,
                 Select = { "title", "content", "category" },
             };
@@ -129,10 +128,9 @@ namespace DotNetVectorDemo
             var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
 
             // Perform the vector similarity search  
-            var vector = new SearchQueryVector { KNearestNeighborsCount = 3, Fields = "contentVector", Value = queryEmbeddings.ToArray() };
             var searchOptions = new SearchOptions
             {
-                Vector = vector,
+                Vectors = { new() { Value = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
                 Filter = filter,
                 Select = { "title", "content", "category" },
             };
@@ -159,10 +157,9 @@ namespace DotNetVectorDemo
             var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
 
             // Perform the vector similarity search  
-            var vector = new SearchQueryVector { KNearestNeighborsCount = 3, Fields = "contentVector", Value = queryEmbeddings.ToArray() };
             var searchOptions = new SearchOptions
             {
-                Vector = vector,
+                Vectors = { new() { Value = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
                 Size = 10,
                 Select = { "title", "content", "category" },
             };
@@ -190,10 +187,9 @@ namespace DotNetVectorDemo
                 var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
 
                 // Perform the vector similarity search    
-                var vector = new SearchQueryVector { KNearestNeighborsCount = 3, Fields = "contentVector", Value = queryEmbeddings.ToArray() };
                 var searchOptions = new SearchOptions
                 {
-                    Vector = vector,
+                    Vectors = { new() { Value = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
                     Size = 10,
                     QueryType = SearchQueryType.Semantic,
                     QueryLanguage = QueryLanguage.EnUs,
