@@ -190,7 +190,7 @@ namespace DotNetVectorDemo
                 var searchOptions = new SearchOptions
                 {
                     Vectors = { new() { Value = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
-                    Size = 10,
+                    Size = 3,
                     QueryType = SearchQueryType.Semantic,
                     QueryLanguage = QueryLanguage.EnUs,
                     SemanticConfigurationName = SemanticSearchConfigName,
@@ -216,7 +216,8 @@ namespace DotNetVectorDemo
                 {
                     count++;
                     Console.WriteLine($"Title: {result.Document["title"]}");
-                    Console.WriteLine($"Score: {result.Score}\n");
+                    Console.WriteLine($"Reranker Score: {result.RerankerScore}");
+                    Console.WriteLine($"Score: {result.Score}");
                     Console.WriteLine($"Content: {result.Document["content"]}");
                     Console.WriteLine($"Category: {result.Document["category"]}\n");
 
