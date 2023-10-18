@@ -10,7 +10,7 @@ The demos currently use beta versions of the client libraries for the Azure SDKs
 | Sample | Description |
 | ------ | ------------|
 | [.NET](demo-dotnet/readme.md) | A .NET Console App that calls Azure OpenAI to create vectorized data. It then calls Azure Cognitive Search to create, load, and query the data.|
-| [Python](demo-python/readme.md) |  Five notebooks that demonstrate aspects of vector search, including data chunking and vectorization of image content. |
+| [Python](demo-python/readme.md) |  A series of notebooks that demonstrate aspects of vector search, including data chunking and vectorization of both text and image content. |
 | [JavaScript](demo-javascript/readme.md) | There are three code samples. One is an end-to-end code sample that calls Azure OpenAI for embeddings and Azure Cognitive Seach to create, load, and query an index that contains vectors. Another sample calls just Azure OpenAI and is used to generate embeddings for fields in an index. The last one also calls just Azure OpenAI and is used to generate an embedding for a vector query.  |
 | [Postman collection](postman-collection/Vector%20Search%20QuickStart.postman_collection%20v1.0.json)| A collection of REST API calls to an Azure Cognitive Search instance to create, load, and query a search index that contains text and vector fields. The requests in this collection include an index schema, sample documents, and sample queries. The collection is reference in [Quickstart: Vector search](/docs/vector-search-quickstart.md). Each query demonstrates key scenarios. <p>Use the [Postman app](https://www.postman.com/downloads/) and import the collection.</p> <p>Set collection variables to provide your search service URI and admin key</p> If you're unfamiliar with Postman, see this [Postman/REST quickstart for Cognitive Search](https://learn.microsoft.com/azure/search/search-get-started-rest). |
 
@@ -23,4 +23,5 @@ The demos currently use beta versions of the client libraries for the Azure SDKs
 - [Azure Search Vector Search Demo Web App Template](https://github.com/farzad528/azure-search-vector-search-demo) A Vector Search Demo React Web App Template using Azure OpenAI for Text Search and Cognitive Services Florence Vision API for Image Search.
 - [Azure Cognitive Search Documentation](https://learn.microsoft.com/azure/search/)
 - [Azure OpenAI Service Documentation](https://learn.microsoft.com/azure/cognitive-services/openai/)
-- [Cognitive Services Computer Vision Documentation](https://learn.microsoft.com/azure/cognitive-services/computer-vision/)
+- [Azure Cognitive Search Comparision Tool](https://github.com/Azure-Samples/azure-search-comparison-tool)
+- [Azure AI Vision Documentation](https://learn.microsoft.com/azure/cognitive-services/computer-vision/)
