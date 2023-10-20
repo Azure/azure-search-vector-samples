@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 using Azure;
 using Azure.AI.OpenAI;
 using Azure.Search.Documents;
@@ -18,6 +14,7 @@ namespace DotNetVectorDemo
         private const string ModelName = "text-embedding-ada-002";
         private const int ModelDimensions = 1536;
         private const string SemanticSearchConfigName = "my-semantic-config";
+
         static async Task Main(string[] args)
         {
             var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("local.settings.json").Build();
@@ -28,7 +25,6 @@ namespace DotNetVectorDemo
             var key = configuration["AZURE_SEARCH_ADMIN_KEY"] ?? string.Empty;
             var openaiApiKey = configuration["AZURE_OPENAI_API_KEY"] ?? string.Empty;
             var openaiEndpoint = configuration["AZURE_OPENAI_ENDPOINT"] ?? string.Empty;
-            var modelDeploymentName = configuration["AZURE_OPENAI_EMBEDDING_DEPLOYED_MODEL"] ?? string.Empty;
 
             // Initialize OpenAI client  
             var credential = new AzureKeyCredential(openaiApiKey);
@@ -91,7 +87,7 @@ namespace DotNetVectorDemo
         // Function to generate embeddings  
         private static async Task<IReadOnlyList<float>> GenerateEmbeddings(string text, OpenAIClient openAIClient)
         {
-            var response = await openAIClient.GetEmbeddingsAsync("text-embedding-ada-002", new EmbeddingsOptions(text));
+            var response = await openAIClient.GetEmbeddingsAsync(ModelName, new EmbeddingsOptions(text));
             return response.Value.Data[0].Embedding;
         }
 
@@ -103,7 +99,7 @@ namespace DotNetVectorDemo
             // Perform the vector similarity search  
             var searchOptions = new SearchOptions
             {
-                Vectors = { new() { Value = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
+                VectorQueries = { new RawVectorQuery() { Vector = queryEmbeddings.ToArray(), KNearestNeighborsCount = k, Fields = { "contentVector" } } },
                 Size = k,
                 Select = { "title", "content", "category" },
             };
@@ -130,11 +126,10 @@ namespace DotNetVectorDemo
             // Perform the vector similarity search  
             var searchOptions = new SearchOptions
             {
-                Vectors = { new() { Value = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
+                VectorQueries = { new RawVectorQuery() { Vector = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
                 Filter = filter,
                 Select = { "title", "content", "category" },
             };
-
 
             SearchResults<SearchDocument> response = await searchClient.SearchAsync<SearchDocument>(null, searchOptions);
 
@@ -146,7 +141,6 @@ namespace DotNetVectorDemo
                 Console.WriteLine($"Score: {result.Score}\n");
                 Console.WriteLine($"Content: {result.Document["content"]}");
                 Console.WriteLine($"Category: {result.Document["category"]}\n");
-
             }
             Console.WriteLine($"Total Results: {count}");
         }
@@ -159,11 +153,10 @@ namespace DotNetVectorDemo
             // Perform the vector similarity search  
             var searchOptions = new SearchOptions
             {
-                Vectors = { new() { Value = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
+                VectorQueries = { new RawVectorQuery() { Vector = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
                 Size = 10,
                 Select = { "title", "content", "category" },
             };
-
 
             SearchResults<SearchDocument> response = await searchClient.SearchAsync<SearchDocument>(query, searchOptions);
 
@@ -183,13 +176,13 @@ namespace DotNetVectorDemo
         {
             try
             {
-                // Generate the embedding for the query    
+                // Generate the embedding for the query  
                 var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
 
-                // Perform the vector similarity search    
+                // Perform the vector similarity search  
                 var searchOptions = new SearchOptions
                 {
-                    Vectors = { new() { Value = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
+                    VectorQueries = { new RawVectorQuery() { Vector = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
                     Size = 3,
                     QueryType = SearchQueryType.Semantic,
                     QueryLanguage = QueryLanguage.EnUs,
@@ -245,19 +238,22 @@ namespace DotNetVectorDemo
             }
         }
 
-
-
         internal static SearchIndex GetSampleIndex(string name)
         {
-            string vectorSearchConfigName = "my-vector-config";
+            string vectorSearchProfile = "my-vector-profile";
+            string vectorSearchHnswConfig = "my-hnsw-vector-config";
 
             SearchIndex searchIndex = new(name)
             {
                 VectorSearch = new()
                 {
-                    AlgorithmConfigurations =
+                    Profiles =
                 {
-                    new HnswVectorSearchAlgorithmConfiguration(vectorSearchConfigName)
+                    new VectorSearchProfile(vectorSearchProfile, vectorSearchHnswConfig)
+                },
+                    Algorithms =
+                {
+                    new HnswVectorSearchAlgorithmConfiguration(vectorSearchHnswConfig)
                 }
                 },
                 SemanticSettings = new()
@@ -290,18 +286,17 @@ namespace DotNetVectorDemo
                 {
                     IsSearchable = true,
                     VectorSearchDimensions = ModelDimensions,
-                    VectorSearchConfiguration = vectorSearchConfigName
+                    VectorSearchProfile = vectorSearchProfile
                 },
                 new SearchField("contentVector", SearchFieldDataType.Collection(SearchFieldDataType.Single))
                 {
                     IsSearchable = true,
                     VectorSearchDimensions = ModelDimensions,
-                    VectorSearchConfiguration = vectorSearchConfigName
+                    VectorSearchProfile = vectorSearchProfile
                 },
                 new SearchableField("category") { IsFilterable = true, IsSortable = true, IsFacetable = true }
             }
             };
-
 
             return searchIndex;
         }
@@ -315,8 +310,10 @@ namespace DotNetVectorDemo
                 string title = document["title"]?.ToString() ?? string.Empty;
                 string content = document["content"]?.ToString() ?? string.Empty;
 
+                float[] titleEmbeddings = (await GenerateEmbeddings(title, openAIClient)).ToArray();
                 float[] contentEmbeddings = (await GenerateEmbeddings(content, openAIClient)).ToArray();
 
+                document["titleVector"] = titleEmbeddings;
                 document["contentVector"] = contentEmbeddings;
                 sampleDocuments.Add(new SearchDocument(document));
             }
