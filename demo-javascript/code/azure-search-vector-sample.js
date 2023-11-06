@@ -23,7 +23,9 @@ async function main() {
     const docs = await generateDocumentEmbeddings();
     await uploadDocuments(docs);
   } catch (err) {
-    console.log(`Failed to generate embeddings and upload documents to ACS: ${err.message}`);
+    console.log(
+      `Failed to generate embeddings and upload documents to ACS: ${err.message}`
+    );
   }
 
   // Examples of different types of vector searches
@@ -93,27 +95,34 @@ async function createSearchIndex() {
         type: "Collection(Edm.Single)",
         searchable: true,
         vectorSearchDimensions: 1536,
-        vectorSearchConfiguration: "my-vector-config",
+        vectorSearchProfile: "myHnswProfile",
       },
       {
         name: "contentVector",
         type: "Collection(Edm.Single)",
         searchable: true,
         vectorSearchDimensions: 1536,
-        vectorSearchConfiguration: "my-vector-config",
+        vectorSearchProfile: "myHnswProfile",
       },
     ],
     vectorSearch: {
-      algorithmConfigurations: [
+      algorithms: [{ name: "myHnswAlgorithm", kind: "hnsw" }],
+      vectorizers: [
         {
-          name: "my-vector-config",
-          kind: "hnsw",
-          parameters: {
-            m: 4,
-            efConstruction: 400,
-            efSearch: 500,
-            metric: "cosine",
+          name: "myOpenAIVectorizer",
+          kind: "azureOpenAI",
+          azureOpenAIParameters: {
+            resourceUri: process.env.AZURE_OPENAI_ENDPOINT,
+            apiKey: process.env.AZURE_OPENAI_API_KEY,
+            deploymentId: process.env.AZURE_OPENAI_DEPLOYMENT_NAME,
           },
+        },
+      ],
+      profiles: [
+        {
+          name: "myHnswProfile",
+          algorithm: "myHnswAlgorithm",
+          vectorizer: "myOpenAIVectorizer",
         },
       ],
     },
