@@ -1,8 +1,8 @@
 # (ARCHIVED) Change-List for the private preview
 
-Please visit our "What's new" REST API documentation to keep up with the change tracking. https://learn.microsoft.com/azure/search/whats-new
+This document is no longer maintained now that vector search is public. For new announcements, see [What's New in Search](https://learn.microsoft.com/azure/search/whats-new).
 
-As the private preview progresses, we'll have updates on bugs or behavior changes, doc updates, and demo updates. Check back here for a status summary of those updates.
+## Preview versions
 
 | Version | Date       | Changes | Regions |  
 | ------- | ---------- | ------- | --------|  
