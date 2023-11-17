@@ -235,7 +235,7 @@
     },
     {
         "id": "40",
-        "title": "Azure Cognitive Search",
+        "title": "Azure AI Search",
         "content": "Azure Cognitive Search is a fully managed search-as-a-service that enables you to build rich search experiences for your applications. It provides features like full-text search, faceted navigation, and filters. Azure Cognitive Search supports various data sources, such as Azure SQL Database, Azure Blob Storage, and Azure Cosmos DB. You can use Azure Cognitive Search to index your data, create custom scoring profiles, and integrate with other Azure services. It also integrates with other Azure services, such as Azure Cognitive Services and Azure Machine Learning.",
         "category": "AI + Machine Learning"
     },

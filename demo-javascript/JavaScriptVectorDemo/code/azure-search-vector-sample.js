@@ -11,14 +11,14 @@ async function main() {
   // Load environment variables from .env file
   dotenv.config({ path: "../.env" });
 
-  // Create Azure Cognitive Search index
+  // Create Azure AI Search index
   try {
     await createSearchIndex();
   } catch (err) {
     console.log(`Failed to create ACS index: ${err.message}`);
   }
 
-  // Generate document embeddings and upload to Azure Cognitive Search
+  // Generate document embeddings and upload to Azure AI Search
   try {
     const docs = await generateDocumentEmbeddings();
     await uploadDocuments(docs);

@@ -30,7 +30,7 @@ namespace DotNetVectorDemo
             var credential = new AzureKeyCredential(openaiApiKey);
             var openAIClient = new OpenAIClient(new Uri(openaiEndpoint), credential);
 
-            // Initialize Azure Cognitive Search clients  
+            // Initialize Azure AI Search clients  
             var searchCredential = new AzureKeyCredential(key);
             var indexClient = new SearchIndexClient(new Uri(serviceEndpoint), searchCredential);
             var searchClient = indexClient.GetSearchClient(indexName);

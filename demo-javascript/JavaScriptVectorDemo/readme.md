@@ -1,16 +1,30 @@
-# Readme: Vector search demos using Node.js and Azure Cognitive Search
+---
+page_type: sample
+languages:
+  - javascript
+name: Vector search in Node.js
+products:
+  - azure
+  - azure-cognitive-search
+  - azure-openai
+description: |
+  Learn how to create, load, and query vectors in Azure AI Search using Node.js.
+urlFragment: vector-search-javascript
+---
 
-The JavaScript demo in this repository is used to create vectorized data that can be indexed in a search index on Azure Cognitive Search.
+# Readme: Vector search demo using Node.js and Azure AI Search
+
+The JavaScript demo in this repository creates vectorized data that can be indexed and queried on Azure AI Search.
 
 | Samples | Description |
 |---------|-------------|
-| **azure-search-vector-sample.js** | [End-to-end sample](#run-the-end-to-end-sample-program). It uses **@azure/search-documents 12.0.0-beta.2** in the Azure SDK for JavaScript. It calls Azure OpenAI and Azure Cognitive Search. |
-| **docs-text-openai-embeddings.js** | Generates embeddings for an index. Input is `data\text-sample.json`. Output is sent to `output\docVectors.json`. The output is usable as a request payload on a document upload action to Cognitive Search, but there are no calls to Cognitive Search in this code. |
-| **query-text-openai-embeddings.js** | Generates an embedding for a query. Output is a vector that can be pasted into a vector query request. There are no calls to Cognitive Search in this code. |
+| **azure-search-vector-sample.js** | [End-to-end sample](#run-the-end-to-end-sample-program). It uses **@azure/search-documents** in the Azure SDK for JavaScript. It calls the next two JavaScript functions, which access a deployed model on your Azure OpenAI resource. It calls Azure AI Search to create and query an index. |
+| **docs-text-openai-embeddings.js** | Generates embeddings for an index. Input is `data\text-sample.json`. Output is sent to `output\docVectors.json`. The output is usable as a request payload on a document upload action to Azure AI Search, but there are no calls to Azure AI Search in this code. |
+| **query-text-openai-embeddings.js** | Generates an embedding for a query. Output is a vector that can be pasted into a vector query request. There are no calls to Azure AI Search in this code. |
 
 ## Prerequisites
 
-To run the programs, you'll need the following:
+To run the programs, you need the following:
 
 + An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access). You must have the Azure OpenAI service name and an API key.
 
@@ -20,7 +34,7 @@ To run the programs, you'll need the following:
 
 + Node.js (these instructions were tested with version Node.js version 16.0)
 
-+ For the end-to-end sample, you also need an Azure Cognitive Search service. Provide the full endpoint, an Admin API key, and an index name as environment variables.
++ For the end-to-end sample, you also need an Azure AI Search service. Provide the full endpoint, an Admin API key, and an index name as environment variables.
 
 You can use [Visual Studio Code with the JavaScript extension](https://code.visualstudio.com/docs/nodejs/extensions) for this demo. For help setting up the environment, see this [JavaScript quickstart](https://learn.microsoft.com/azure/search/search-get-started-javascript).
 
@@ -28,13 +42,16 @@ You can use [Visual Studio Code with the JavaScript extension](https://code.visu
 
 1. Clone this repository.
 
-1. Create a .env file in the *demo-javascript* directory and include the following variables
+1. Create a .env file in the *demo-javascript/JavaScriptVectorDemo* directory and include the following variables
 
    ```bash
    AZURE_OPENAI_SERVICE_NAME=YOUR-AZURE-OPENAI-SERVICE-NAME
    AZURE_OPENAI_DEPLOYMENT_NAME=YOUR-AZURE-OPENAI-DEPLOYMENT-NAME
    AZURE_OPENAI_API_VERSION=YOUR-AZURE-OPENAI-API-VERSION
    AZURE_OPENAI_API_KEY=YOUR-AZURE-OPENAI-API-KEY
+   AZURE_SEARCH_ENDPOINT=YOUR-AZURE_SEARCH_ENDPOINT
+   AZURE_SEARCH_ADMIN_KEY=YOUR-AZURE_SEARCH_ADMIN_KEY
+   AZURE_SEARCH_INDEX_NAME=YOUR-AZURE_SEARCH_INDEX_NAME
    ```
 
    **Key points**:
@@ -66,20 +83,16 @@ node docs-text-openai-embeddings.js
 Output should look similar to this:
 
 ```bash
-PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\code> node docs-text-openai-embeddings.js
+PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\JavaSCriptVectorDemo\code> node docs-text-openai-embeddings.js
 Reading data/text-sample.json...
 Generating embeddings with Azure OpenAI...
 Success! See output/docVectors.json
-PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\code> 
+PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\JavaSCriptVectorDemo\code> 
 ```
 
 If you get an error, such as error code 429 or a server error, verify the model deployment capacity is sufficient to process the sample input. 
 
 The generated output consists of embeddings for the title and content fields of the input data (`data/text-sample.json`).
-
-The code adds the embeddings and a `"@search.action"` field to `output/docVectors.json`. This JSON file can be uploaded to an Azure Cognitive Search index using the **2023-07-01-preview** API version of the [Add, Update, or Delete Documents REST API](https://learn.microsoft.com/rest/api/searchservice/preview-api/add-update-delete-documents).
-
-You can use the [Postman collection](https://github.com/Azure/cognitive-search-vector-pr/tree/main/postman-collection) and update the payload in the **Upload Docs** step to load the output you just generated, or switch to the end-to-end example if you want to use the JavaScript SDK.
 
 ### Query vectorization
 
@@ -109,9 +122,9 @@ Modify the `userQuery` variable in `query-text-openai-embedding.js` to customize
    + Azure OpenAI deployment name can be found in Azure AI Studio. Azure portal provides a link. We used `text-embedding-ada-002` for our deployment name. 
    + Azure OpenAI API version used for testing is `2023-05-15`.
    + Azure OpenAI keys and endpoints can be found in the Azure portal pages for your Azure OpenAI resource.
-   + Azure Cognitive Search endpoint should be the full URL, starting with `https://`.
-   + Azure Cognitive Search admin API key can be found in the **Keys** page in the Azure portal.
-   + Azure Cognitive Search index name should be unique, and start with a lowercase letter (no spaces or slashes).
+   + Azure AI Search endpoint should be the full URL, starting with `https://`.
+   + Azure AI Search admin API key can be found in the **Keys** page in the Azure portal.
+   + Azure AI Search index name should be unique, and start with a lowercase letter (no spaces or slashes).
 
    This end-to-end JavaScript sample shows you how to create a search index, generate documents embeddings, and upload them to an index. It also demonstrates several vector queries. It attemps to run a hybrid query that invokes semantic search. If you want that query to run, be sure to enable semantic search on your search service.
 
@@ -129,7 +142,7 @@ Modify the `userQuery` variable in `query-text-openai-embedding.js` to customize
 Output of the first several lines should look similar to this:
 
 ```bash
-PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\code> node azure-search-vector-sample.js
+PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\JavaSCriptVectorDemo\code> node azure-search-vector-sample.js
 Creating ACS index...
 Reading data/text-sample.json...
 Generating embeddings with Azure OpenAI...
