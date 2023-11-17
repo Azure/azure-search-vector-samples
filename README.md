@@ -2,9 +2,11 @@
 
 This repository provides code samples for the [vector search](https://learn.microsoft.com/azure/search/vector-search-overview) in Azure AI Search.
 
-Vector search is generally available, but it also has capabilities that are still in preview, under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/), without a service level agreement. Vector indexing and queries are generally available. 
+Vector search is generally available, but it also has capabilities that are still in preview, under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/), without a service level agreement. 
 
-[Integrated data chunking and vectorization](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization), which takes a dependency on indexers and skillsets, is in preview.
++ Vector indexing and queries are generally available. 
+
++ [Integrated data chunking and vectorization](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization), which takes a dependency on indexers and skillsets, is in preview.
 
 ## Content
 
