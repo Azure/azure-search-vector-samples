@@ -2,7 +2,9 @@
 
 This repository provides code samples for the [vector search](https://learn.microsoft.com/azure/search/vector-search-overview) in Azure AI Search.
 
-Vector search is generally available, but it also has capabilities that are still in preview, under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/), without a service level agreement. Vector indexing and queries are generally available. [Integrated data chunking and vectorization](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization), which takes a dependency on indexers and skillsets, is in preview.
+Vector search is generally available, but it also has capabilities that are still in preview, under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/), without a service level agreement. Vector indexing and queries are generally available. 
+
+[Integrated data chunking and vectorization](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization), which takes a dependency on indexers and skillsets, is in preview.
 
 ## Content
 
@@ -10,9 +12,9 @@ Vector search is generally available, but it also has capabilities that are stil
 | ------ | ------------|--------|
 | [demo-dotnet/DotNetVectorDemo](demo-dotnet/DotNetVectorDemo/readme.md) | A .NET Console App that calls Azure OpenAI to create vectorized data. It then calls Azure AI Search to create, load, and query the data.| Generally available (GA) |
 | [demo-dotnet/DotNetIntegratedVectorizationDemo](demo-dotnet/DotNetIntegratedVectorizationDemo/readme.md) | A .NET Console App that calls Azure AI Search to create an index, indexer, data source, and skillset. An Azure Storage account provides the data. Azure OpenAI is called by the skillset during indexing, and again during query execution to vectorize text queries. | Public preview |
-| [demo-javaScript/JavaScriptVectorDemo](demo-javascript/JavaScriptVectorDemo/readme.md) | There are three code samples. One is an end-to-end code sample that calls Azure OpenAI for embeddings and Azure AI Seach to create, load, and query an index that contains vectors. Another sample calls just Azure OpenAI and is used to generate embeddings for fields in an index. The last one also calls just Azure OpenAI and is used to generate an embedding for a vector query. | Generally available |
+| [demo-javaScript/JavaScriptVectorDemo](demo-javascript/JavaScriptVectorDemo/readme.md) | There are three code samples. One is an end-to-end code sample that calls Azure OpenAI for embeddings and Azure AI Seach to create, load, and query an index that contains vectors. Another sample calls just Azure OpenAI and is used to generate embeddings for fields in an index. The last one also calls just Azure OpenAI and is used to generate an embedding for a vector query. | GA |
 | [demo-python](demo-python/readme.md) |  A series of notebooks that demonstrate aspects of vector search, including data chunking and vectorization of both text and image content. | GA and preview | 
-| [Postman collection](postman-collection/Vector%20Search%20QuickStart.postman_collection%20v1.0.json)| A collection of REST API calls to an Azure AI Search instance to create, load, and query a search index that contains text and vector fields. The requests in this collection include an index schema, sample documents, and sample queries. Use the [Postman app](https://www.postman.com/downloads/) and import the collection. |
+| [Postman collection](postman-collection/Vector%20Search%20QuickStart.postman_collection%20v1.0.json)| A collection of REST API calls to an Azure AI Search instance to create, load, and query a search index that contains text and vector fields. The requests in this collection include an index schema, sample documents, and sample queries. Use the [Postman app](https://www.postman.com/downloads/) and import the collection. | GA and preview | 
 
 ## Related samples and tools
 
@@ -28,7 +30,7 @@ Vector search is generally available, but it also has capabilities that are stil
 
 - [Azure AI Search Documentation](https://learn.microsoft.com/azure/search/)
 
-  - [Azure REST API reference](https://learn.microsoft.com/rest/api/searchservice/)
+  - [REST API reference](https://learn.microsoft.com/rest/api/searchservice/)
   - [Vector search overview](https://learn.microsoft.com/azure/search/vector-search-overview)
   - [Hybrid search overview](https://learn.microsoft.com/azure/search/vector-search-overview)
   - [Create a vector index](https://learn.microsoft.com/azure/search/vector-search-how-to-create-index)
