@@ -95,44 +95,32 @@ async function createSearchIndex() {
         type: "Collection(Edm.Single)",
         searchable: true,
         vectorSearchDimensions: 1536,
-        vectorSearchProfile: "myHnswProfile",
+        vectorSearchProfileName: "myHnswProfile",
       },
       {
         name: "contentVector",
         type: "Collection(Edm.Single)",
         searchable: true,
         vectorSearchDimensions: 1536,
-        vectorSearchProfile: "myHnswProfile",
+        vectorSearchProfileName: "myHnswProfile",
       },
     ],
     vectorSearch: {
       algorithms: [{ name: "myHnswAlgorithm", kind: "hnsw" }],
-      vectorizers: [
-        {
-          name: "myOpenAIVectorizer",
-          kind: "azureOpenAI",
-          azureOpenAIParameters: {
-            resourceUri: process.env.AZURE_OPENAI_ENDPOINT,
-            apiKey: process.env.AZURE_OPENAI_API_KEY,
-            deploymentId: process.env.AZURE_OPENAI_DEPLOYMENT_NAME,
-          },
-        },
-      ],
       profiles: [
         {
           name: "myHnswProfile",
-          algorithm: "myHnswAlgorithm",
-          vectorizer: "myOpenAIVectorizer",
+          algorithmConfigurationName: "myHnswAlgorithm",
         },
       ],
     },
-    semanticSettings: {
+    semanticSearch: {
       configurations: [
         {
           name: "my-semantic-config",
           prioritizedFields: {
-            prioritizedContentFields: [{ name: "content" }],
-            prioritizedKeywordsFields: [{ name: "category" }],
+            contentFields: [{ name: "content" }],
+            keywordsFields: [{ name: "category" }],
             titleField: {
               name: "title",
             },
@@ -174,11 +162,12 @@ async function doPureVectorSearch() {
 
   const query = "tools for software development";
   const response = await searchClient.search(undefined, {
-    vector: {
-      value: await generateEmbeddings(query),
+    vectorQueries: [{
+      kind: "vector",
+      vector: await generateEmbeddings(query),
       kNearestNeighborsCount: 3,
       fields: ["contentVector"],
-    },
+    }],
     select: ["title", "content", "category"],
   });
 
@@ -206,11 +195,12 @@ async function doPureVectorSearchMultilingual() {
   // e.g 'tools for software development' in Dutch)
   const query = "tools voor softwareontwikkeling";
   const response = await searchClient.search(undefined, {
-    vector: {
-      value: await generateEmbeddings(query),
+    vectorQueries: [{
+      kind: "vector",
+      vector: await generateEmbeddings(query),
       kNearestNeighborsCount: 3,
       fields: ["contentVector"],
-    },
+    }],
     select: ["title", "content", "category"],
   });
 
@@ -237,11 +227,12 @@ async function doCrossFieldVectorSearch() {
 
   const query = "tools for software development";
   const response = await searchClient.search(undefined, {
-    vector: {
-      value: await generateEmbeddings(query),
+    vectorQueries: [{
+      kind: "vector",
+      vector: await generateEmbeddings(query),
       kNearestNeighborsCount: 3,
       fields: ["titleVector", "contentVector"],
-    },
+    }],
     select: ["title", "content", "category"],
   });
 
@@ -268,11 +259,12 @@ async function doVectorSearchWithFilter() {
 
   const query = "tools for software development";
   const response = await searchClient.search(undefined, {
-    vector: {
-      value: await generateEmbeddings(query),
+    vectorQueries: [{
+      kind: "vector",
+      vector: await generateEmbeddings(query),
       kNearestNeighborsCount: 3,
       fields: ["contentVector"],
-    },
+    }],
     filter: "category eq 'Developer Tools'",
     select: ["title", "content", "category"],
   });
@@ -300,11 +292,12 @@ async function doHybridSearch() {
 
   const query = "scalable storage solution";
   const response = await searchClient.search(query, {
-    vector: {
-      value: await generateEmbeddings(query),
+    vectorQueries: [{
+      kind: "vector",
+      vector: await generateEmbeddings(query),
       kNearestNeighborsCount: 3,
       fields: ["contentVector"],
-    },
+    }],
     select: ["title", "content", "category"],
     top: 3,
   });
@@ -332,18 +325,26 @@ async function doSemanticHybridSearch() {
 
   const query = "what is azure sarch?";
   const response = await searchClient.search(query, {
-    vector: {
-      value: await generateEmbeddings(query),
+    vectorQueries: [{
+      kind: "vector",
+      vector: await generateEmbeddings(query),
       kNearestNeighborsCount: 3,
       fields: ["contentVector"],
-    },
+    }],
     select: ["title", "content", "category"],
     queryType: "semantic",
-    queryLanguage: "en-us",
-    semanticConfiguration: "my-semantic-config",
-    captions: "extractive",
-    answers: "extractive",
     top: 3,
+    semanticSearchOptions: {
+      answers: {
+          answerType: "extractive",
+          count: 3
+      },
+      captions:{
+          captionType: "extractive",
+          count: 3
+      },
+      configurationName: "my-semantic-config",
+    }
   });
 
   console.log(`\nSemantic Hybrid search results:`);
@@ -359,6 +360,7 @@ async function doSemanticHybridSearch() {
 
   for await (const result of response.results) {
     console.log(`Title: ${result.document.title}`);
+    console.log(`Reranker Score: ${result.rerankerScore}`); // Reranker score is the semantic score
     console.log(`Content: ${result.document.content}`);
     console.log(`Category: ${result.document.category}`);
 
