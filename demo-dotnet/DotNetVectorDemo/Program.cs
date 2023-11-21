@@ -99,7 +99,10 @@ namespace DotNetVectorDemo
             // Perform the vector similarity search  
             var searchOptions = new SearchOptions
             {
-                VectorQueries = { new RawVectorQuery() { Vector = queryEmbeddings.ToArray(), KNearestNeighborsCount = k, Fields = { "contentVector" } } },
+                VectorSearch = new()
+                {
+                    Queries = { new VectorizedQuery(queryEmbeddings.ToArray()) { KNearestNeighborsCount = 3, Fields = { "contentVector" } } }
+                },
                 Size = k,
                 Select = { "title", "content", "category" },
             };
@@ -118,7 +121,7 @@ namespace DotNetVectorDemo
             Console.WriteLine($"Total Results: {count}");
         }
 
-        internal static async Task SingleVectorSearchWithFilter(SearchClient searchClient, OpenAIClient openAIClient, string query, string filter)
+        internal static async Task SingleVectorSearchWithFilter(SearchClient searchClient, OpenAIClient openAIClient, string query, string filter, int k = 3)
         {
             // Generate the embedding for the query  
             var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
@@ -126,7 +129,10 @@ namespace DotNetVectorDemo
             // Perform the vector similarity search  
             var searchOptions = new SearchOptions
             {
-                VectorQueries = { new RawVectorQuery() { Vector = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
+                VectorSearch = new()
+                {
+                    Queries = { new VectorizedQuery(queryEmbeddings.ToArray()) { KNearestNeighborsCount = k, Fields = { "contentVector" } } }
+                },
                 Filter = filter,
                 Select = { "title", "content", "category" },
             };
@@ -145,7 +151,7 @@ namespace DotNetVectorDemo
             Console.WriteLine($"Total Results: {count}");
         }
 
-        internal static async Task SimpleHybridSearch(SearchClient searchClient, OpenAIClient openAIClient, string query)
+        internal static async Task SimpleHybridSearch(SearchClient searchClient, OpenAIClient openAIClient, string query, int k = 3)
         {
             // Generate the embedding for the query  
             var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
@@ -153,8 +159,11 @@ namespace DotNetVectorDemo
             // Perform the vector similarity search  
             var searchOptions = new SearchOptions
             {
-                VectorQueries = { new RawVectorQuery() { Vector = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
-                Size = 10,
+                VectorSearch = new()
+                {
+                    Queries = { new VectorizedQuery(queryEmbeddings.ToArray()) { KNearestNeighborsCount = k, Fields = { "contentVector" } } }
+                },
+                Size = k,
                 Select = { "title", "content", "category" },
             };
 
@@ -172,7 +181,7 @@ namespace DotNetVectorDemo
             Console.WriteLine($"Total Results: {count}");
         }
 
-        internal static async Task SemanticHybridSearch(SearchClient searchClient, OpenAIClient openAIClient, string query)
+        internal static async Task SemanticHybridSearch(SearchClient searchClient, OpenAIClient openAIClient, string query, int k = 3)
         {
             try
             {
@@ -182,41 +191,46 @@ namespace DotNetVectorDemo
                 // Perform the vector similarity search  
                 var searchOptions = new SearchOptions
                 {
-                    VectorQueries = { new RawVectorQuery() { Vector = queryEmbeddings.ToArray(), KNearestNeighborsCount = 3, Fields = { "contentVector" } } },
-                    Size = 3,
+                    VectorSearch = new()
+                    {
+                        Queries = { new VectorizedQuery(queryEmbeddings.ToArray()) { KNearestNeighborsCount = 3, Fields = { "contentVector" } } }
+                    },
+                    SemanticSearch = new()
+                    {
+                        SemanticConfigurationName = "my-semantic-config",
+                        QueryCaption = new(QueryCaptionType.Extractive),
+                        QueryAnswer = new(QueryAnswerType.Extractive),
+                    },
                     QueryType = SearchQueryType.Semantic,
-                    QueryLanguage = QueryLanguage.EnUs,
-                    SemanticConfigurationName = SemanticSearchConfigName,
-                    QueryCaption = QueryCaptionType.Extractive,
-                    QueryAnswer = QueryAnswerType.Extractive,
-                    QueryCaptionHighlightEnabled = true,
+                    Size = k,
                     Select = { "title", "content", "category" },
+
                 };
 
                 SearchResults<SearchDocument> response = await searchClient.SearchAsync<SearchDocument>(query, searchOptions);
 
                 int count = 0;
-                Console.WriteLine("Semantic Hybrid Search Results:\n");
+                Console.WriteLine($"Semantic Hybrid Search Results:");
 
-                Console.WriteLine("Query Answer:");
-                foreach (AnswerResult result in response.Answers)
+                Console.WriteLine($"\nQuery Answer:");
+                foreach (QueryAnswerResult result in response.SemanticSearch.Answers)
                 {
                     Console.WriteLine($"Answer Highlights: {result.Highlights}");
-                    Console.WriteLine($"Answer Text: {result.Text}\n");
+                    Console.WriteLine($"Answer Text: {result.Text}");
                 }
 
                 await foreach (SearchResult<SearchDocument> result in response.GetResultsAsync())
                 {
                     count++;
                     Console.WriteLine($"Title: {result.Document["title"]}");
-                    Console.WriteLine($"Reranker Score: {result.RerankerScore}");
+                    Console.WriteLine($"Reranker Score: {result.SemanticSearch.RerankerScore}");
                     Console.WriteLine($"Score: {result.Score}");
                     Console.WriteLine($"Content: {result.Document["content"]}");
                     Console.WriteLine($"Category: {result.Document["category"]}\n");
 
-                    if (result.Captions != null)
+                    if (result.SemanticSearch.Captions != null)
                     {
-                        var caption = result.Captions.FirstOrDefault();
+                        var caption = result.SemanticSearch.Captions.FirstOrDefault();
                         if (caption != null)
                         {
                             if (!string.IsNullOrEmpty(caption.Highlights))
@@ -253,25 +267,25 @@ namespace DotNetVectorDemo
                 },
                     Algorithms =
                 {
-                    new HnswVectorSearchAlgorithmConfiguration(vectorSearchHnswConfig)
+                    new HnswAlgorithmConfiguration(vectorSearchHnswConfig)
                 }
                 },
-                SemanticSettings = new()
+                SemanticSearch = new()
                 {
 
                     Configurations =
                     {
                        new SemanticConfiguration(SemanticSearchConfigName, new()
                        {
-                           TitleField = new(){ FieldName = "title" },
+                           TitleField = new SemanticField("title"),
                            ContentFields =
                            {
-                               new() { FieldName = "content" }
+                            new SemanticField("content")
                            },
-                           KeywordFields =
-                           {
-                               new() { FieldName = "category" }
-                           }
+                KeywordsFields =
+                {
+                    new SemanticField("category")
+                }
 
                        })
 
@@ -286,13 +300,13 @@ namespace DotNetVectorDemo
                 {
                     IsSearchable = true,
                     VectorSearchDimensions = ModelDimensions,
-                    VectorSearchProfile = vectorSearchProfile
+                    VectorSearchProfileName = vectorSearchProfile
                 },
                 new SearchField("contentVector", SearchFieldDataType.Collection(SearchFieldDataType.Single))
                 {
                     IsSearchable = true,
                     VectorSearchDimensions = ModelDimensions,
-                    VectorSearchProfile = vectorSearchProfile
+                    VectorSearchProfileName = vectorSearchProfile
                 },
                 new SearchableField("category") { IsFilterable = true, IsSortable = true, IsFacetable = true }
             }
