@@ -1,0 +1,42 @@
+[
+    {
+        "image_path": "Braeburn.jpeg",
+        "description": "Braeburn"
+    },
+    {
+        "image_path": "Fiji.jpeg",
+        "description": "Fiji"
+    },
+    {
+        "image_path": "Gala.jpeg",
+        "description": "Gala"
+    },
+    {
+        "image_path": "GoldenDelicious.jpeg",
+        "description": "GoldenDelicious"
+    },
+    {
+        "image_path": "GrannySmith.jpeg",
+        "description": "GrannySmith"
+    },
+    {
+        "image_path": "Honeycrisp.jpeg",
+        "description": "Honeycrisp"
+    },
+    {
+        "image_path": "Jonagold.jpeg",
+        "description": "Jonagold"
+    },
+    {
+        "image_path": "PinkLady.jpeg",
+        "description": "PinkLady"
+    },
+    {
+        "image_path": "RedDelicious.jpeg",
+        "description": "RedDelicious"
+    },
+    {
+        "image_path": "Rome.jpeg",
+        "description": "Rome"
+    }
+]
