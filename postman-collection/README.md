@@ -22,7 +22,7 @@ There are two collections:
 | Collection | Description |
 |------------|-------------|
 | AzureSearchVectors_2023-11-01 | Demonstrates vector indexing and queries. |
-| AzureSearchVectors_2023-10-01-preview | Adds [integrated vectorization](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization)), with data chunking and embedded calls to Azure OpenAI. This worflow adds an indexer, data source, and skillset. It uses sample PDFs that you upload to Azure Storage to demonstrate data chunking. |
+| AzureSearchVectors_2023-10-01-preview | Adds [integrated vectorization](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization), with data chunking and embedded calls to Azure OpenAI. This workflow adds an indexer, data source, and skillset. It uses PDFs for the sample data. |
 
 ## Prerequisites
 
