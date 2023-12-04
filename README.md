@@ -1,18 +1,21 @@
 # Vector search samples - Azure AI Search
 
-This repository provides code samples for the [vector search](https://learn.microsoft.com/azure/search/vector-search-overview) in Azure AI Search.
+This repository provides code samples for [vector support](https://learn.microsoft.com/azure/search/vector-search-overview) in Azure AI Search.
 
-Vector search is generally available, but it also has capabilities that are still in preview, under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/), without a service level agreement. Vector indexing and queries are generally available. [Integrated data chunking and vectorization](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization), which takes a dependency on indexers and skillsets, is in preview.
+Vector search is generally available, but it also has capabilities that are still in preview, under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/), without a service level agreement. 
+
+- Vector indexing and queries are generally available. 
+- [Integrated data chunking and vectorization](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization), which takes a dependency on indexers and skillsets, is in preview.
 
 ## Content
 
 | Sample | Description | Status |
 | ------ | ------------|--------|
-| [demo-dotnet/DotNetVectorDemo](demo-dotnet/DotNetVectorDemo/readme.md) | A .NET Console App that calls Azure OpenAI to create vectorized data. It then calls Azure AI Search to create, load, and query the data.| Generally available (GA) |
-| [demo-dotnet/DotNetIntegratedVectorizationDemo](demo-dotnet/DotNetIntegratedVectorizationDemo/readme.md) | A .NET Console App that calls Azure AI Search to create an index, indexer, data source, and skillset. An Azure Storage account provides the data. Azure OpenAI is called by the skillset during indexing, and again during query execution to vectorize text queries. | Public preview |
-| [demo-javaScript/JavaScriptVectorDemo](demo-javascript/JavaScriptVectorDemo/readme.md) | There are three code samples. One is an end-to-end code sample that calls Azure OpenAI for embeddings and Azure AI Seach to create, load, and query an index that contains vectors. Another sample calls just Azure OpenAI and is used to generate embeddings for fields in an index. The last one also calls just Azure OpenAI and is used to generate an embedding for a vector query. | Generally available |
-| [demo-python](demo-python/readme.md) |  A series of notebooks that demonstrate aspects of vector search, including data chunking and vectorization of both text and image content. | GA and preview | 
-| [Postman collection](postman-collection/Vector%20Search%20QuickStart.postman_collection%20v1.0.json)| A collection of REST API calls to an Azure AI Search instance to create, load, and query a search index that contains text and vector fields. The requests in this collection include an index schema, sample documents, and sample queries. Use the [Postman app](https://www.postman.com/downloads/) and import the collection. |
+| [DotNetVectorDemo](demo-dotnet/DotNetVectorDemo/readme.md) | A .NET Console App that calls Azure OpenAI to create vectorized data. It then calls Azure AI Search to create, load, and query vector data.| Generally available (GA) |
+| [DotNetIntegratedVectorizationDemo](demo-dotnet/DotNetIntegratedVectorizationDemo/readme.md) | A .NET Console App that calls Azure AI Search to create an index, indexer, data source, and skillset. An Azure Storage account provides the data. Azure OpenAI is called by the skillset during indexing, and again during query execution to vectorize text queries. | Public preview |
+| [JavaScriptVectorDemo](demo-javascript/JavaScriptVectorDemo/readme.md) | There are three code samples. One is an end-to-end code sample that calls Azure OpenAI for embeddings and Azure AI Seach to create, load, and query an index that contains vectors. Another sample calls just Azure OpenAI and is used to generate embeddings for fields in an index. The last one also calls just Azure OpenAI and is used to generate an embedding for a vector query. | GA |
+| [demo-python/*.ipynb](demo-python/readme.md) |  A collection of notebooks that demonstrate aspects of vector search, including data chunking and vectorization of both text and image content. | GA and preview | 
+| [postman-collection](postman-collection/readme.md)| Two separte Postman collections of REST API calls for generally available (2023-11-01) and preview (2023-10-01-preview) versions. GA requests shows you how to create, load, and query vector and non-vector content in an index. Preview requests demonstrate integrated data chunking and vectorization through indexers and skillsets. Use the [Postman app](https://www.postman.com/downloads/) for these samples. | GA and preview | 
 
 ## Related samples and tools
 
@@ -28,12 +31,13 @@ Vector search is generally available, but it also has capabilities that are stil
 
 - [Azure AI Search Documentation](https://learn.microsoft.com/azure/search/)
 
-  - [Azure REST API reference](https://learn.microsoft.com/rest/api/searchservice/)
+  - [Retrieval Augmented Generation (RAG) in Azure AI Search](https://learn.microsoft.com/azure/search/retrieval-augmented-generation-overview)
   - [Vector search overview](https://learn.microsoft.com/azure/search/vector-search-overview)
-  - [Hybrid search overview](https://learn.microsoft.com/azure/search/vector-search-overview)
+  - [Hybrid search overview](https://learn.microsoft.com/azure/search/hybrid-search-overview)
   - [Create a vector index](https://learn.microsoft.com/azure/search/vector-search-how-to-create-index)
   - [Query a vector index](https://learn.microsoft.com/azure/search/vector-search-how-to-query)
   - [Vector search algorithms](https://learn.microsoft.com/azure/search/vector-search-ranking)
+  - [REST API reference](https://learn.microsoft.com/rest/api/searchservice/)
 
 - [Azure OpenAI Service Documentation](https://learn.microsoft.com/azure/cognitive-services/openai/)
 
