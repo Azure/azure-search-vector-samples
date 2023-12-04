@@ -1,0 +1,777 @@
+{
+	"info": {
+		"_postman_id": "8bb5c2d7-2d68-47a5-a38b-ca1ef63e3ade",
+		"name": "AzureSearchVectors_2023-10-01-preview",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8892386"
+	},
+	"item": [
+		{
+			"name": "Indexing",
+			"item": [
+				{
+					"name": "Create Data Source (Azure blob)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"name\" : \"{{search-name-prefix}}-ds\",  \r\n    \"description\" : \"Blob data source example\",  \r\n    \"type\" : \"azureblob\",\r\n    \"credentials\" :\r\n    { \r\n        \"connectionString\":\"{{storage-connection-string}}\"\r\n    },  \r\n    \"container\" : { \"name\" : \"{{storage-blob-container}}\" }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net.search.windows.net/datasources?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"datasources"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Index",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{search-name-prefix}}-idx\",\r\n    \"vectorSearch\": {\r\n        \"algorithms\": [\r\n            {\r\n                \"name\": \"myalgo\",\r\n                \"kind\": \"hnsw\"\r\n            }\r\n        ],\r\n        \"vectorizers\": [\r\n            {\r\n                \"name\": \"openai\",\r\n                \"kind\": \"azureOpenAI\",\r\n                \"azureOpenAIParameters\":\r\n                {\r\n                    \"resourceUri\" : \"{{openai-service-uri}}\",\r\n                    \"apiKey\" : \"{{openai-api-key}}\",\r\n                    \"deploymentId\" : \"{{openai-deployment-name}}\"\r\n                }\r\n            }\r\n        ],\r\n        \"profiles\": [\r\n            {\r\n                \"name\": \"myprofile\",\r\n                \"algorithm\": \"myalgo\",\r\n                \"vectorizer\":\"openai\"\r\n            }\r\n        ]\r\n    },\r\n    \"semantic\": {\r\n        \"configurations\": [\r\n            {\r\n                \"name\": \"my-semantic-config\",\r\n                \"prioritizedFields\": {\r\n                    \"titleField\": {\r\n                        \"fieldName\": \"page\"\r\n                    },\r\n                    \"prioritizedContentFields\": [\r\n                        {\r\n                            \"fieldName\": \"page\"\r\n                        }\r\n                    ],\r\n                    \"prioritizedKeywordsFields\": [\r\n                        {\r\n                            \"fieldName\": \"page\"\r\n                        }\r\n                    ]\r\n                }\r\n            }\r\n        ]\r\n    },\r\n    \"fields\": [\r\n        {\r\n            \"name\": \"ChunkKey\",\r\n            \"type\": \"Edm.String\",\r\n            \"key\": true,\r\n            \"analyzer\": \"keyword\"\r\n        },\r\n        {\r\n            \"name\": \"ParentKey\",\r\n            \"type\": \"Edm.String\"\r\n        },\r\n        {\r\n            \"name\": \"title\",\r\n            \"type\": \"Edm.String\"\r\n        },\r\n\t    {\r\n\t\t    \"name\": \"page\",\r\n\t\t    \"type\": \"Edm.String\"\r\n\t    },\r\n        {\r\n            \"name\": \"vector\",\r\n            \"type\": \"Collection(Edm.Single)\",\r\n            \"dimensions\": 1536,\r\n            \"vectorSearchProfile\": \"myprofile\",\r\n            \"searchable\": true,\r\n            \"retrievable\": true,\r\n            \"filterable\": false,\r\n            \"sortable\": false,\r\n            \"facetable\": false\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/indexes/?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"indexes",
+								""
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Skillset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{search-name-prefix}}-ss\",\r\n    \"description\": \"An e2e skillset\",\r\n    \"skills\": [\r\n                {\r\n            \"@odata.type\": \"#Microsoft.Skills.Text.SplitSkill\",\r\n            \"description\": \"split text into pages\",\r\n            \"textSplitMode\": \"pages\",\r\n            \"maximumPageLength\": 500,\r\n            \"pageOverlapLength\": 100,\r\n            \"context\": \"/document\",\r\n            \"inputs\": [\r\n                {\r\n                    \"name\": \"text\",\r\n                    \"source\": \"/document/content\"\r\n                }\r\n            ],\r\n            \"outputs\": [\r\n                {\r\n                    \"name\": \"textItems\",\r\n                    \"targetName\": \"pages\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"@odata.type\": \"#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill\",\r\n            \"description\": \"Azure OpenAI Embedding Skill\",\r\n            \"context\": \"/document/pages/*\",\r\n            \"resourceUri\": \"{{openai-service-uri}}\",\r\n            \"apiKey\": \"{{openai-api-key}}\",\r\n            \"deploymentId\": \"{{openai-deployment-name}}\",\r\n            \"inputs\": [\r\n                {\r\n                    \"name\": \"text\",\r\n                    \"source\": \"/document/pages/*\"\r\n                }\r\n            ],\r\n            \"outputs\": [\r\n                {\r\n                    \"name\": \"embedding\",\r\n                    \"targetName\": \"vector\"\r\n                }\r\n            ]\r\n        }\r\n    ],\r\n    \"indexProjections\": {\r\n        \"selectors\": [\r\n            {\r\n                \"targetIndexName\": \"{{search-name-prefix}}-idx\",\r\n                \"parentKeyFieldName\": \"ParentKey\",\r\n                \"sourceContext\": \"/document/pages/*\",\r\n                \"mappings\": [\r\n                    {\r\n                        \"name\": \"page\",\r\n                        \"source\": \"/document/pages/*\"\r\n                    },\r\n                    {\r\n                        \"name\": \"vector\",\r\n                        \"source\": \"/document/pages/*/vector\"\r\n                    }\r\n                ]\r\n            }\r\n        ],\r\n        \"parameters\": {\r\n            \"projectionMode\": \"skipIndexingParentDocuments\"\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/skillsets?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"skillsets"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Indexer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{search-name-prefix}}-idxr\",\r\n    \"dataSourceName\": \"{{search-name-prefix}}-ds\",\r\n    \"targetIndexName\": \"{{search-name-prefix}}-idx\",\r\n    \"skillsetName\": \"{{search-name-prefix}}-ss\",\r\n    \"schedule\": { },\r\n    \"parameters\": {\r\n        \"maxFailedItems\": 0,\r\n        \"maxFailedItemsPerBatch\": 0,\r\n        \"batchSize\": 1,\r\n        \"configuration\": {\r\n            \"dataToExtract\": \"contentAndMetadata\"\r\n        }\r\n    },\r\n    \"fieldMappings\": [],\r\n    \"outputFieldMappings\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/indexers?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"indexers"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Indexer Status",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/indexers/{{search-name-prefix}}-idxr/status?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"indexers",
+								"{{search-name-prefix}}-idxr",
+								"status"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Index List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/indexes?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"indexes"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Index Statistics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/indexes/{{search-name-prefix}}-idx/stats?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"indexes",
+								"{{search-name-prefix}}-idx",
+								"stats"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Indexer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/indexers/{{search-name-prefix}}-idxr/reset?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"indexers",
+								"{{search-name-prefix}}-idxr",
+								"reset"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rerun Indexer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/indexers/{{search-name-prefix}}-idxr/run?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"indexers",
+								"{{search-name-prefix}}-idxr",
+								"run"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Queries",
+			"item": [
+				{
+					"name": "Single vector query (text input vectorization)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"vectorQueries\": [\r\n        {\r\n            \"kind\":\"text\",\r\n            \"text\":\"Is there coverage for alternative medicine?\",\r\n            \"fields\": \"vector\",\r\n            \"k\": 10\r\n        }\r\n    ],\r\n    \"count\": true,\r\n    \"select\":\"title, page\"\r\n}"
+						},
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/indexes/{{search-name-prefix}}-idx/docs/search?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"indexes",
+								"{{search-name-prefix}}-idx",
+								"docs",
+								"search"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Hybrid query (text input vectorization)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"vectorQueries\": [\r\n        {\r\n            \"kind\":\"text\",\r\n            \"text\":\"Does the standard plan cover clinical trials?\",\r\n            \"fields\": \"vector\",\r\n            \"k\": 50\r\n        }\r\n    ],\r\n    \"count\": true,\r\n    \"select\":\"page\",\r\n    \"search\":\"Does the standard plan cover clinical trials??\"\r\n}"
+						},
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/indexes/{{search-name-prefix}}-idx/docs/search?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"indexes",
+								"{{search-name-prefix}}-idx",
+								"docs",
+								"search"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Hybrid query (text input) w/ semantic ranking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"vectorQueries\": [\r\n        {\r\n            \"kind\":\"text\",\r\n            \"text\":\"Does the standard plan cover clinical trials?\",\r\n            \"fields\": \"vector\",\r\n            \"k\": 50\r\n        }\r\n    ],\r\n    \"count\": true,\r\n    \"select\":\"page\",\r\n    \"semanticConfiguration\":\"my-semantic-config\",\r\n    \"queryType\":\"semantic\",\r\n    \"search\":\"Does the standard plan cover clinical trials?\"\r\n}"
+						},
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/indexes/{{search-name-prefix}}-idx/docs/search?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"indexes",
+								"{{search-name-prefix}}-idx",
+								"docs",
+								"search"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Clean up",
+			"item": [
+				{
+					"name": "delete index",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/indexes/{{search-name-prefix}}-idx?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"indexes",
+								"{{search-name-prefix}}-idx"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete indexer",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/indexers/{{search-name-prefix}}-idxr?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"indexers",
+								"{{search-name-prefix}}-idxr"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete skillset",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/skillsets/{{search-name-prefix}}-ss?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"skillsets",
+								"{{search-name-prefix}}-ss"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete datasource",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "api-key",
+								"value": "{{search-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{search-service-name}}.search.windows.net/datasources/{{search-name-prefix}}-ds?api-version={{search-api-version}}",
+							"protocol": "https",
+							"host": [
+								"{{search-service-name}}",
+								"search",
+								"windows",
+								"net"
+							],
+							"path": [
+								"datasources",
+								"{{search-name-prefix}}-ds"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "{{search-api-version}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "search-service-name",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "search-api-version",
+			"value": "2023-10-01-preview",
+			"type": "string"
+		},
+		{
+			"key": "search-api-key",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "search-name-prefix",
+			"value": "health-plan",
+			"type": "string"
+		},
+		{
+			"key": "openai-service-uri",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "openai-api-key",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "openai-deployment-name",
+			"value": "text-embedding-ada-002",
+			"type": "string"
+		},
+		{
+			"key": "openai-api-version",
+			"value": "2023-05-15",
+			"type": "string"
+		},
+		{
+			"key": "storage-connection-string",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "storage-blob-container",
+			"value": "health-plan-pdfs",
+			"type": "string"
+		}
+	]
+}
