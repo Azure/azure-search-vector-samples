@@ -15,21 +15,22 @@ urlFragment: rest-api-vectors
 
 ![Flask sample MIT license badge](https://img.shields.io/badge/license-MIT-green.svg)
 
-Use Postman and the Azure AI Search REST APIs to work with vector and hybrid queries.
+Use Postman and the Azure AI Search REST APIs to work with vector and hybrid queries. 
 
 There are two collections:
 
-+ Generally available version (2023-11-01) demonstrates vector indexing and queries.
-
-+ Preview version (2023-10-01-preview) adds integrated vectorization, with data chunking and embedded calls to Azure OpenAI. This worflow adds an indexer, data source, and skillset. It uses sample PDFs that you upload to Azure Storage to demonstrate data chunking.
+| Collection | Description |
+|------------|-------------|
+| AzureSearchVectors_2023-11-01 | Demonstrates vector indexing and queries. |
+| AzureSearchVectors_2023-10-01-preview | Adds [integrated vectorization](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization), with data chunking and embedded calls to Azure OpenAI. This workflow adds an indexer, data source, and skillset. It uses PDFs for the sample data. |
 
 ## Prerequisites
 
 + [Postman Desktop app](https://www.getpostman.com/)
 + [Azure AI Search service](https://docs.microsoft.com/azure/search/search-create-service-portal)
-+ (optional) [Semantic ranking](https://learn.microsoft.com/azure/search/semantic-how-to-enable-disable) if you want to run the hybrid query that invokes semantic ranking
-+ (optional) [Azure OpenAI](https://learn.microsoft.com/azure/ai-services/openai/how-to/create-resource) with a deployment of **text-embedding-ada-002** if you want to generate embeddings (the sample comes with vectors, so prerequisite is only needed if you want different vectors.)
-+ (optional) [Azure Storage](https://learn.microsoft.com/azure/storage/blobs/) for the preview API workflow.
++ (optional) [Semantic ranking](https://learn.microsoft.com/azure/search/semantic-how-to-enable-disable) for queries that use it.
++ [Azure OpenAI](https://learn.microsoft.com/azure/ai-services/openai/how-to/create-resource) with a deployment of **text-embedding-ada-002** is required for the preview collection and optional for the GA version. It's optional for the GA version because requests in the collection include pre-vectorized content for queries and indexing.
++ (optional) [Azure Storage](https://learn.microsoft.com/azure/storage/blobs/) for the preview API workflow. Azure Storage provides the PDFs used in data chunking and embedded vectorization.
 
 ## Setup
 
