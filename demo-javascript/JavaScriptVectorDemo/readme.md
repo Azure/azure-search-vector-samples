@@ -8,11 +8,11 @@ products:
   - azure-cognitive-search
   - azure-openai
 description: |
-  Learn how to create, load, and query vectors in Azure AI Search using Node.js.
+  Using @azure/search-documents and Node.js, index and query vectors in a RAG pattern or a traditional search solution.
 urlFragment: vector-search-javascript
 ---
 
-# Readme: Vector search demo using Node.js and Azure AI Search
+# Vector search using Node.js  (Azure AI Search)  
 
 The JavaScript demo in this repository creates vectorized data that can be indexed and queried on Azure AI Search.
 
@@ -23,8 +23,6 @@ The JavaScript demo in this repository creates vectorized data that can be index
 | **query-text-openai-embeddings.js** | Generates an embedding for a query. Output is a vector that can be pasted into a vector query request. There are no calls to Azure AI Search in this code. |
 
 ## Prerequisites
-
-To run the programs, you need the following:
 
 + An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access). You must have the Azure OpenAI service name and an API key.
 

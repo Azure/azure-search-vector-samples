@@ -1,24 +1,31 @@
-# Readme: Azure AI Search - Vector search using Azure OpenAI service with .NET  
+---
+page_type: sample
+languages:
+  - csharp
+name: Vector storage and retrieval in C#
+description: |
+  Using Azure.Search.Documents, index and query vectors in a RAG pattern or a traditional search solution.
+products:
+  - azure
+  - azure-cognitive-search
+urlFragment: csharp-vector-search
+---
 
-This repository contains two .NET console applications that demonstrate how to generate text embeddings using Azure OpenAI service, insert those embeddings into vector fields in Azure AI Search, and issue vector queries. Queries include vector searches with metadata filtering and hybrid (text + vectors) search. The code uses Azure OpenAI service to generate embeddings for titleVector and contentVector fields. You'll need access to Azure OpenAI service to run these demos.  
+# Vector search in C# (Azure AI Search)  
 
-+ **DotNetVectorDemo** provides raw data for which embeddings are generated and queries. It calls your Azure OpenAI resource and a deployment of text-embedding-ada-002 to create embeddings for the text in a local `text-sample.json` file. It uses the push API to index text and embeddings. The output is a combination of human-readable text and embeddings that can be queried from your code. 
-
-+ **DotNetIntegratedVectorizationDemo** uses an indexer, skillset, and a data source connection to Azure Storage to chunk, vectorize, and index content in a blob container. You can provide the files or choose some from [azure-search-samples-data](ttps://github.com/Azure-Samples/azure-search-sample-data). This project uses [integrated vectorization](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization), currently in public preview. You still provide the Azure OpenAI endpoint and deployed model, but chunking and vectorization is integrated into the indexing pipeline, and text queries can be vectorized at query time.
+In this .NET console application for Azure AI Search, **DotNetVectorDemo** provides raw data for which embeddings are generated externally and then pushed into a search index for queries. First, it calls Azure OpenAI resource and a deployment of the text-embedding-ada-002 model to create embeddings for text in a local `text-sample.json` file. Next, it pushes the embeddings and other textual content to a search index. The searchable output is a combination of human-readable text and embeddings that can be queried from your code. 
 
 ## Prerequisites  
 
-To run these demos, you'll need the following:  
-
-+ An Azure subscription, with [access to Azure OpenAI service](https://aka.ms/oai/access). You must have the Azure OpenAI service endpoint and an API key.  
++ An Azure subscription, with [access to Azure OpenAI service](https://aka.ms/oai/access). You must have the Azure OpenAI service endpoint and an API key.
 
 + A deployment of the **text-embedding-ada-002** embedding model. We use API version 2023-05-15 in these demos. For the deployment name, the deployment name is the same as the model, "text-embedding-ada-002".  
 
 + Model capacity should be sufficient to handle the load. We successfully tested these samples on a deployment model having a 33K tokens per minute rate limit.  
 
-+ Azure SDK for .NET 5.0 or later.  
++ An Azure AI Search service with room for a new index. You must have full endpoint and an admin API key.  
 
-+ An Azure AI Search service with room for a new index, and room for an indexer, data source, and skillset if you're running the integrated vectorization demo. You must have full endpoint and an admin API key.  
++ Azure SDK for .NET 5.0 or later. 
 
 You can use [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Studio Code with the C# extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) for these demos.  
 

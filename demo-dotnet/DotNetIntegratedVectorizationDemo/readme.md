@@ -1,26 +1,33 @@
-# Readme: Azure AI Search - Vector search using Azure OpenAI service with .NET  
+---
+page_type: sample
+languages:
+  - csharp
+name: Embed data chunking and vectorization in C#
+description: |
+  Using Azure.Search.Documents, add data chunking and vectorization to indexing and query workloads.
+products:
+  - azure
+  - azure-cognitive-search
+urlFragment: csharp-integrated-vectorization
+---
 
-This repository contains two .NET console applications that demonstrate how to generate text embeddings using Azure OpenAI service, insert those embeddings into vector fields in Azure AI Search, and issue vector queries. Queries include vector searches with metadata filtering and hybrid (text + vectors) search. The code uses Azure OpenAI service to generate embeddings for titleVector and contentVector fields. You'll need access to Azure OpenAI service to run these demos.  
+# Embed data chunking and vectorization in C# (Azure AI Search)
 
-+ **DotNetVectorDemo** provides raw data for which embeddings are generated and queries. It calls your Azure OpenAI resource and a deployment of text-embedding-ada-002 to create embeddings for the text in a local `text-sample.json` file. It uses the push API to index text and embeddings. The output is a combination of human-readable text and embeddings that can be queried from your code. 
-
-+ **DotNetIntegratedVectorizationDemo** uses an indexer, skillset, and a data source connection to Azure Storage to chunk, vectorize, and index content in a blob container. This project uses [integrated vectorization](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization), currently in public preview. You still provide the Azure OpenAI endpoint and deployed model, but chunking and vectorization is integrated into the indexing pipeline, and text queries can be vectorized at query time.
+In this .NET console application for Azure AI Search, **DotNetIntegratedVectorizationDemo** uses an indexer, skillset, and a data source connection to Azure Storage to chunk, vectorize, and index content in a blob container. This project uses [integrated vectorization](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization), currently in public preview. You still provide the Azure OpenAI endpoint and deployed model, but chunking and vectorization is integrated into the indexing pipeline, and text queries can be vectorized at query time.
 
 ## Prerequisites  
 
-To run these demos, you'll need the following:  
-
-+ An Azure subscription, with [access to Azure OpenAI service](https://aka.ms/oai/access). You must have the Azure OpenAI service endpoint and an API key.  
-
-+ An Azure Storage account, with a blob container containing sample data. You can provide the files or choose some from [azure-search-samples-data](ttps://github.com/Azure-Samples/azure-search-sample-data). 
++ An Azure subscription, with [access to Azure OpenAI service](https://aka.ms/oai/access). You must have the Azure OpenAI service endpoint and an API key.
 
 + A deployment of the **text-embedding-ada-002** embedding model hosted on your Azure OpenAI resource. We use API version 2023-05-15 in these demos. For the deployment name, the deployment name is the same as the model, "text-embedding-ada-002".  
 
-+ Model capacity should be sufficient to handle the load. We successfully tested these samples on a deployment model having a 33K tokens per minute rate limit.  
++ Model capacity should be sufficient to handle the load. We successfully tested these samples on a deployment model having a 33K tokens per minute rate limit. 
+
++ An Azure AI Search service with room for a new index, and room for an indexer, data source, and skillset. You must have full endpoint and an admin API key.  
+
++ An Azure Storage account, with a blob container containing sample data, such as the [health plan PDFs](https://github.com/Azure-Samples/azure-search-sample-data/tree/main/health-plan).
 
 + Azure SDK for .NET 5.0 or later. This project specifies 11.5.0-beta.5 for preview features.
-
-+ An Azure AI Search service with room for a new index, and room for an indexer, data source, and skillset if you're running the integrated vectorization demo. You must have full endpoint and an admin API key.  
 
 You can use [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Studio Code with the C# extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) for these demos.  
 
@@ -56,7 +63,7 @@ You can use [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Stud
     "AZURE_OPENAI_API_VERSION": "2023-05-15",  
     "AZURE_OPENAI_EMBEDDING_DEPLOYED_MODEL": "text-embedding-ada-002",
     "AZURE_BLOB_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=mystorageaccount;AccountKey=000000000000000000000000==;EndpointSuffix=core.windows.net",
-    "AZURE_BLOB_CONTAINER_NAME": "nasa-ebooks"
+    "AZURE_BLOB_CONTAINER_NAME": "health-plan-pdfs"
    }  
    ```  
 
@@ -82,7 +89,7 @@ Before running the code, ensure you have the .NET SDK installed on your machine.
 
 1. Choose a query type, such as single vector query or a hybrid query. The program calls Azure OpenAI service to convert your query string into a vector.  
   
-   For **DotNetVectorDemo**, sample data is 108 descriptions of Azure services, so your query should be about Azure. For example, for a vector query, type in "what Azure services support full text search" or "what product has OCR".  
+   For **DotNetIntegratedVectorizationDemo**, sample data should be PDFS or documents large enough for chunking into segments. If you're using the sample health plan PDFs, some vector queries might be "what health plan is the most comprehensive" or "is there coverage for alternative medicine".  
 
 ## Output  
 
