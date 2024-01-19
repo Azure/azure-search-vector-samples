@@ -1,10 +1,14 @@
-import logging
-from sentence_transformers import SentenceTransformer
 import azure.functions as func
+from sentence_transformers import SentenceTransformer
 import json
+import logging
 import os
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
+app = func.FunctionApp()
+
+@app.function_name(name="GetTextEmbedding")
+@app.route(route="embed")
+def GetTextEmbedding(req: func.HttpRequest) -> str:
     # Read input text
     input_text = []
     if req.method == "GET":
@@ -26,10 +30,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "No input text found",
             status_code=400
         )
-    
-    # Embed text
-    # https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
-    model = SentenceTransformer(os.path.join(os.getcwd(), 'all-MiniLM-L6-v2'))
+
+    model = os.environ["SENTENCE_TRANSFORMERS_TEXT_EMBEDDING_MODEL"]
+    model_path = os.path.join(os.getcwd(), 'models', model)
+    model = SentenceTransformer(model_path)
     embeddings = model.encode(input_text)
     response = { "values": [ { "recordId": i, "data": { "vector": embedding.tolist() } } for i, embedding in enumerate(embeddings)]}
 

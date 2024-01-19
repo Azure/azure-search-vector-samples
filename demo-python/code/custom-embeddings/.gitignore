@@ -1,0 +1,4 @@
+.azure
+.venv
+scripts/.venv
+models
