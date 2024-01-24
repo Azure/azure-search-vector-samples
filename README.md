@@ -1,6 +1,8 @@
 # Vector samples - Azure AI Search
 
-This repository provides Python, C#, REST, and JavaScript code samples for [vector support](https://learn.microsoft.com/azure/search/vector-search-overview) in Azure AI Search. 
+This repository provides Python, C#, REST, and JavaScript code samples for [vector support](https://learn.microsoft.com/azure/search/vector-search-overview) in Azure AI Search.
+
+There are breaking changes from REST API version 2023-07-01-Preview to newer API versions. See [Upgrade REST API versions](https://learn.microsoft.com/azure/search/search-api-migration) for migration guidance.
 
 ## Feature status
 
@@ -13,8 +15,9 @@ Vector support consists of generally available features and preview features.
 | data chunking ([Text Split skill](https://learn.microsoft.com/azure/search/cognitive-search-skill-textsplit)) | public preview (2023-10-01-preview and beta SDK packages) |
 | embedding ([AzureOpenAiEmbedding skill](https://learn.microsoft.com/azure/search/cognitive-search-skill-azure-openai-embedding))  | public preview (2023-10-01-preview and beta SDK packages) |
 | [index projections](https://learn.microsoft.com/azure/search/index-projections-concept-intro) in skillsets | public preview (2023-10-01-preview and beta SDK packages) |
+| [vectorizer](https://learn.microsoft.com/azure/search/vector-search-how-to-configure-vectorizer) in index schema | public preview (2023-10-01-preview and beta SDK packages) |
 
- [Integrated data chunking, embedding, and projections](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization) take a dependency on indexers and skills, in preview under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/). 
+ [Integrated data chunking, embedding, vectorizers and projections](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization) take a dependency on indexers and skills. These features are in preview under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/). 
 
 ## demo-dotnet samples
 
