@@ -4,13 +4,13 @@ This repository provides Python, C#, REST, and JavaScript code samples for [vect
 
 | Feature | Status |
 |---------|--------|
-| [vector indexing](https://learn.microsoft.com/azure/search/vector-search-how-to-create-index) | generally available |
-| [vector queries](https://learn.microsoft.com/azure/search/vector-search-how-to-query) | generally available |
+| [vector indexing](https://learn.microsoft.com/azure/search/vector-search-how-to-create-index) | generally available (2023-11-01 and stable SDK packages) |
+| [vector queries](https://learn.microsoft.com/azure/search/vector-search-how-to-query) | generally available (2023-11-01 and stable SDK packages)|
 | data chunking ([Text Split skill](https://learn.microsoft.com/azure/search/cognitive-search-skill-textsplit)) | public preview (2023-10-01-preview and beta SDK packages) |
 | embedding ([AzureOpenAiEmbedding skill](https://learn.microsoft.com/azure/search/cognitive-search-skill-azure-openai-embedding))  | public preview (2023-10-01-preview and beta SDK packages) |
 | [index projections](https://learn.microsoft.com/azure/search/index-projections-concept-intro) in skillsets | public preview (2023-10-01-preview and beta SDK packages) |
 
- [Integrated data chunking and vectorization](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization) takes a dependency on indexers and skills, is in preview under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/). 
+ [Integrated data chunking, embedding, and projections](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization) take a dependency on indexers and skills, in preview under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/). 
 
 ## demo-dotnet samples
 
@@ -23,7 +23,7 @@ This repository provides Python, C#, REST, and JavaScript code samples for [vect
 
 | Sample | Description | Status |
 | ------ | ------------|--------|
-| [demo-python/code/*.ipynb](demo-python/readme.md) |  A collection of nine notebooks that demonstrate aspects of vector search, including data chunking and vectorization of both text and image content. The latest one, `custom-embeddings/azure-search-custom-vectorization-sample.ipynb`, demonstrates how to call custom embedding model from a skillset. | GA and preview | 
+| [demo-python/code/*.ipynb](demo-python/readme.md) |  A collection of nine notebooks that demonstrate aspects of vector search, including data chunking and vectorization of both text and image content. The most recent one, `custom-embeddings/azure-search-custom-vectorization-sample.ipynb`, demonstrates how to call custom embedding model from a skillset. | GA and preview | 
 
 ## demo-javascript samples
 
