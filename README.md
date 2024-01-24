@@ -1,6 +1,10 @@
 # Vector samples - Azure AI Search
 
-This repository provides Python, C#, REST, and JavaScript code samples for [vector support](https://learn.microsoft.com/azure/search/vector-search-overview) in Azure AI Search. Vector support consists of generally available features and preview features.
+This repository provides Python, C#, REST, and JavaScript code samples for [vector support](https://learn.microsoft.com/azure/search/vector-search-overview) in Azure AI Search. 
+
+## Feature status
+
+Vector support consists of generally available features and preview features.
 
 | Feature | Status |
 |---------|--------|
