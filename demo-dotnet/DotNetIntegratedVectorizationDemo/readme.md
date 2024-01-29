@@ -19,7 +19,7 @@ In this .NET console application for Azure AI Search, **DotNetIntegratedVectoriz
 
 + An Azure subscription, with [access to Azure OpenAI service](https://aka.ms/oai/access). You must have the Azure OpenAI service endpoint and an API key.
 
-+ A deployment of the **text-embedding-ada-002** embedding model hosted on your Azure OpenAI resource. We use API version 2023-05-15 in these demos. For the deployment name, the deployment name is the same as the model, "text-embedding-ada-002".  
++ A deployment of the **text-embedding-ada-002** embedding model hosted on your Azure OpenAI resource. We use API version 2023-05-15 in these demos. You can change the deployment name, bu tthe default is **text-embedding-ada-002**
 
 + Model capacity should be sufficient to handle the load. We successfully tested these samples on a deployment model having a 33K tokens per minute rate limit. 
 
@@ -27,7 +27,7 @@ In this .NET console application for Azure AI Search, **DotNetIntegratedVectoriz
 
 + An Azure Storage account, with a blob container containing sample data, such as the [health plan PDFs](https://github.com/Azure-Samples/azure-search-sample-data/tree/main/health-plan).
 
-+ Azure SDK for .NET 5.0 or later. This project specifies 11.5.0-beta.5 for preview features.
++ Azure SDK for .NET 5.0 or later. This project specifies 11.6.0-beta.1 for preview features.
 
 You can use [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Studio Code with the C# extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) for these demos.  
 
@@ -35,37 +35,35 @@ You can use [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Stud
 
 1. Clone this repository.  
 
-2. Create a `local.settings.json` file in the same directory as the code for each project and include the following variables:  
+2. Create a `local.settings.json` file in the same directory by copying the `local.settings-sample.json` file and changing the following variables appropriately
   
-   ```json  
-   {  
-    "AZURE_SEARCH_SERVICE_ENDPOINT": "YOUR-SEARCH-SERVICE-ENDPOINT",  
-    "AZURE_SEARCH_INDEX_NAME": "YOUR-SEARCH-SERVICE-INDEX-NAME",  
-    "AZURE_SEARCH_ADMIN_KEY": "YOUR-SEARCH-SERVICE-ADMIN-KEY",  
-    "AZURE_OPENAI_ENDPOINT": "YOUR-OPENAI-ENDPOINT",  
-    "AZURE_OPENAI_API_KEY": "YOUR-OPENAI-API-KEY",  
-    "AZURE_OPENAI_API_VERSION": "YOUR-OPENAI-API-VERSION",  
-    "AZURE_OPENAI_EMBEDDING_DEPLOYED_MODEL": "YOUR-OPENAI-MODEL-DEPLOYMENT-NAME",
-    "AZURE_BLOB_CONNECTION_STRING": "YOUR-BLOB-CONNECTION-STRING",
-    "AZURE_BLOB_CONTAINER_NAME": "YOUR-BLOB-CONTAINER-NAME"
-   }  
-   ```  
-  
-   Here's an example with fictitious values:  
-  
-   ```json  
-   {  
-    "AZURE_SEARCH_SERVICE_ENDPOINT": "https://demo-srch-eastus.search.windows.net",  
-    "AZURE_SEARCH_INDEX_NAME": "demo-vector-index",  
-    "AZURE_SEARCH_ADMIN_KEY": "000000000000000000000000000000000",  
-    "AZURE_OPENAI_ENDPOINT": "https://demo-openai-southcentralus.openai.azure.com/",  
-    "AZURE_OPENAI_API_KEY": "0000000000000000000000000000000000",  
-    "AZURE_OPENAI_API_VERSION": "2023-05-15",  
+```json  
+{
+    "AZURE_SEARCH_SERVICE_ENDPOINT": "",
+    "AZURE_SEARCH_INDEX_NAME": "demovectorizer",
+    "AZURE_SEARCH_ADMIN_KEY": "",
+    "AZURE_OPENAI_ENDPOINT": "",
+    "AZURE_OPENAI_API_KEY": "",
     "AZURE_OPENAI_EMBEDDING_DEPLOYED_MODEL": "text-embedding-ada-002",
-    "AZURE_BLOB_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=mystorageaccount;AccountKey=000000000000000000000000==;EndpointSuffix=core.windows.net",
-    "AZURE_BLOB_CONTAINER_NAME": "health-plan-pdfs"
-   }  
-   ```  
+    "AZURE_BLOB_CONNECTION_STRING": "",
+    "AZURE_BLOB_CONTAINER_NAME": ""
+}
+```  
+  
+Here's an example with fictitious values:  
+  
+```json  
+{  
+   "AZURE_SEARCH_SERVICE_ENDPOINT": "https://demo-srch-eastus.search.windows.net",  
+   "AZURE_SEARCH_INDEX_NAME": "demo-vector-index",  
+   "AZURE_SEARCH_ADMIN_KEY": "000000000000000000000000000000000", // May be omitted if using RBAC auth  
+   "AZURE_OPENAI_ENDPOINT": "https://demo-openai-southcentralus.openai.azure.com/",  
+   "AZURE_OPENAI_API_KEY": "0000000000000000000000000000000000",  // May be omitted if using RBAC auth
+   "AZURE_OPENAI_EMBEDDING_DEPLOYED_MODEL": "text-embedding-ada-002",
+   "AZURE_BLOB_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=mystorageaccount;AccountKey=000000000000000000000000==;EndpointSuffix=core.windows.net", // May be in the ResourceId= format if using RBAC auth / managed identity
+   "AZURE_BLOB_CONTAINER_NAME": "health-plan-pdfs"
+}  
+```  
 
 ## Run the code  
 
@@ -81,15 +79,48 @@ Before running the code, ensure you have the .NET SDK installed on your machine.
 
 1. Run the program:  
   
-   ```bash  
-   dotnet run  
-   ```  
+```bash  
+dotnet run -- -h
+```
 
-1. When prompted, select "Y" to create and load the index. Wait for the query prompt.  
+```
+Description:
+  .NET Integrated Vectorization Demo
 
-1. Choose a query type, such as single vector query or a hybrid query. The program calls Azure OpenAI service to convert your query string into a vector.  
-  
-   For **DotNetIntegratedVectorizationDemo**, sample data should be PDFS or documents large enough for chunking into segments. If you're using the sample health plan PDFs, some vector queries might be "what health plan is the most comprehensive" or "is there coverage for alternative medicine".  
+Usage:
+  DotNetIntegratedVectorizationDemo [options]
+
+Options:
+  --setup-and-run-indexer  Sets up integrated vectorization indexer with a skillset.
+  --query <query>          Optional text of the search query. By default no query is run. Unless --textOnly is
+                           specified, this query is automatically vectorized. []
+  --filter <filter>        Optional filter of the search query. By default no filter is applied []
+  -k <k>                   How many results to return if running a query. [default: 3]
+  --exhaustive             Optional, specifies if the query skips using the index and computes the true nearest
+                           neighbors. Can only be used with vector or hybrid queries. [default: False]
+  --text-only              Optional, specifies if the query is vectorized before searching. If true, only the text
+                           indexed is used for search. [default: False]
+  --hybrid                 Optional, specifies if the query combines text and vector results. [default: False]
+  --semantic               Optional, specifies if the semantic reranker is used to rerank results from the query.
+                           [default: False]
+  --version                Show version information
+  -?, -h, --help           Show help and usage information
+```
+
+1. Setup and run the indexer using the following command
+
+```bash
+dotnet run -- -setup-and-run-indexer
+```
+For **DotNetIntegratedVectorizationDemo**, sample data should be PDFS or documents large enough for chunking into segments. If you're using the sample health plan PDFs, some vector queries might be "what health plan is the most comprehensive" or "is there coverage for alternative medicine".  
+
+1. Run a test query using the following examples:
+
+```bash
+dotnet run -- -query "is there coverage for alternative medicine" -hybrid -semantic
+```
+
+The output will be the chunks matched by the query and their relevance score. If [semantic](https://learn.microsoft.com/azure/search/semantic-search-overview) is specified, [captions and answers](https://learn.microsoft.com/azure/search/semantic-answers) will be included in the output if they are available.
 
 ## Output  
 
