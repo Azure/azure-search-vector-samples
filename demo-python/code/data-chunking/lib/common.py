@@ -213,6 +213,9 @@ def get_chunks(search_client):
         chunks[id] = result["chunk"]
     return [chunks[id] for id in sorted(chunks.keys())]
 
+def get_encoding_name(model="gpt-3.5-turbo"):
+    return tiktoken.encoding_for_model(model).name
+
 def get_token_length(text, model="gpt-3.5-turbo"):
     return len(tiktoken.encoding_for_model(model).encode(text))
 
