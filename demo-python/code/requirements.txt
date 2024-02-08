@@ -2,6 +2,8 @@ asttokens==2.4.1
 azure-common==1.1.28
 azure-core==1.30.0
 azure-identity==1.15.0
+azure-mgmt-core==1.4.0
+azure-mgmt-web==7.2.0
 azure-search-documents==11.6.0b1
 azure-storage-blob==12.19.0
 certifi==2024.2.2
