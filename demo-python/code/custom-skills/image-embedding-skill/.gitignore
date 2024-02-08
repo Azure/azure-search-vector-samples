@@ -41,10 +41,9 @@ venv.bak/
 __pycache__/
 *.py[cod]
 *$py.class
+models
 
 # Azurite artifacts
 __blobstorage__
 __queuestorage__
 __azurite_db*__.json
-
-all-MiniLM-L6-v2/*

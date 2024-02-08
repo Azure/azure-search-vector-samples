@@ -1,0 +1,72 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "resourceGroupName": {
+      "value": "${AZURE_RESOURCE_GROUP}"
+    },
+    "principalId": {
+      "value": "${AZURE_PRINCIPAL_ID}"
+    },
+    "storageLocation": {
+      "value": "${AZURE_STORAGE_ACCOUNT_LOCATION}"
+    },
+    "storageResourceGroupName": {
+      "value": "${AZURE_STORAGE_ACCOUNT_RESOURCE_GROUP}"
+    },
+    "storageAccountName": {
+      "value": "${AZURE_STORAGE_ACCOUNT}"
+    },
+    "appServicePlanName": {
+      "value": "${AZURE_APP_SERVICE_PLAN}"
+    },
+    "appServicePlanLocation": {
+      "value": "${AZURE_APP_SERVICE_PLAN_LOCATION}"
+    },
+    "appServicePlanResourceGroupName": {
+      "value": "${AZURE_APP_SERVICE_PLAN_RESOURCE_GROUP}"
+    },
+    "keyVaultName": {
+      "value": "${AZURE_KEY_VAULT_NAME}"
+    },
+    "keyVaultLocation": {
+      "value": "${AZURE_KEY_VAULT_LOCATION}"
+    },
+    "keyVaultResourceGroupName": {
+      "value": "${AZURE_KEY_VAULT_RESOURCE_GROUP}"
+    },
+    "functionAppName": {
+      "value": "${AZURE_FUNCTION_APP_NAME}"
+    },
+    "apiServiceResourceGroupName": {
+      "value": "${AZURE_API_SERVICE_RESOURCE_GROUP}"
+    },
+    "frontendServiceName": {
+      "value": "${AZURE_FRONTEND_SERVICE_NAME}"
+    },
+    "logAnalyticsName": {
+      "value": "${AZURE_LOG_ANALYTICS}"
+    },
+    "applicationInsightsName": {
+      "value": "${AZURE_APPINSIGHTS}"
+    },
+    "computerVisionAccountName": {
+      "value": "${AZURE_COMPUTER_VISION_ACCOUNT}"
+    },
+    "computerVisionResourceGroupName": {
+      "value": "${AZURE_COMPUTER_VISION_RESOURCE_GROUP}"
+    },
+    "computerVisionLocation": {
+      "value": "${AZURE_COMPUTER_VISION_LOCATION}"
+    },
+    "computerVisionSkuName": {
+      "value": "${AZURE_COMPUTER_VISION_SKU_NAME=S1}"
+    }
+  }
+}
