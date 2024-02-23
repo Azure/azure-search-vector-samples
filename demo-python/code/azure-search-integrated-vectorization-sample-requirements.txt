@@ -1,0 +1,4 @@
+python-dotenv
+azure-search-documents==11.6.0b1
+azure-storage-blob
+azure-identity
