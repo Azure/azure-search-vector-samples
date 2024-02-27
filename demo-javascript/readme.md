@@ -40,7 +40,7 @@ You can use [Visual Studio Code with the JavaScript extension](https://code.visu
 
 1. Clone this repository.
 
-1. Create a .env file in the *demo-javascript/JavaScriptVectorDemo* directory and include the following variables
+1. Create a .env file in the *demo-javascript* directory and include the following variables
 
    ```bash
    AZURE_OPENAI_SERVICE_NAME=YOUR-AZURE-OPENAI-SERVICE-NAME
@@ -81,11 +81,11 @@ node docs-text-openai-embeddings.js
 Output should look similar to this:
 
 ```bash
-PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\JavaSCriptVectorDemo\code> node docs-text-openai-embeddings.js
+PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\code> node docs-text-openai-embeddings.js
 Reading data/text-sample.json...
 Generating embeddings with Azure OpenAI...
 Success! See output/docVectors.json
-PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\JavaSCriptVectorDemo\code> 
+PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\code> 
 ```
 
 If you get an error, such as error code 429 or a server error, verify the model deployment capacity is sufficient to process the sample input. 
@@ -140,7 +140,7 @@ Modify the `userQuery` variable in `query-text-openai-embedding.js` to customize
 Output of the first several lines should look similar to this:
 
 ```bash
-PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\JavaSCriptVectorDemo\code> node azure-search-vector-sample.js
+PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\code> node azure-search-vector-sample.js
 Creating ACS index...
 Reading data/text-sample.json...
 Generating embeddings with Azure OpenAI...
