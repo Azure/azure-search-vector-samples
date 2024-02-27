@@ -2,7 +2,7 @@
 
 This repository provides Python, C#, REST, and JavaScript code samples for [vector support](https://learn.microsoft.com/azure/search/vector-search-overview) in Azure AI Search.
 
-There are breaking changes from REST API version 2023-07-01-Preview to newer API versions. See [Upgrade REST API versions](https://learn.microsoft.com/azure/search/search-api-migration) for migration guidance.
+There are breaking changes from REST API version 2023-07-01-Preview to newer API versions. These breaking changes also apply to the Azure SDK beta packages targeting that REST API version. See [Upgrade REST APIs](https://learn.microsoft.com/azure/search/search-api-migration) for migration guidance.
 
 ## Feature status
 
@@ -32,11 +32,17 @@ Vector support consists of generally available features and preview features.
 | ------ | ------------|--------|
 | [demo-python/code/*.ipynb](demo-python/readme.md) |  A collection of nine notebooks that demonstrate aspects of vector search, including data chunking and vectorization of both text and image content. The most recent one, `custom-embeddings/azure-search-custom-vectorization-sample.ipynb`, demonstrates how to call custom embedding model from a skillset. | GA and preview | 
 
+## demo-java samples
+
+| Sample | Description | Status |
+| ------ | ------------|--------|
+| [integrated-vectorization](demo-java/integrated-vectorization/readme.md) | Demonstrates the integrated vectorization capabilities currently in preview, but also includes steps for indexing and querying vectors on an Azure AI Search service. | GA and preview | 
+
 ## demo-javascript samples
 
 | Sample | Description | Status |
 | ------ | ------------|--------|
-| [JavaScriptVectorDemo](demo-javascript/JavaScriptVectorDemo/readme.md) | A single folder contains three code samples. The `azure-search-vector-sample.js` script calls just Azure OpenAI and is used to generate embeddings for fields in an index. The `docs-text-openai-embeddings.js` program is an end-to-end code sample that calls Azure OpenAI for embeddings and Azure AI Seach to create, load, and query an index that contains vectors. The `query-text-openai-embeddings.js` script generates an embedding for a vector query. | GA and preview | 
+| [JavaScriptVectorDemo](demo-javascript/readme.md) | A single folder contains three code samples. The `azure-search-vector-sample.js` script calls just Azure OpenAI and is used to generate embeddings for fields in an index. The `docs-text-openai-embeddings.js` program is an end-to-end code sample that calls Azure OpenAI for embeddings and Azure AI Seach to create, load, and query an index that contains vectors. The `query-text-openai-embeddings.js` script generates an embedding for a vector query. | GA and preview | 
 
 ## postman-collection samples
 
