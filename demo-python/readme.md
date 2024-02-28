@@ -10,7 +10,7 @@ Once you understand the basics, continue with the following notebooks for more e
 
 | Sample | Description |
 |--------|-------------|
-| [azure-search-backup-and-restore.ipynb](./code/index-backup-and-restore/azure-search-backup-and-restore.ipynb) | Backup retrievable index fields and restore it on a different search service. |
+| [azure-search-backup-and-restore.ipynb](./code/index-backup-restore/azure-search-backup-and-restore.ipynb) | Backup retrievable index fields and restore it on a different search service. |
 | [azure-search-custom-vectorization-sample.ipynb](./code/custom-embeddings/azure-search-custom-vectorization-sample.ipynb) | Integrated data chunking and vectorization using custom skills and open source models. |
 | [azure-search-integrated-vectorization-sample.ipynb](./code/integrated-vectorization/azure-search-integrated-vectorization-sample.ipynb) | Integrated data chunking and vectorization (preview) using a skills to split text and call an Azure OpenAI embedding model. |
 | [azure-search-vector-image-index-creation-python-sample.ipynb](./code/azure-search-vector-image-index-creation-python-sample.ipynb) | Vectorization using Azure AI Vision image embedding. |
