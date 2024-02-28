@@ -36,7 +36,8 @@ Vector support consists of generally available features and preview features.
 
 | Sample | Description | Status |
 | ------ | ------------|--------|
-| [integrated-vectorization](demo-java/integrated-vectorization/readme.md) | Demonstrates the integrated vectorization capabilities currently in preview, but also includes steps for indexing and querying vectors on an Azure AI Search service. | GA and preview | 
+| [demo-vectors](demo-java/demo-vectors/readme.md) | Basic workflow of vector indexing and querying on an Azure AI Search service. | GA | 
+| [demo-integrated-vectorization](demo-java/demo-integrated-vectorization/readme.md) | Demonstrates the integrated vectorization capabilities currently in preview, but also includes steps for indexing and querying vectors on an Azure AI Search service. | GA and preview | 
 
 ## demo-javascript samples
 
