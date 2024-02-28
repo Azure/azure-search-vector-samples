@@ -1,7 +1,7 @@
 ---
 page_type: sample
 languages:
-  - javas
+  - java
 name: Integrated vectorization (Java)
 products:
   - azure

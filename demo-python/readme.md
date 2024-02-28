@@ -1,64 +1,57 @@
----
-page_type: sample
-languages:
-  - python
-name: Vector search in Python
-products:
-  - azure
-  - azure-cognitive-search
-  - azure-openai
-description: |
-  Using azure-search-documents and the Azure SDK for Python, index and query vectors in a RAG pattern or a traditional search solution.
-urlFragment: vector-search-python
----
-
 # Vector search in Python (Azure AI Search)
 
 This repository contains multiple notebooks that demonstrate how to use Azure AI Search for vector and non-vector content in RAG patterns and in traditional search solutions.
 
-Start with **azure-search-vector-python-sample.ipynb** for the basic steps. The code reads the `text-sample.json` file, which contains the input data for which embeddings need to be generated. Output is a combination of human-readable text and embeddings that's pushed into a search index.
+Start with [**azure-search-vector-python-sample.ipynb**](code/vectors/azure-search-vector-python-sample.ipynb) for the basic steps. The code reads the `data/text-sample.json` file, which contains the input strings for which embeddings are generated. Output is a combination of human-readable text and embeddings that's pushed into a search index.
 
-![Python Vector Video](https://github.com/Azure/cognitive-search-vector-pr/blob/main/demo-python/data/images/python-vector-video.gif?raw=true)
+![Python Vector Video](https://github.com/Azure/azure-search-vector-samples/blob/main/demo-python/data/images/python-vector-video.gif?raw=true)
 
 Once you understand the basics, continue with the following notebooks for more exploration:
 
 | Sample | Description |
 |--------|-------------|
-| [azure-search-backup-and-restore.ipynb](./code/azure-search-backup-and-restore.ipynb) | Backup retrievable index fields and restore it on a different search service. |
+| [azure-search-backup-and-restore.ipynb](./code/backup-and-restore/azure-search-backup-and-restore.ipynb) | Backup retrievable index fields and restore it on a different search service. |
 | [azure-search-custom-vectorization-sample.ipynb](./code/custom-embeddings/azure-search-custom-vectorization-sample.ipynb) | Integrated data chunking and vectorization using custom skills and open source models. |
-| [azure-search-integrated-vectorization-sample.ipynb](./code/azure-search-integrated-vectorization-sample.ipynb) | Integrated data chunking and vectorization (preview) using Azure OpenAI. |
-| [azure-search-vector-image-index-creation-python-sample.ipynb](./code/azure-search-vector-image-index-creation-python-sample.ipynb) | Vectorization using Azure AI Vision image embedding. |
-| [azure-search-vector-image-python-sample.ipynb](./code/azure-search-vector-image-python-sample.ipynb)  | Vectorize images using Azure AI Vision image retrieval. |
-| [azure-search-vector-python-huggingface-model-sample.ipynb](./code/azure-search-vector-python-huggingface-model-sample.ipynb)  | Vectorize using Hugging Face E5-small-V2 embedding model. |
-| [azure-search-vector-python-langchain-sample.ipynb](./code/azure-search-vector-python-langchain-sample.ipynb) | LangChain integration. |
-| [azure-search-vector-python-llamaindex-sample.ipynb](./code/azure-search-vector-python-llamaindex-sample.ipynb) | LlamaIndex integration. |
-| [azure-search-vector-python-sample.ipynb](./code/azure-search-vector-python-sample.ipynb) | Basic vector indexing and queries. **Start here**. |
+| [azure-search-integrated-vectorization-sample.ipynb](./code/integrated-vectorization/azure-search-integrated-vectorization-sample.ipynb) | Integrated data chunking and vectorization (preview) using a skills to split text and call an Azure OpenAI embedding model. |
+| [azure-search-vector-image-index-creation-python-sample.ipynb](./code/image-vectors/azure-search-vector-image-index-creation-python-sample.ipynb) | Vectorization using Azure AI Vision image embedding. |
+| [azure-search-vector-image-python-sample.ipynb](./code/image-vectors/azure-search-vector-image-python-sample.ipynb)  | Vectorize images using Azure AI Vision image retrieval. |
+| [azure-search-vector-python-huggingface-model-sample.ipynb](./code/hugging-face/azure-search-vector-python-huggingface-model-sample.ipynb)  | Vectorize using Hugging Face E5-small-V2 embedding model. |
+| [azure-search-vector-python-langchain-sample.ipynb](./code/langchain/azure-search-vector-python-langchain-sample.ipynb) | LangChain integration. |
+| [azure-search-vector-python-llamaindex-sample.ipynb](./code/llamaindex/azure-search-vector-python-llamaindex-sample.ipynb) | LlamaIndex integration. |
+| [azure-search-vector-python-sample.ipynb](./code/vectors/azure-search-vector-python-sample.ipynb) | Basic vector indexing and queries. **Start here**. |
 
 ## Prerequisites
 
 To run the Python samples in this folder, you will need the following:
 
-- An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access)
-- A deployment of the `text-embedding-ada-002` embedding model in your Azure OpenAI service. This demo uses API version `2023-10-01-preview`. We used the same name as the model for the deployment name, "text-embedding-ada-002".
+- An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access).
+- Azure AI Search, any tier, but choose a service that can handle the workload. We recommend Basic or higher.
+- A deployment of the `text-embedding-ada-002` embedding model on Azure OpenAI.
 - Azure OpenAI connection and model information:
-  - OpenAI API key
-  - OpenAI embedding model deployment name
-  - OpenAI API version
+  - Azure OpenAI API key
+  - Azure OpenAI embedding model deployment name (we name deployments after the model name: "text-embedding-ada-002")
+  - Azure OpenAI REST API version (we recommend `2023-05-15`)
 - Python (these instructions were tested with version 3.11.x)
 
 You can use [Visual Studio Code with the Python extension](https://code.visualstudio.com/docs/python/python-tutorial) for these demos.
 
-## Setup
+## Set up your environment
 
 1. Clone this repository.
 
-1. Create a `.env` based off of the `.env-sample` file in the same directory as the code and update the variables according to which notebook you want to run.
+1. Create a `.env` based on the `code/.env-sample` file. Copy your new .env file to the folder containing your notebook and update the variables.
+
+1. If you're using Visual Studio Code with the [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python), make sure you also have the [Jupyter extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter).
 
 ## Run the code
 
-Before running the code, ensure you have the [Jupyter extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) installed in Visual Studio Code.
+1. Open the `code` folder and sample subfolder. Open a `ipynb` file in Visual Studio Code.
 
-To run the code, navigate to the `code` folder and open the `ipynb` file in Visual Studio Code and execute the cells by clicking the **Run** button or pressing Shift+Enter.
+1. Optionally, create a virtual environment so that you can control which package versions are used. Use Ctrl+shift+P to open a command palette. Search for `Python: Create environment`. Select `Venv` to create an environment within the current workspace.
+
+1. Copy the `.env` file to the subfolder containing the notebook.
+
+1. Execute the cells one by one, or select **Run** or Shift+Enter.
 
 ## Troubleshoot errors
 
