@@ -1,7 +1,7 @@
 ---
 page_type: sample
 languages:
-  - javas
+  - java
 name: Vector search in Java
 products:
   - azure
