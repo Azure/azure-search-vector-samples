@@ -2,7 +2,7 @@
 
 This repository contains multiple notebooks that demonstrate how to use Azure AI Search for vector and non-vector content in RAG patterns and in traditional search solutions.
 
-Start with [**azure-search-vector-python-sample.ipynb**](code/vectors/azure-search-vector-python-sample.ipynb) for the basic steps. The code reads the `data/text-sample.json` file, which contains the input strings for which embeddings are generated. Output is a combination of human-readable text and embeddings that's pushed into a search index.
+Start with [**azure-search-vector-python-sample.ipynb**](code/azure-search-vector-python-sample.ipynb) for the basic steps. The code reads the `data/text-sample.json` file, which contains the input strings for which embeddings are generated. Output is a combination of human-readable text and embeddings that's pushed into a search index.
 
 ![Python Vector Video](https://github.com/Azure/azure-search-vector-samples/blob/main/demo-python/data/images/python-vector-video.gif?raw=true)
 
@@ -10,27 +10,24 @@ Once you understand the basics, continue with the following notebooks for more e
 
 | Sample | Description |
 |--------|-------------|
-| [azure-search-backup-and-restore.ipynb](./code/index-backup-restore/azure-search-backup-and-restore.ipynb) | Backup retrievable index fields and restore it on a different search service. |
-| [azure-search-custom-vectorization-sample.ipynb](./code/custom-embeddings/azure-search-custom-vectorization-sample.ipynb) | Integrated data chunking and vectorization using custom skills and open source models. |
-| [azure-search-integrated-vectorization-sample.ipynb](./code/integrated-vectorization/azure-search-integrated-vectorization-sample.ipynb) | Integrated data chunking and vectorization (preview) using a skills to split text and call an Azure OpenAI embedding model. |
+| [backup-restore](./code/index-backup-restore/azure-search-backup-and-restore.ipynb) | Backup retrievable index fields and restore them on a new index on a different search service. |
+| [custom-embeddings](./code/custom-embeddings/azure-search-custom-vectorization-sample.ipynb) | Use a custom embedding model to vectorize content and queries. |
+| [custom-skills](./code/custom-embeddings/azure-search-custom-vectorization-sample.ipynb) | End-to-end sample that creates and calls a custom embedding model using a custom skill. This sample includes source code for an Azure function. The function uses Azure AI Vision Image Retrieval for it's built-in support of image vectorization. This sample includes the azure-search-vector-image-python.ipynb notebook that invokes the function app during indexing and queries. |
+| [integrated-vectorization](./code/integrated-vectorization/azure-search-integrated-vectorization-sample.ipynb) | Deonstrates integrated data chunking and vectorization (preview) using skills to split text and call an Azure OpenAI embedding model. |
 | [azure-search-vector-image-index-creation-python-sample.ipynb](./code/azure-search-vector-image-index-creation-python-sample.ipynb) | Vectorization using Azure AI Vision image embedding. |
 | [azure-search-vector-image-python-sample.ipynb](./code/azure-search-vector-image-python-sample.ipynb)  | Vectorize images using Azure AI Vision image retrieval. |
 | [azure-search-vector-python-huggingface-model-sample.ipynb](./code/azure-search-vector-python-huggingface-model-sample.ipynb)  | Vectorize using Hugging Face E5-small-V2 embedding model. |
 | [azure-search-vector-python-langchain-sample.ipynb](./code/langchain/azure-search-vector-python-langchain-sample.ipynb) | LangChain integration. |
 | [azure-search-vector-python-llamaindex-sample.ipynb](./code/azure-search-vector-python-llamaindex-sample.ipynb) | LlamaIndex integration. |
-| [azure-search-vector-python-sample.ipynb](./code/azure-search-vector-python-sample.ipynb) | Basic vector indexing and queries. **Start here**. |
+| [vectors](./code/azure-search-vector-python-sample.ipynb) | Basic vector indexing and queries using push model APIs. **Start here**. |
 
 ## Prerequisites
 
-To run the Python samples in this folder, you will need the following:
+To run the Python samples in this folder, you should have:
 
 - An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access).
-- Azure AI Search, any tier, but choose a service that can handle the workload. We recommend Basic or higher.
-- A deployment of the `text-embedding-ada-002` embedding model on Azure OpenAI.
-- Azure OpenAI connection and model information:
-  - Azure OpenAI API key
-  - Azure OpenAI embedding model deployment name (we name deployments after the model name: "text-embedding-ada-002")
-  - Azure OpenAI REST API version (we recommend `2023-05-15`)
+- Azure AI Search, any tier, but choose a service that can handle the workload. We strongly recommend Basic or higher.
+- Azure OpenAI is used in most samples. A deployment of the `text-embedding-ada-002` is a common requirement.
 - Python (these instructions were tested with version 3.11.x)
 
 You can use [Visual Studio Code with the Python extension](https://code.visualstudio.com/docs/python/python-tutorial) for these demos.
