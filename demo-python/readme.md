@@ -4,7 +4,7 @@ This repository contains multiple notebooks that demonstrate how to use Azure AI
 
 Start with [**azure-search-vector-python-sample.ipynb**](code/azure-search-vector-python-sample.ipynb) for the basic steps. The code reads the `data/text-sample.json` file, which contains the input strings for which embeddings are generated. Output is a combination of human-readable text and embeddings that's pushed into a search index.
 
-![Python Vector Video](https://github.com/Azure/azure-search-vector-samples/blob/main/demo-python/data/images/python-vector-video.gif?raw=true)
+<!-- ![Python Vector Video](https://github.com/Azure/azure-search-vector-samples/blob/main/demo-python/data/images/python-vector-video.gif?raw=true) -->
 
 Once you understand the basics, continue with the following notebooks for more exploration:
 

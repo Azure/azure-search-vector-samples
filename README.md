@@ -12,12 +12,12 @@ Vector support consists of generally available features and preview features.
 |---------|--------|
 | [vector indexing](https://learn.microsoft.com/azure/search/vector-search-how-to-create-index) | generally available (2023-11-01 and stable SDK packages) |
 | [vector queries](https://learn.microsoft.com/azure/search/vector-search-how-to-query) | generally available (2023-11-01 and stable SDK packages)|
-| data chunking ([Text Split skill](https://learn.microsoft.com/azure/search/cognitive-search-skill-textsplit)) | public preview (2023-10-01-preview and beta SDK packages) |
-| embedding ([AzureOpenAiEmbedding skill](https://learn.microsoft.com/azure/search/cognitive-search-skill-azure-openai-embedding))  | public preview (2023-10-01-preview and beta SDK packages) |
+| [integrated data chunking using Text Split skill](https://learn.microsoft.com/azure/search/cognitive-search-skill-textsplit) | public preview (2023-10-01-preview and beta SDK packages) |
+| [integrated embedding using AzureOpenAIEmbedding skill](https://learn.microsoft.com/azure/search/cognitive-search-skill-azure-openai-embedding) | public preview (2023-10-01-preview and beta SDK packages) |
 | [index projections](https://learn.microsoft.com/azure/search/index-projections-concept-intro) in skillsets | public preview (2023-10-01-preview and beta SDK packages) |
 | [vectorizer](https://learn.microsoft.com/azure/search/vector-search-how-to-configure-vectorizer) in index schema | public preview (2023-10-01-preview and beta SDK packages) |
 
- [Integrated data chunking, embedding, vectorizers and projections](https://learn.microsoft.com/azure/search/vector-search-integrated-vectorization) take a dependency on indexers and skills. These features are in preview under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/). 
+Preview features are available under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/). 
 
 ## demo-dotnet samples
 
@@ -36,8 +36,8 @@ Vector support consists of generally available features and preview features.
 
 | Sample | Description | Status |
 | ------ | ------------|--------|
-| [demo-vectors](demo-java/demo-vectors/readme.md) | Basic workflow of vector indexing and querying on an Azure AI Search service. | GA | 
-| [demo-integrated-vectorization](demo-java/demo-integrated-vectorization/readme.md) | Demonstrates the integrated vectorization capabilities currently in preview, but also includes steps for indexing and querying vectors on an Azure AI Search service. | GA and preview | 
+| [demo-vectors](demo-java/demo-vectors/readme.md) | A Java console app that calls Azure OpenAI to vectorize data. It then calls Azure AI Search to create, load, and query vector data.| GA | 
+| [demo-integrated-vectorization](demo-java/demo-integrated-vectorization/readme.md) | A Java console app that calls Azure AI Search to create an index, indexer, data source, and skillset. An Azure Storage account provides the data. Azure OpenAI is called by the skillset during indexing, and again during query execution to vectorize text queries. | GA and preview | 
 
 ## demo-javascript samples
 
