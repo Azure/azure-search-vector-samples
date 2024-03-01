@@ -235,7 +235,7 @@ namespace DotNetIntegratedVectorizationDemo
                             {
                                 ResourceUri = new Uri(configuration.AzureOpenAIEndpoint),
                                 ApiKey = configuration.AzureOpenAIApiKey,
-                                DeploymentId = "text-embedding-ada-002",
+                                DeploymentId = configuration.AzureOpenAIEmbeddingDeployedModel,
                             }
                         }
                     }
