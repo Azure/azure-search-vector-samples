@@ -25,7 +25,17 @@ param principalId string = ''
 ])
 param computerVisionSkuName string // Set in main.parameters.json
 
-param computerVisionLocation string = '' // Set in main.parameters.json
+@description('Location for Computer Vision API')
+@allowed([
+  'eastus'
+  'francecentral'
+  'koreacentral'
+  'northeurope'
+  'southeastasia'
+  'westeurope'
+  'westus'
+])
+param computerVisionLocation string // Set in main.parameters.json
 
 param computerVisionResourceGroupName string = '' // Set in main.parameters.json
 

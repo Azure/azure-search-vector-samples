@@ -63,7 +63,7 @@
       "value": "${AZURE_COMPUTER_VISION_RESOURCE_GROUP}"
     },
     "computerVisionLocation": {
-      "value": "${AZURE_COMPUTER_VISION_LOCATION}"
+      "value": "${AZURE_COMPUTER_VISION_LOCATION=eastus}"
     },
     "computerVisionSkuName": {
       "value": "${AZURE_COMPUTER_VISION_SKU_NAME=S1}"
