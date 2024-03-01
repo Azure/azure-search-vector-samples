@@ -1,3 +1,5 @@
+# Source code for the function app. This function runs a custom vectorizer for text-to-image queries. 
+# It's also a custom skill that vectorizes images from a blob indexer.
 import azure.functions as func
 import json
 import logging
