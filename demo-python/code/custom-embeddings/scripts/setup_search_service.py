@@ -4,19 +4,18 @@ from azure.mgmt.web import WebSiteManagementClient
 from azure.storage.blob import BlobServiceClient
 from azure.search.documents.indexes import SearchIndexClient, SearchIndexerClient
 from azure.search.documents.indexes.models import (
-    CustomVectorizerParameters,  
+    CustomWebApiParameters,  
     CustomVectorizer,
     SearchField,
     SearchFieldDataType,
-    HnswVectorSearchAlgorithmConfiguration,
-    VectorSearchAlgorithmKind,
+    HnswAlgorithmConfiguration,
     VectorSearch,
     VectorSearchProfile,
     SearchIndex,
     SemanticConfiguration,
     SemanticField,
-    PrioritizedFields,
-    SemanticSettings,
+    SemanticPrioritizedFields,
+    SemanticSearch,
     SearchIndexerDataSourceConnection,
     SearchIndexerDataContainer,
     SplitSkill,
@@ -103,41 +102,40 @@ def create_or_update_sample_index(search_index_client: SearchIndexClient, custom
         SearchField(name="title", type=SearchFieldDataType.String),  
         SearchField(name="chunk_id", type=SearchFieldDataType.String, key=True, sortable=True, filterable=True, facetable=True, analyzer_name="keyword"),  
         SearchField(name="chunk", type=SearchFieldDataType.String, sortable=False, filterable=False, facetable=False),  
-        SearchField(name="vector", type=SearchFieldDataType.Collection(SearchFieldDataType.Single), vector_search_dimensions=384, vector_search_profile="hnswProfile"),  
+        SearchField(name="vector", type=SearchFieldDataType.Collection(SearchFieldDataType.Single), vector_search_dimensions=384, vector_search_profile_name="hnswProfile"),  
     ]  
     
     # Configure the vector search configuration  
     vector_search = VectorSearch(  
         algorithms=[  
-            HnswVectorSearchAlgorithmConfiguration(  
-                name="hnsw",  
-                kind=VectorSearchAlgorithmKind.HNSW
+            HnswAlgorithmConfiguration(  
+                name="hnsw"
             )
         ],  
         profiles=[  
             VectorSearchProfile(  
                 name="hnswProfile",  
-                algorithm="hnsw",  
+                algorithm_configuration_name="hnsw",  
                 vectorizer="customVectorizer",  
             )
         ],  
         vectorizers=[  
-            CustomVectorizer(name="customVectorizer", custom_vectorizer_parameters=CustomVectorizerParameters(uri=custom_vectorizer_url))
+            CustomVectorizer(name="customVectorizer", custom_web_api_parameters=CustomWebApiParameters(uri=custom_vectorizer_url))
         ],  
     )  
     
     semantic_config = SemanticConfiguration(  
         name="my-semantic-config",  
-        prioritized_fields=PrioritizedFields(  
-            prioritized_content_fields=[SemanticField(field_name="chunk")]  
+        prioritized_fields=SemanticPrioritizedFields(  
+            content_fields=[SemanticField(field_name="chunk")]  
         ),  
     )  
     
     # Create the semantic settings with the configuration  
-    semantic_settings = SemanticSettings(configurations=[semantic_config])
+    semantic_search = SemanticSearch(configurations=[semantic_config])
 
     # Create the search index with the semantic settings  
-    index = SearchIndex(name=sample_index_name, fields=fields, vector_search=vector_search, semantic_settings=semantic_settings)  
+    index = SearchIndex(name=sample_index_name, fields=fields, vector_search=vector_search, semantic_search=semantic_search)  
     search_index_client.create_or_update_index(index)  
 
 def create_or_update_datasource(search_indexer_client: SearchIndexerClient):

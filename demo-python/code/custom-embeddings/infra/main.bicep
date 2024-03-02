@@ -115,6 +115,7 @@ module appServicePlan './core/host/appserviceplan.bicep' = {
     kind: 'elastic'
     properties: {
       maximumElasticWorkerCount: 2
+      reserved: true // This property determines if the app service plan is Linux https://github.com/Azure/bicep/discussions/7029
     }
   }
 }
