@@ -14,7 +14,7 @@ This sample uses the [Azure Python SDK](https://learn.microsoft.com/en-us/python
 
 ## Set variables and run the script
 
-This sample uses [`azd`](https://learn.microsoft.com/azure/developer/azure-developer-cli/) and a bicep template to deploy all Azure resources, including Azure AI Search. TO use an existing search service, set environment variables before running `azd up`.
+This sample uses [`azd`](https://learn.microsoft.com/azure/developer/azure-developer-cli/) and a bicep template to deploy all Azure resources, including Azure AI Search. To use an existing search service, set environment variables before running `azd up`.
 
 1. Open a command line prompt at the sample folder (custom-embeddings).
 

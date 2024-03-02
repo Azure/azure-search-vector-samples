@@ -12,8 +12,8 @@ Vector support consists of generally available features and preview features.
 |---------|--------|
 | [vector indexing](https://learn.microsoft.com/azure/search/vector-search-how-to-create-index) | generally available (2023-11-01 and stable SDK packages) |
 | [vector queries](https://learn.microsoft.com/azure/search/vector-search-how-to-query) | generally available (2023-11-01 and stable SDK packages)|
-| [integrated data chunking using Text Split skill](https://learn.microsoft.com/azure/search/cognitive-search-skill-textsplit) | public preview (2023-10-01-preview and beta SDK packages) |
-| [integrated embedding using AzureOpenAIEmbedding skill](https://learn.microsoft.com/azure/search/cognitive-search-skill-azure-openai-embedding) | public preview (2023-10-01-preview and beta SDK packages) |
+| [integrated data chunking (Text Split skill)](https://learn.microsoft.com/azure/search/cognitive-search-skill-textsplit) | public preview (2023-10-01-preview and beta SDK packages) |
+| [integrated embedding (AzureOpenAIEmbedding skill()](https://learn.microsoft.com/azure/search/cognitive-search-skill-azure-openai-embedding) | public preview (2023-10-01-preview and beta SDK packages) |
 | [index projections](https://learn.microsoft.com/azure/search/index-projections-concept-intro) in skillsets | public preview (2023-10-01-preview and beta SDK packages) |
 | [vectorizer](https://learn.microsoft.com/azure/search/vector-search-how-to-configure-vectorizer) in index schema | public preview (2023-10-01-preview and beta SDK packages) |
 
@@ -30,7 +30,7 @@ Preview features are available under [Supplemental Terms of Use](https://azure.m
 
 | Sample | Description | Status |
 | ------ | ------------|--------|
-| [demo-python/code/*.ipynb](demo-python/readme.md) |  A collection of nine notebooks that demonstrate aspects of vector search, including data chunking and vectorization of both text and image content. The most recent one, `custom-embeddings/azure-search-custom-vectorization-sample.ipynb`, demonstrates how to call custom embedding model from a skillset. | GA and preview | 
+| [demo-python readme](demo-python/readme.md) |  A growing collection of notebooks that demonstrate aspects of vector search support, including data chunking and embedding of both text and image content and queries, using a variety of frameworks and techniques.| GA and preview | 
 
 ## demo-java samples
 
@@ -53,6 +53,7 @@ Preview features are available under [Supplemental Terms of Use](https://azure.m
 
 ## Other vector samples and tools
 
+- [azure-ai-search-lab](https://github.com/jelledruyts/azure-ai-search-lab) A learning and experimentation lab for trying out various AI-enabled search scenarios in Azure. It includes web application front-end which uses Azure AI Search and Azure OpenAI to execute searches with a variety of options - ranging from simple keyword search, to semantic ranking, vector and hybrid search, and using generative AI to answer search queries in various ways. This allows you to quickly understand what each option does, how it affects the search results, and how various approaches compare against each other.
 - [chat-with-your-data-solution-accelerator](https://github.com/Azure-Samples/chat-with-your-data-solution-accelerator) A template that deploys multiple Azure resources for a custom chat-with-your-data solution. Use this accelerator to create a production-ready solution that implements coding best practices.
 - [Azure Search OpenAI Demo](https://github.com/Azure-Samples/azure-search-openai-demo/tree/vectors) A sample app for the Retrieval-Augmented Generation pattern running in Azure, using Azure AI Search for retrieval and Azure OpenAI large language models to power ChatGPT-style and Q&A experiences. Use the "vectors" branch to leverage Vector retrieval.
 - [Azure Search OpenAI Demo - C#](https://github.com/Azure-Samples/azure-search-openai-demo-csharp/tree/feature/embeddingSearch) A sample app for the Retrieval-Augmented Generation pattern running in Azure, using Azure AI Search for retrieval and Azure OpenAI large language models to power ChatGPT-style and Q&A experiences using C#.
