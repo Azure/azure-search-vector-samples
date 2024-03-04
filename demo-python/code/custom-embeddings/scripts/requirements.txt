@@ -65,6 +65,7 @@ sentencepiece==0.1.99
 six==1.16.0
 stack-data==0.6.3
 sympy==1.12
+tenacity==8.2.3
 threadpoolctl==3.2.0
 tokenizers==0.15.0
 torch==2.1.2
