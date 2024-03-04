@@ -12,10 +12,10 @@ Vector support consists of generally available features and preview features.
 |---------|--------|
 | [vector indexing](https://learn.microsoft.com/azure/search/vector-search-how-to-create-index) | generally available (2023-11-01 and stable SDK packages) |
 | [vector queries](https://learn.microsoft.com/azure/search/vector-search-how-to-query) | generally available (2023-11-01 and stable SDK packages)|
-| [integrated data chunking (Text Split skill)](https://learn.microsoft.com/azure/search/cognitive-search-skill-textsplit) | public preview (2023-10-01-preview and beta SDK packages) |
-| [integrated embedding (AzureOpenAIEmbedding skill()](https://learn.microsoft.com/azure/search/cognitive-search-skill-azure-openai-embedding) | public preview (2023-10-01-preview and beta SDK packages) |
-| [index projections](https://learn.microsoft.com/azure/search/index-projections-concept-intro) in skillsets | public preview (2023-10-01-preview and beta SDK packages) |
-| [vectorizer](https://learn.microsoft.com/azure/search/vector-search-how-to-configure-vectorizer) in index schema | public preview (2023-10-01-preview and beta SDK packages) |
+| [integrated data chunking](https://learn.microsoft.com/azure/search/cognitive-search-skill-textsplit) | public preview (2023-10-01-preview and beta SDK packages) |
+| [integrated embedding](https://learn.microsoft.com/azure/search/cognitive-search-skill-azure-openai-embedding) | public preview (2023-10-01-preview and beta SDK packages) |
+| [index projections](https://learn.microsoft.com/azure/search/index-projections-concept-intro) | public preview (2023-10-01-preview and beta SDK packages) |
+| [vectorizer](https://learn.microsoft.com/azure/search/vector-search-how-to-configure-vectorizer)a | public preview (2023-10-01-preview and beta SDK packages) |
 
 Preview features are available under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/). 
 
