@@ -10,16 +10,16 @@ Once you understand the basics, continue with the following notebooks for more e
 
 | Sample | Description |
 |--------|-------------|
-| [backup-restore](./code/backup-restore/azure-search-backup-and-restore.ipynb) | Backup retrievable index fields and restore them on a new index on a different search service. |
 | [basic-vector-workflow](./code/basic-vector-workflow/azure-search-vector-python-sample.ipynb) | Basic vector indexing and queries using push model APIs. **Start here**. |
 | [community-integration/hugging-face](./code/community-integration/hugging-face/azure-search-vector-python-huggingface-model-sample.ipynb)  | Vectorize using the Hugging Face [E5-small-V2](https://huggingface.co/intfloat/e5-small-v2) embedding model. |
 | [community-integration/langchain](./code/community-integration/langchain/azure-search-vector-python-langchain-sample.ipynb) | LangChain integration using the [Azure AI Search vector store integration module](https://python.langchain.com/docs/integrations/vectorstores/azuresearch). |
 | [community-integration/llamaindex](./code/community-integration/llamaindex/azure-search-vector-python-llamaindex-sample.ipynb) | LlamaIndex integration. |
 | [custom-vectorizer](./code/custom-vectorizer/azure-search-custom-vectorization-sample.ipynb) | Use an open source embedding model such as Hugging Face sentence-transformers [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) to vectorize content and queries. This sample uses azd and bicep to deploy Azure resources for a fully operational solution. It uses a custom skill with a function app that calls an embedding model. |
 | [data-chunking](./code/data-chunking) | Examples used in the in [Chunk documents](https://learn.microsoft.com/azure/search/vector-search-how-to-chunk-documents) article on the documentation web site. |
+| [index-backup-restore](./code/index-backup-restore/azure-search-backup-and-restore.ipynb) | Backup retrievable index fields and restore them on a new index on a different search service. |
 | [integrated-vectorization](./code/integrated-vectorization/azure-search-integrated-vectorization-sample.ipynb) | Demonstrates integrated data chunking and vectorization (preview) using skills to split text and call an Azure OpenAI embedding model. |
 | [multimodal](./code/multimodal/azure-search-vector-image-index-creation-python-sample.ipynb) | Vectorize images using [Azure AI Vision multimodal embedding](https://learn.microsoft.com/azure/ai-services/computer-vision/how-to/image-retrieval). In contrast with the multimodal-custom-skill example, this notebook uses the push API (no indexers or skillsets) for indexing. It calls the embedding model directly for a pure image vector search.  |
-| [multimodal-custom-skill](./code/multimodal-custom-skill/azure-search-custom-vectorization-sample.ipynb) | End-to-end text-to-image sample that creates and calls a custom embedding model using a custom skill. Includes source code for an Azure function that calls the [Azure AI Vision Image Retrieval REST API](https://learn.microsoft.com/rest/api/computervision/image-retrieval) for text-to-image vectorization. Includes an azure-search-vector-image notebook for all steps, from deployment to queries. |
+| [multimodal-custom-skill](./code/multimodal-custom-skill/azure-search-vector-image-python-sample.ipynb) | End-to-end text-to-image sample that creates and calls a custom embedding model using a custom skill. Includes source code for an Azure function that calls the [Azure AI Vision Image Retrieval REST API](https://learn.microsoft.com/rest/api/computervision/image-retrieval) for text-to-image vectorization. Includes an azure-search-vector-image notebook for all steps, from deployment to queries. |
 
 ## Prerequisites
 
