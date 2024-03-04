@@ -1,3 +1,4 @@
+from azure.core.exceptions import ResourceNotFoundError
 from azure.core.pipeline.policies import HTTPPolicy
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.web import WebSiteManagementClient
@@ -23,10 +24,7 @@ from azure.search.documents.indexes.models import (
     WebApiSkill,
     InputFieldMappingEntry,
     OutputFieldMappingEntry,
-    FieldMapping
-)
-# Workaround to use the preview SDK
-from azure.search.documents.indexes._generated.models import (
+    FieldMapping,
     IndexProjectionMode,
     SearchIndexerIndexProjectionSelector,  
     SearchIndexerIndexProjections,  
@@ -34,6 +32,12 @@ from azure.search.documents.indexes._generated.models import (
     SearchIndexerSkillset
 )
 import os
+from tenacity import (
+    Retrying,
+    retry_if_exception_type,
+    wait_random_exponential,
+    stop_after_attempt
+)
 
 function_name = "GetTextEmbedding"
 sample_index_name = "custom-embedding-index"
@@ -73,11 +77,19 @@ def get_function_url(credential: DefaultAzureCredential) -> str:
 
     resource_group = os.environ["AZURE_API_SERVICE_RESOURCE_GROUP"]
     function_app_name = os.environ["AZURE_API_SERVICE"]
-    embedding_function = client.web_apps.get_function(resource_group_name=resource_group, name=function_app_name, function_name=function_name)
-    embedding_function_keys = client.web_apps.list_function_keys(resource_group_name=resource_group, name=function_app_name, function_name=function_name)
-    function_url_template = embedding_function.invoke_url_template
-    function_key = embedding_function_keys.additional_properties["default"]
-    return f"{function_url_template}?code={function_key}"
+    # It's possible the function is not fully provisioned by the time this script runs
+    # Retry fetching the function information a few times before giving up if it's not found
+    for attempt in Retrying(
+        retry=retry_if_exception_type(ResourceNotFoundError),
+        wait=wait_random_exponential(min=15, max=60),
+        stop=stop_after_attempt(5)
+    ):
+        with attempt:
+            embedding_function = client.web_apps.get_function(resource_group_name=resource_group, name=function_app_name, function_name=function_name)
+            embedding_function_keys = client.web_apps.list_function_keys(resource_group_name=resource_group, name=function_app_name, function_name=function_name)
+            function_url_template = embedding_function.invoke_url_template
+            function_key = embedding_function_keys.additional_properties["default"]
+            return f"{function_url_template}?code={function_key}"
 
 def upload_sample_data(credential: DefaultAzureCredential):
     # Connect to Blob Storage
