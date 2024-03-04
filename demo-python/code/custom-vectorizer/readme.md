@@ -14,9 +14,9 @@ This sample uses the [Azure Python SDK](https://learn.microsoft.com/en-us/python
 
 ## Set variables and run the script
 
-This sample uses [`azd`](https://learn.microsoft.com/azure/developer/azure-developer-cli/) and a bicep template to deploy all Azure resources, including Azure AI Search. TO use an existing search service, set environment variables before running `azd up`.
+This sample uses [`azd`](https://learn.microsoft.com/azure/developer/azure-developer-cli/) and a bicep template to deploy all Azure resources, including Azure AI Search. To use an existing search service, set environment variables before running `azd up`.
 
-1. Open a command line prompt at the sample folder (custom-embeddings).
+1. Open a command line prompt at the sample folder (custom-vectorizer).
 
 1. Optionally, enter variables if you have an existing search service:
 
@@ -31,8 +31,19 @@ This sample uses [`azd`](https://learn.microsoft.com/azure/developer/azure-devel
    + Enter a development environment name.
    + Enter a region for the function app. 
 
-   If you aren't prompted for an environment or region, retry `azd up -e` to specify a new environment and region.
+   If you aren't prompted for an environment or region, retry `azd env new` to specify a new environment.
 
    The deployment creates multiple Azure resources and runs multiple jobs. It takes several minutes to complete. 
 
 1. Open the [notebook](./azure-search-custom-vectorization-sample.ipynb) to run sample queries once the sample is provisioned and the indexer has finished running.
+
+1. If you can't run the queries, check your search service to make sure the index, indexer, data source, and skillset exist. Object creation won't occur if your function app isn't fully warmed up when `azd` gets to this step. To create the objects manually, run  `./scripts/setup_search_service.ps1` at the command line prompt.
+
+   You should see the following output statements:
+
+   ```bash
+   Create or update sample index custom-embedding-index...
+   Create or update sample data source custom-embedding-datasource...
+   Create or update sample skillset custom-embedding-skillset
+   Create or update sample indexer custom-embedding-indexer
+   ```
