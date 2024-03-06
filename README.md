@@ -45,12 +45,6 @@ Preview features are available under [Supplemental Terms of Use](https://azure.m
 | ------ | ------------|--------|
 | [JavaScriptVectorDemo](demo-javascript/readme.md) | A single folder contains three code samples. The `azure-search-vector-sample.js` script calls just Azure OpenAI and is used to generate embeddings for fields in an index. The `docs-text-openai-embeddings.js` program is an end-to-end code sample that calls Azure OpenAI for embeddings and Azure AI Seach to create, load, and query an index that contains vectors. The `query-text-openai-embeddings.js` script generates an embedding for a vector query. | GA and preview | 
 
-## postman-collection samples
-
-| Sample | Description | Status |
-| ------ | ------------|--------|
-| [postman-collection](postman-collection/README.md)| Two separate Postman collections of REST API calls for generally available (2023-11-01) and preview (2023-10-01-preview) capabilities. GA version shows you how to create, load, and query vector and non-vector content in an index. Preview version demonstrates integrated data chunking and vectorization through indexers and skillsets. Use the [Postman app](https://www.postman.com/downloads/) for these samples. | GA and preview | 
-
 ## Other vector samples and tools
 
 - [azure-ai-search-lab](https://github.com/jelledruyts/azure-ai-search-lab) A learning and experimentation lab for trying out various AI-enabled search scenarios in Azure. It includes web application front-end which uses Azure AI Search and Azure OpenAI to execute searches with a variety of options - ranging from simple keyword search, to semantic ranking, vector and hybrid search, and using generative AI to answer search queries in various ways. This allows you to quickly understand what each option does, how it affects the search results, and how various approaches compare against each other.
