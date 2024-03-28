@@ -23,6 +23,7 @@ content_path = os.path.join(
     "data",
     "documentVectors.json")
 
+# You can create the index used by this function using the integrated vectorization notebook
 def load_chunks_from_index():
     load_dotenv(override=True)
     endpoint = os.getenv("AZURE_SEARCH_SERVICE_ENDPOINT")
@@ -31,10 +32,12 @@ def load_chunks_from_index():
     search_client = SearchClient(endpoint, index, AzureKeyCredential(key))
     content = []
     for doc in search_client.search(search_text="", top=1000, select="chunk_id,chunk,title"):
-        content.append({"id": doc["chunk_id"], "chunk": doc["chunk"], "title": doc["title"]})
+        content.append({"id": doc["chunk_id"], "chunk": doc["chunk"], "title": doc["title"], "embedding": doc["vector"]})
     with open(content_path, "w") as f:
         json.dump(content, f)
 
+# Optionally re-embed all the chunks
+# Can be used to test a different embedding model such as text-embedding-3-large
 def create_embeddings():
     load_dotenv(override=True)
     openai_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
