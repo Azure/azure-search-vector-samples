@@ -2,20 +2,20 @@
 page_type: sample
 languages:
   - python
-name: Vector compression and storage options in Python
+name: Vector quantization and storage options in Python
 products:
   - azure
   - azure-ai-search
 description: |
-  Using azure-search-documents and the Azure SDK for Python, save on storage when using vector compression
+  Using azure-search-documents and the Azure SDK for Python, save on storage when using vector quantization
 urlFragment: vector-search-python
 ---
 
-# Vector compression and storage options using Python (Azure AI Search)  
+# Vector quantization and storage options using Python (Azure AI Search)  
 
 The Python notebook creates vectorized data on Azure AI Search and demonstrates how to save on storage using the following features
 
-- Compression
+- Quantization
 - Disabling storage of vectors returned in query responses. These vectors are stored separately from vectors used for the queries themselves.
 - Smaller data types than `Edm.Single`.
 
