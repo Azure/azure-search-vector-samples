@@ -20,6 +20,7 @@ content_path = os.path.join(
     "..",
     "..",
     "..",
+    "..",
     "data",
     "documentVectors.json")
 

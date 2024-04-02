@@ -8,7 +8,7 @@ products:
   - azure-ai-search
 description: |
   Using azure-search-documents and the Azure SDK for Python, save on storage when using vector quantization
-urlFragment: vector-search-python
+urlFragment: quantization-storage-python
 ---
 
 # Vector quantization and storage options using Python (Azure AI Search)  
