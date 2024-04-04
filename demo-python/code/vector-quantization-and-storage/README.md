@@ -7,7 +7,7 @@ products:
   - azure
   - azure-ai-search
 description: |
-  Using azure-search-documents and the Azure SDK for Python, save on storage when using vector quantization
+  Using azure-search-documents and the Azure SDK for Python, save on storage when using vector quantization.
 urlFragment: quantization-storage-python
 ---
 
@@ -15,7 +15,7 @@ urlFragment: quantization-storage-python
 
 The Python notebook creates vectorized data on Azure AI Search and demonstrates how to save on storage using the following features
 
-- Quantization
+- Built-in scalar quantization that reduces vector index size in memory and on disk.
 - Disabling storage of vectors returned in query responses. These vectors are stored separately from vectors used for the queries themselves.
 - Smaller data types than `Edm.Single`.
 

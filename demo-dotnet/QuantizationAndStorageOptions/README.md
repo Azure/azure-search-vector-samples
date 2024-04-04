@@ -1,25 +1,25 @@
 ---
 page_type: sample
 languages:
-  - python
+  - csharp
 name: Vector quantization and storage options in C#
 products:
   - azure
   - azure-ai-search
 description: |
-  Using Azure.Search.Documents and the Azure SDK for C#, save on storage when using vector quantization
-urlFragment: quantization-storage-c#
+  Using Azure.Search.Documents and the Azure SDK for .NET, save on storage when using vector quantization.
+urlFragment: quantization-storage-csharp
 ---
 
 # Vector quantization and storage options using C# (Azure AI Search)  
 
-The C# program creates vectorized data on Azure AI Search and demonstrates how to save on storage using the following features
+The C# program creates vectorized data on Azure AI Search and demonstrates how to save on storage using the following features:
 
-- Quantization
+- Built-in scalar quantization that reduces vector index size in memory and on disk.
 - Disabling storage of vectors returned in query responses. These vectors are stored separately from vectors used for the queries themselves.
 - Smaller data types than `Edm.Single`.
 
-The sample data is a JSON file containing a pre-chunked version of the sample documents. They have been embedded using text-embedding-3-large with 3072 dimensions.
+The sample data is a JSON file containing a pre-chunked version of the sample documents about a fictious company called Contoso Electronics and their policies. They have been embedded using text-embedding-3-large with 3072 dimensions.
 
 ## Prerequisites
 
@@ -37,7 +37,7 @@ Before running the code, ensure you have the .NET SDK installed on your machine.
 
 1. Clone this repository.  
 
-1. Create a `local.settings.json` file in the same directory as the code that follows the same pattern as `local.settings-sample.json`
+1. Create a `local.settings.json` file in the same directory as the code that follows the same pattern as `local.settings-sample.json`.
 
 1. If you're using Visual Studio Code, select **Terminal** and **New Terminal** to get a command line prompt.   
   
