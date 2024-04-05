@@ -1,5 +1,5 @@
 python-dotenv
-azure-search-documents==11.6.0b1
+azure-search-documents==11.6.0b2
 azure-identity
 llama-index
 llama-index-vector-stores-azureaisearch==0.1.3
