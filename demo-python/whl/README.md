@@ -1,1 +1,0 @@
-This .whl file is included for scripts that have not yet been updated to the latest AI Search preview library available.

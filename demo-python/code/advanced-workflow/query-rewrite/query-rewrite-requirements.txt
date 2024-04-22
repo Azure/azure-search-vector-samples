@@ -1,5 +1,5 @@
 python-dotenv
-azure-search-documents==11.6.0b1
+azure-search-documents==11.6.0b3
 azure-identity
 openai
 pandas
