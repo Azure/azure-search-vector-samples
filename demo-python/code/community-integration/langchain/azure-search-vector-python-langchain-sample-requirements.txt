@@ -1,6 +1,6 @@
 python-dotenv
-azure-search-documents==11.6.0b2
+azure-search-documents==11.6.0b3
 azure-identity
-langchain==0.1.8
-langchain-openai==0.0.6
+langchain==0.1.16
+langchain-openai==0.1.3
 pypdf
