@@ -1,33 +1,60 @@
-const axios = require("axios");
 const dotenv = require("dotenv");
 const fs = require("fs");
-const {
-  SearchIndexClient,
-  SearchClient,
-  AzureKeyCredential,
-} = require("@azure/search-documents");
+const { SearchIndexClient, SearchClient } = require("@azure/search-documents");
+const { DefaultAzureCredential } = require("@azure/identity")
+const { AzureKeyCredential } = require("@azure/core-auth")
+const { OpenAIClient } = require("@azure/openai");
+const { promisify } = require('util');
+const { program } = require('commander');
+const { create } = require("domain");
+
+program
+  .option('-e, --embed', 'Recreate embeddings in text-sample.json')
+  .option('-u, --upload', 'Upload embeddings and data in text-sample.json to the search index');
 
 async function main() {
+  program.parse();
+
+  const options = program.opts()
+  const defaultCredential = new DefaultAzureCredential();
+
   // Load environment variables from .env file
   dotenv.config({ path: "../.env" });
 
   // Create Azure AI Search index
   try {
-    await createSearchIndex();
+    await createSearchIndex(defaultCredential);
   } catch (err) {
-    console.log(`Failed to create ACS index: ${err.message}`);
+    console.error(`Failed to create ACS index: ${err.message}`);
+    return;
   }
 
-  // Generate document embeddings and upload to Azure AI Search
-  try {
-    const docs = await generateDocumentEmbeddings();
-    await uploadDocuments(docs);
-  } catch (err) {
-    console.log(
-      `Failed to generate embeddings and upload documents to ACS: ${err.message}`
-    );
+  // Generate document embeddings
+  if (options.embed) {
+    try {
+      await generateDocumentEmbeddings(defaultCredential);
+    } catch (err) {
+      console.error(
+        `Failed to generate embeddings: ${err.message}`
+      );
+      return;
+    }
   }
 
+  // Upload documents to Azure AI Search
+  if (options.upload) {
+    try {
+      await uploadDocuments(defaultCredential);
+    } catch (err) {
+      console.error(
+        `Failed to upload documents to search index: ${err.message}`
+      );
+      return;
+    }
+  }
+}
+
+  /*
   // Examples of different types of vector searches
   await doPureVectorSearch();
   await doPureVectorSearchMultilingual();
@@ -35,40 +62,51 @@ async function main() {
   await doVectorSearchWithFilter();
   await doHybridSearch();
   await doSemanticHybridSearch();
-}
+  */
 
-async function generateDocumentEmbeddings() {
+const readFileAsync = promisify(fs.readFile);
+const writeFileAsync = promisify(fs.writeFile);
+
+async function generateDocumentEmbeddings(defaultCredential) {
+  const openAiEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
+  const openAiKey = process.env.AZURE_OPENAI_KEY;
+  const openAiDeployment = process.env.AZURE_OPENAI_EMBEDDING_DEPLOYMENT;
+  let credential = !openAiKey || openAiKey.trim() == '' ?
+    defaultCredential : new AzureKeyCredential(openAiKey);
+  const client = new OpenAIClient(openAiEndpoint, credential);
+
   console.log("Reading data/text-sample.json...");
-  const inputData = JSON.parse(
-    fs.readFileSync("../data/text-sample.json", "utf-8")
-  );
+  const fileData = await readFileAsync("../data/text-sample.json", "utf-8");
+  let data = JSON.parse(fileData);
 
   console.log("Generating embeddings with Azure OpenAI...");
-  const outputData = [];
-  for (const item of inputData) {
-    const titleEmbeddings = await generateEmbeddings(item.title);
-    const contentEmbeddings = await generateEmbeddings(item.content);
+  const titles = data.map(item => item["title"]);
+  const content = data.map(item => item["content"]);
+  const titleEmbeddings = await client.getEmbeddings(openAiDeployment, titles);
+  const contentEmbeddings = await client.getEmbeddings(openAiDeployment, content);
 
-    outputData.push({
-      ...item,
-      titleVector: titleEmbeddings,
-      contentVector: contentEmbeddings,
-    });
+  for (let i = 0; i < data.length; i++) {
+    data[i]["titleVector"] = titleEmbeddings.data[i].embedding;
+    data[i]["contentVector"] = contentEmbeddings.data[i].embedding;
   }
 
-  fs.writeFileSync("../output/docVectors.json", JSON.stringify(outputData));
-
-  return outputData;
+  await writeFileAsync("../data/text-sample.json", JSON.stringify(data, null, 2));
 }
 
-async function createSearchIndex() {
-  const searchServiceEndpoint = process.env.AZURE_SEARCH_ENDPOINT;
+async function createSearchIndex(defaultCredential) {
+  const searchServiceEndpoint = process.env.AZURE_SEARCH_SERVICE_ENDPOINT;
   const searchServiceApiKey = process.env.AZURE_SEARCH_ADMIN_KEY;
-  const searchIndexName = process.env.AZURE_SEARCH_INDEX_NAME;
+  const searchIndexName = process.env.AZURE_SEARCH_INDEX;
+  const embeddingDimensions = parseInt(process.env.AZURE_OPENAI_EMBEDDING_DIMENSIONS);
+
+  let vectorSearchDimensions = isNaN(embeddingDimensions) || embeddingDimensions <= 0 ?
+    1536 : embeddingDimensions;
+  let credential = !searchServiceApiKey || searchServiceApiKey.trim() === '' ?
+    defaultCredential : new AzureKeyCredential(searchServiceApiKey);
 
   const indexClient = new SearchIndexClient(
     searchServiceEndpoint,
-    new AzureKeyCredential(searchServiceApiKey)
+    credential
   );
 
   const index = {
@@ -94,14 +132,14 @@ async function createSearchIndex() {
         name: "titleVector",
         type: "Collection(Edm.Single)",
         searchable: true,
-        vectorSearchDimensions: 1536,
+        vectorSearchDimensions: vectorSearchDimensions,
         vectorSearchProfileName: "myHnswProfile",
       },
       {
         name: "contentVector",
         type: "Collection(Edm.Single)",
         searchable: true,
-        vectorSearchDimensions: 1536,
+        vectorSearchDimensions: vectorSearchDimensions,
         vectorSearchProfileName: "myHnswProfile",
       },
     ],
@@ -134,19 +172,32 @@ async function createSearchIndex() {
   await indexClient.createOrUpdateIndex(index);
 }
 
-async function uploadDocuments(docs) {
-  const searchServiceEndpoint = process.env.AZURE_SEARCH_ENDPOINT;
+function createSearchClient(defaultCredential) {
+  const searchServiceEndpoint = process.env.AZURE_SEARCH_SERVICE_ENDPOINT;
   const searchServiceApiKey = process.env.AZURE_SEARCH_ADMIN_KEY;
-  const searchIndexName = process.env.AZURE_SEARCH_INDEX_NAME;
+  const searchIndexName = process.env.AZURE_SEARCH_INDEX;
 
-  const searchClient = new SearchClient(
+  let credential = !searchServiceApiKey || searchServiceApiKey.trim() === '' ?
+    defaultCredential : new AzureKeyCredential(searchServiceApiKey);
+
+  return new SearchClient(
     searchServiceEndpoint,
     searchIndexName,
-    new AzureKeyCredential(searchServiceApiKey)
+    credential
   );
+}
+
+async function uploadDocuments(defaultCredential) {
+  console.log("Reading data/text-sample.json...");
+  const fileData = await readFileAsync("../data/text-sample.json", "utf-8");
+  let data = JSON.parse(fileData);
+
+  const searchClient = createSearchClient(defaultCredential);
 
   console.log("Uploading documents to ACS index...");
-  await searchClient.uploadDocuments(docs);
+  for (let i = 0; i < data.length; i++) {
+    await searchClient.uploadDocuments([data[i]]);
+  }
 }
 
 async function doPureVectorSearch() {
@@ -375,31 +426,6 @@ async function doSemanticHybridSearch() {
 
     console.log(`\n`);
   }
-}
-
-async function generateEmbeddings(text) {
-  // Set Azure OpenAI API parameters from environment variables
-  const apiKey = process.env.AZURE_OPENAI_API_KEY;
-  const apiBase = `https://${process.env.AZURE_OPENAI_SERVICE_NAME}.openai.azure.com`;
-  const apiVersion = process.env.AZURE_OPENAI_API_VERSION;
-  const deploymentName = process.env.AZURE_OPENAI_DEPLOYMENT_NAME;
-
-  const response = await axios.post(
-    `${apiBase}/openai/deployments/${deploymentName}/embeddings?api-version=${apiVersion}`,
-    {
-      input: text,
-      engine: "text-embedding-ada-002",
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "api-key": apiKey,
-      },
-    }
-  );
-
-  const embeddings = response.data.data[0].embedding;
-  return embeddings;
 }
 
 main();
