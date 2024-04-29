@@ -43,7 +43,7 @@ async function main() {
     try {
       await createSearchIndex(defaultCredential);
     } catch (err) {
-      console.error(`Failed to create ACS index: ${err.message}`);
+      console.error(`Failed to create index: ${err.message}`);
       return;
     }
 
@@ -117,6 +117,7 @@ async function generateDocumentEmbeddings(defaultCredential) {
   }
 
   await writeFileAsync("../data/text-sample.json", JSON.stringify(data, null, 2));
+  console.log("Wrote embeddings to data/text-sample.json");
 }
 
 async function createSearchIndex(defaultCredential) {
@@ -194,7 +195,7 @@ async function createSearchIndex(defaultCredential) {
     },
   };
 
-  console.log("Creating ACS index...");
+  console.log("Creating index...");
   await indexClient.createOrUpdateIndex(index);
 }
 
@@ -205,12 +206,14 @@ async function uploadDocuments(defaultCredential) {
 
   const searchClient = createSearchClient(defaultCredential);
 
-  console.log("Uploading documents to ACS index...");
+  console.log("Uploading documents to the index...");
 
   // Upload 1 document at a time
   for (let i = 0; i < data.length; i++) {
     await searchClient.uploadDocuments([data[i]]);
   }
+
+  console.log("Finished uploading documents");
 }
 
 async function queryDocuments(defaultCredential, query, queryKind, categoryFilter, includeTitle, semanticReranker) {

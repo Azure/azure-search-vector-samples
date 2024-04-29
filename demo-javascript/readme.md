@@ -18,19 +18,17 @@ The JavaScript demo in this repository creates vectorized data that can be index
 
 | Samples | Description |
 |---------|-------------|
-| **azure-search-vector-sample.js** | [End-to-end sample](#run-the-end-to-end-sample-program). It uses **@azure/search-documents** in the Azure SDK for JavaScript. It calls the next two JavaScript functions, which access a deployed model on your Azure OpenAI resource. It calls Azure AI Search to create and query an index. |
-| **docs-text-openai-embeddings.js** | Generates embeddings for an index. Input is `data\text-sample.json`. Output is sent to `output\docVectors.json`. The output is usable as a request payload on a document upload action to Azure AI Search, but there are no calls to Azure AI Search in this code. |
-| **query-text-openai-embeddings.js** | Generates an embedding for a query. Output is a vector that can be pasted into a vector query request. There are no calls to Azure AI Search in this code. |
+| **azure-search-vector-sample.js** | [End-to-end sample](#run-the-end-to-end-sample-program). It uses **@azure/search-documents** in the Azure SDK for JavaScript. You can use this to either revectorize the included sample data in `text-sample.json`, or you can use it to initialize a new index on your Azure AI Search service with the pre-vectorized sample data. When revectorizing or querying, it accesses a deployed model on your Azure OpenAI resource. |
 
 ## Prerequisites
 
 + An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access). You must have the Azure OpenAI service name and an API key.
 
-+ A deployment of the **text-embedding-ada-002** embedding model. We use API version 2023-05-15 in this demo. For the deployment name, the deployment name is the same as the model, "text-embedding-ada-002".
-
-+ Model capacity should be sufficient to handle the load. We successfully tested this sample on a deployment model having a 33K tokens per minute rate limit.
-
 + Node.js (these instructions were tested with version Node.js version 16.0)
+
++ A deployment of the **text-embedding-3-large** embedding model. For the deployment name, the deployment name is the same as the model, "text-embedding-3-large".
+
++ Model capacity should be sufficient to handle the load.
 
 + For the end-to-end sample, you also need an Azure AI Search service. Provide the full endpoint, an Admin API key, and an index name as environment variables.
 
@@ -40,24 +38,7 @@ You can use [Visual Studio Code with the JavaScript extension](https://code.visu
 
 1. Clone this repository.
 
-1. Create a .env file in the *demo-javascript* directory and include the following variables
-
-   ```bash
-   AZURE_OPENAI_SERVICE_NAME=YOUR-AZURE-OPENAI-SERVICE-NAME
-   AZURE_OPENAI_DEPLOYMENT_NAME=YOUR-AZURE-OPENAI-DEPLOYMENT-NAME
-   AZURE_OPENAI_API_VERSION=YOUR-AZURE-OPENAI-API-VERSION
-   AZURE_OPENAI_API_KEY=YOUR-AZURE-OPENAI-API-KEY
-   AZURE_SEARCH_ENDPOINT=YOUR-AZURE_SEARCH_ENDPOINT
-   AZURE_SEARCH_ADMIN_KEY=YOUR-AZURE_SEARCH_ADMIN_KEY
-   AZURE_SEARCH_INDEX_NAME=YOUR-AZURE_SEARCH_INDEX_NAME
-   ```
-
-   **Key points**:
-
-   + Service name should be the short name. For example, if the endpoint is `https://my-openai-svc.openai.azure.com/`, the service name is `my-openai-svc`.
-   + Deployment name can be found in Azure AI Studio. Azure portal provides a link. We used `text-embedding-ada-002` for our deployment name. 
-   + API version used for testing is `2023-05-15`.
-   + Keys and endpoints can be found in the Azure portal pages for your Azure OpenAI resource.
+1. Copy the .env-sample file to a .env file in the same directory and fill out the missing variables. API-key usage is optional if RBAC is setup. Keys and endpoints can be found in the Azure portal pages for your Azure OpenAI resource and your Azure AI Search resoruce.
 
 1. Select **Terminal** and **New Terminal** to get a command line prompt. Install `npm` dependencies:
 
@@ -66,109 +47,114 @@ You can use [Visual Studio Code with the JavaScript extension](https://code.visu
    npm install
    ```
 
-## Run the vectorization code
+## Run the end-to-end sample program
 
-This section explains how to run the separate vectorization programs that call Azure OpenAI. One program generates embeddings for a documents payload for indexing. The second program generates an embedding for a vector query.
 
-### Document vectorization
-
-Enter the following statement at the command line:
+This section explains how to run the separate vectorization programs that call Azure OpenAI. Enter the following statement at the command line:
 
 ```bash
-node docs-text-openai-embeddings.js
+node .\azure-search-vector-sample.js -h
+```
+
+Output should look similar to this:
+
+```
+Usage: azure-search-vector-sample [options]
+
+Options:
+  -e, --embed                       Recreate embeddings in text-sample.json
+  -u, --upload                      Upload embeddings and data in text-sample.json to the search index
+  -q, --query <text>                Text of query to issue to search, if any
+  -k, --query-kind <kind>           Kind of query to issue. Defaults to hybrid (choices: "text", "vector", "hybrid", default: "hybrid")
+  -c, --category-filter <category>  Category to filter results to
+  -t, --include-title               Search over the title field as well as the content field
+  --no-semantic-reranker            Do not use semantic reranker. Defaults to false
+  -h, --help                        display help for command```
+```
+
+#### Upload the sample data
+
+The sample includes data and text-embedding-3-large embeddings for that data in the data/text-sample.json file. You can setup a search index using this sample data and the credentials in the .env file you created as part of setup. Use the following command to upload the sample data:
+
+```bash
+node .\azure-search-vector-sample.js --upload
+```
+
+Output should look similar to this:
+
+```
+Creating index...
+Reading data/text-sample.json...
+Uploading documents to the index...
+Finished uploading documents
+```
+
+Once the sample data and embeddings have been uploaded, continue to issue a query.
+
+#### Query the sample data
+
+You can issue vector, text, and hybrid queries. The semantic re-ranker is used by default but can be disabled. You can also issue a cross-field vector query against both the content and the title embeddings, and filter based on the category field. Below is a sample query and its result:
+
+```bash
+node .\azure-search-vector-sample.js  --query "what is azure search" --query-kind hybrid --include-title
+```
+
+Output should look similar to this:
+
+```
+Semantic answer: Azure Cognitive Search is<em> a fully managed search-as-a-service that enables you to build rich search experiences for your applications.</em> It provides features like full-text search, faceted navigation, and filters. Azure Cognitive Search supports various data sources, such as Azure SQL Database, Azure Blob Storage, and Azure Cosmos DB.
+Semantic answer score: 0.98583984375
+
+----
+Title: Azure AI Search
+Score: 0.05000000447034836
+Reranker Score: 3.0303308963775635
+Content: Azure Cognitive Search is a fully managed search-as-a-service that enables you to build rich search experiences for your applications. It provides features like full-text search, faceted navigation, and filters. Azure Cognitive Search supports various data sources, such as Azure SQL Database, Azure Blob Storage, and Azure Cosmos DB. You can use Azure Cognitive Search to index your data, create custom scoring profiles, and integrate with other Azure services. It also integrates with other Azure services, such as Azure Cognitive Services and Azure Machine Learning.
+Category: AI + Machine Learning
+Caption: <em>Azure</em> Cognitive<em> Search</em> is a fully managed search-as-a-service that enables you to build rich<em> search</em> experiences for your applications. It provides features like full-text<em> search,</em> faceted navigation, and filters.<em> Azure</em> Cognitive<em> Search</em> supports various data sources, such as<em> Azure</em> SQL Database,<em> Azure</em> Blob Storage, and<em> Azure</em> Cosmos DB.
+----
+
+
+----
+Title: Azure Cognitive Services
+Score: 0.047642678022384644
+Reranker Score: 2.1211702823638916
+Content: Azure Cognitive Services is a collection of AI services and APIs that enable you to build intelligent applications using pre-built models and algorithms. It provides features like computer vision, speech recognition, and natural language processing. Cognitive Services supports various platforms, such as .NET, Java, Node.js, and Python. You can use Azure Cognitive Services to build chatbots, analyze images and videos, and process and understand text. It also integrates with other Azure services, such as Azure Machine Learning and Azure Cognitive Search.
+Category: AI + Machine Learning
+Caption: Azure Cognitive Services is a collection of AI services and APIs that enable you to build intelligent applications using pre-built models and algorithms. It provides features like computer vision, speech recognition, and natural language processing. Cognitive Services supports various platforms, such as .NET, Java, Node.js, and Python.
+----
+
+
+----
+Title: Azure Data Explorer
+Score: 0.03652850165963173
+Reranker Score: 2.0093204975128174
+Content: Azure Data Explorer is a fast, fully managed data analytics service for real-time analysis on large volumes of data. It provides features like ingestion, querying, and visualization. Data Explorer supports various data sources, such as Azure Event Hubs, Azure IoT Hub, and Azure Blob Storage. You can use Data Explorer to analyze logs, monitor applications, and gain insights into your data. It also integrates with other Azure services, such as Azure Synapse Analytics and Azure Machine Learning.
+Category: Analytics
+Caption: Azure Data Explorer is a fast, fully managed data analytics service for real-time analysis on large volumes of data. It provides features like ingestion, querying, and visualization. Data Explorer supports various data sources, such as Azure Event Hubs, Azure IoT Hub, and Azure Blob Storage.
+----
+```
+
+
+#### Re-creating the sample embeddings
+
+The text-sample.json file already contains the text-embedding-3-large embeddings for both the content and the title fields. You can re-embed the sample data using the following command:
+
+```bash
+node .\azure-search-vector-sample.js --embed
 ```
 
 Output should look similar to this:
 
 ```bash
-PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\code> node docs-text-openai-embeddings.js
 Reading data/text-sample.json...
 Generating embeddings with Azure OpenAI...
-Success! See output/docVectors.json
-PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\code> 
+Wrote embeddings to data/text-sample.json
 ```
 
 If you get an error, such as error code 429 or a server error, verify the model deployment capacity is sufficient to process the sample input. 
 
 The generated output consists of embeddings for the title and content fields of the input data (`data/text-sample.json`).
-
-### Query vectorization
-
-Run the following program to generate a query embedding and execute vector queries:
-
-```node query-text-openai-embedding.js```
-
-Modify the `userQuery` variable in `query-text-openai-embedding.js` to customize the query.
-
-## Run the end-to-end sample program
-
-1. Modify the `.env` file in the `demo-javascript` directory to have the following variables
-
-   ```bash
-   AZURE_OPENAI_SERVICE_NAME=YOUR-AZURE-OPENAI-SERVICE-NAME
-   AZURE_OPENAI_DEPLOYMENT_NAME=YOUR-AZURE-OPENAI-DEPLOYMENT-NAME
-   AZURE_OPENAI_API_VERSION=YOUR-AZURE-OPENAI-API-VERSION
-   AZURE_OPENAI_API_KEY=YOUR-AZURE-OPENAI-API-KEY
-   AZURE_SEARCH_ENDPOINT=YOUR-AZURE_SEARCH_ENDPOINT
-   AZURE_SEARCH_ADMIN_KEY=YOUR-AZURE_SEARCH_ADMIN_KEY
-   AZURE_SEARCH_INDEX_NAME=YOUR-AZURE_SEARCH_INDEX_NAME
-   ```
-
-   **Key points**:
-
-   + Azure OpenAI service name should be the short name. For example, if the endpoint is `https://my-openai-svc.openai.azure.com/`, the service name is `my-openai-svc`.
-   + Azure OpenAI deployment name can be found in Azure AI Studio. Azure portal provides a link. We used `text-embedding-ada-002` for our deployment name. 
-   + Azure OpenAI API version used for testing is `2023-05-15`.
-   + Azure OpenAI keys and endpoints can be found in the Azure portal pages for your Azure OpenAI resource.
-   + Azure AI Search endpoint should be the full URL, starting with `https://`.
-   + Azure AI Search admin API key can be found in the **Keys** page in the Azure portal.
-   + Azure AI Search index name should be unique, and start with a lowercase letter (no spaces or slashes).
-
-   This end-to-end JavaScript sample shows you how to create a search index, generate documents embeddings, and upload them to an index. It also demonstrates several vector queries. It attemps to run a hybrid query that invokes semantic search. If you want that query to run, be sure to enable semantic search on your search service.
-
-   All code is one file, split among functions, on purpose. Though the file is longer this way, the code is easier to follow when it's all together.
-
-1. Select **Terminal** and **New Terminal** to get a command line prompt. Install `npm` dependencies:
-
-   ```bash
-   cd demo-javascript/code
-   npm install
-   ```
-
-1. Run `node azure-search-vector-sample.js` to execute the program. The code takes several minutes to run. It creates index, loads the raw sample data, generates embeddings, loads the index with vector and non-vector content, and then begins a series of vector queries.
-
-Output of the first several lines should look similar to this:
-
-```bash
-PS C:\Users\username\cognitive-search-vector-pr\demo-javascript\code> node azure-search-vector-sample.js
-Creating ACS index...
-Reading data/text-sample.json...
-Generating embeddings with Azure OpenAI...
-Uploading documents to ACS index...
-
-Pure vector search results:
-Title: Azure DevOps
-Score: 0.8333178
-Content: Azure DevOps is a suite of services that help you plan, build, and deploy applications. It includes Azure Boards for work item tracking, Azure Repos for source code management, Azure Pipelines for continuous integration and continuous deployment, Azure Test Plans for manual and automated testing, and Azure Artifacts for package management. DevOps supports a wide range of programming languages, frameworks, and platforms, making it easy to integrate with your existing development tools and processes. It also integrates with other Azure services, such as Azure App Service and Azure Functions.
-Category: Developer Tools
-
-
-Title: Azure App Service
-Score: 0.808263
-Content: Azure App Service is a fully managed platform for building, deploying, and scaling web apps. You can host web apps, mobile app backends, and RESTful APIs. It supports a variety of programming languages and frameworks, such as .NET, Java, Node.js, Python, and PHP. The service offers built-in auto-scaling and load balancing capabilities. It also provides integration with other Azure services, such as Azure DevOps, GitHub, and Bitbucket.
-Category: Web
-
-```
-
-You can search the output for other query outcomes:
-
-+ `Pure vector search results:`
-+ `Pure vector search (multilingual) results:`
-+ `Cross-field vector search results:`
-+ `Vector search with filter results:`
-+ `Hybrid search results:` (requires semantic search)
-
-You can also use the Azure portal to explore the index definition or delete the index if you no longer need it.
 
 ## Troubleshoot errors
 
