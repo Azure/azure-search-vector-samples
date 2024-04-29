@@ -5,29 +5,25 @@ const { DefaultAzureCredential } = require("@azure/identity")
 const { AzureKeyCredential } = require("@azure/core-auth")
 const { OpenAIClient } = require("@azure/openai");
 const { promisify } = require('util');
-const { program } = require('commander');
-const { create } = require("domain");
+const { Option, program } = require('commander');
 
-program
-  .option('-e, --embed', 'Recreate embeddings in text-sample.json')
-  .option('-u, --upload', 'Upload embeddings and data in text-sample.json to the search index');
 
 async function main() {
-  program.parse();
+  program
+    .option('-e, --embed', 'Recreate embeddings in text-sample.json')
+    .option('-u, --upload', 'Upload embeddings and data in text-sample.json to the search index')
+    .option('-q, --query <text>', 'Text of query to issue to search, if any')
+    .addOption(new Option('-k, --query-kind <kind>', 'Kind of query to issue. Defaults to hybrid').default('hybrid').choices(['text', 'vector', 'hybrid']))
+    .option('-c, --category-filter <category>', 'Category to filter results to')
+    .option('-t, --include-title', 'Search over the title field as well as the content field')
+    .option('--no-semantic-reranker', 'Do not use semantic reranker. Defaults to false')
+    .parse();
 
   const options = program.opts()
   const defaultCredential = new DefaultAzureCredential();
 
   // Load environment variables from .env file
   dotenv.config({ path: "../.env" });
-
-  // Create Azure AI Search index
-  try {
-    await createSearchIndex(defaultCredential);
-  } catch (err) {
-    console.error(`Failed to create ACS index: ${err.message}`);
-    return;
-  }
 
   // Generate document embeddings
   if (options.embed) {
@@ -43,6 +39,14 @@ async function main() {
 
   // Upload documents to Azure AI Search
   if (options.upload) {
+    // Create Azure AI Search index
+    try {
+      await createSearchIndex(defaultCredential);
+    } catch (err) {
+      console.error(`Failed to create ACS index: ${err.message}`);
+      return;
+    }
+
     try {
       await uploadDocuments(defaultCredential);
     } catch (err) {
@@ -52,34 +56,56 @@ async function main() {
       return;
     }
   }
+
+  // Query Azure AI Search
+  if (options.query) {
+    try {
+      await queryDocuments(defaultCredential, options.query, options.queryKind, options.categoryFilter, options.includeTitle, options.semanticReranker);
+    } catch (err) {
+      console.error(
+        `Failed to issue query to search index: ${err.message}`
+      );
+      return;
+    }
+  }
 }
 
-  /*
-  // Examples of different types of vector searches
-  await doPureVectorSearch();
-  await doPureVectorSearchMultilingual();
-  await doCrossFieldVectorSearch();
-  await doVectorSearchWithFilter();
-  await doHybridSearch();
-  await doSemanticHybridSearch();
-  */
+function createSearchClient(defaultCredential) {
+  const searchServiceEndpoint = process.env.AZURE_SEARCH_SERVICE_ENDPOINT;
+  const searchServiceApiKey = process.env.AZURE_SEARCH_ADMIN_KEY;
+  const searchIndexName = process.env.AZURE_SEARCH_INDEX;
+
+  let credential = !searchServiceApiKey || searchServiceApiKey.trim() === '' ?
+    defaultCredential : new AzureKeyCredential(searchServiceApiKey);
+
+  return new SearchClient(
+    searchServiceEndpoint,
+    searchIndexName,
+    credential
+  );
+}
+
+function createOpenAiClient(defaultCredential) {
+  const openAiEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
+  const openAiKey = process.env.AZURE_OPENAI_KEY;
+  let credential = !openAiKey || openAiKey.trim() == '' ?
+    defaultCredential : new AzureKeyCredential(openAiKey);
+  return new OpenAIClient(openAiEndpoint, credential);
+}
+
 
 const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
 
 async function generateDocumentEmbeddings(defaultCredential) {
-  const openAiEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
-  const openAiKey = process.env.AZURE_OPENAI_KEY;
-  const openAiDeployment = process.env.AZURE_OPENAI_EMBEDDING_DEPLOYMENT;
-  let credential = !openAiKey || openAiKey.trim() == '' ?
-    defaultCredential : new AzureKeyCredential(openAiKey);
-  const client = new OpenAIClient(openAiEndpoint, credential);
-
   console.log("Reading data/text-sample.json...");
   const fileData = await readFileAsync("../data/text-sample.json", "utf-8");
   let data = JSON.parse(fileData);
 
   console.log("Generating embeddings with Azure OpenAI...");
+  const client = createOpenAiClient(defaultCredential);
+  const openAiDeployment = process.env.AZURE_OPENAI_EMBEDDING_DEPLOYMENT;
+
   const titles = data.map(item => item["title"]);
   const content = data.map(item => item["content"]);
   const titleEmbeddings = await client.getEmbeddings(openAiDeployment, titles);
@@ -172,21 +198,6 @@ async function createSearchIndex(defaultCredential) {
   await indexClient.createOrUpdateIndex(index);
 }
 
-function createSearchClient(defaultCredential) {
-  const searchServiceEndpoint = process.env.AZURE_SEARCH_SERVICE_ENDPOINT;
-  const searchServiceApiKey = process.env.AZURE_SEARCH_ADMIN_KEY;
-  const searchIndexName = process.env.AZURE_SEARCH_INDEX;
-
-  let credential = !searchServiceApiKey || searchServiceApiKey.trim() === '' ?
-    defaultCredential : new AzureKeyCredential(searchServiceApiKey);
-
-  return new SearchClient(
-    searchServiceEndpoint,
-    searchIndexName,
-    credential
-  );
-}
-
 async function uploadDocuments(defaultCredential) {
   console.log("Reading data/text-sample.json...");
   const fileData = await readFileAsync("../data/text-sample.json", "utf-8");
@@ -195,170 +206,96 @@ async function uploadDocuments(defaultCredential) {
   const searchClient = createSearchClient(defaultCredential);
 
   console.log("Uploading documents to ACS index...");
+
+  // Upload 1 document at a time
   for (let i = 0; i < data.length; i++) {
     await searchClient.uploadDocuments([data[i]]);
   }
 }
 
-async function doPureVectorSearch() {
-  const searchServiceEndpoint = process.env.AZURE_SEARCH_ENDPOINT;
-  const searchServiceApiKey = process.env.AZURE_SEARCH_ADMIN_KEY;
-  const searchIndexName = process.env.AZURE_SEARCH_INDEX_NAME;
+async function queryDocuments(defaultCredential, query, queryKind, categoryFilter, includeTitle, semanticReranker) {
+  const searchClient = createSearchClient(defaultCredential);
+  const openAiClient = createOpenAiClient(defaultCredential);
+  const openAiDeployment = process.env.AZURE_OPENAI_EMBEDDING_DEPLOYMENT;
 
-  const searchClient = new SearchClient(
-    searchServiceEndpoint,
-    searchIndexName,
-    new AzureKeyCredential(searchServiceApiKey)
-  );
-
-  const query = "tools for software development";
-  const response = await searchClient.search(undefined, {
-    vectorQueries: [{
-      kind: "vector",
-      vector: await generateEmbeddings(query),
-      kNearestNeighborsCount: 3,
-      fields: ["contentVector"],
-    }],
+  let options = {
     select: ["title", "content", "category"],
-  });
+    top: 3
+  };
 
-  console.log(`\nPure vector search results:`);
-  for await (const result of response.results) {
-    console.log(`Title: ${result.document.title}`);
-    console.log(`Score: ${result.score}`);
-    console.log(`Content: ${result.document.content}`);
-    console.log(`Category: ${result.document.category}`);
-    console.log(`\n`);
+  if (queryKind == "vector" || queryKind == "hybrid") {
+    let embeddingResponse = await openAiClient.getEmbeddings(openAiDeployment, [query]);
+    let embedding = embeddingResponse.data[0].embedding;
+    let vectorFields = includeTitle ? [ "contentVector", "titleVector" ] : [ "contentVector" ]; 
+    options["vectorSearchOptions"] = {
+      queries:  [
+        {
+          kind: "vector",
+          vector: embedding,
+          kNearestNeighborsCount: 50,
+          fields: vectorFields
+        }
+      ]
+    }
   }
-}
 
-async function doPureVectorSearchMultilingual() {
-  const searchServiceEndpoint = process.env.AZURE_SEARCH_ENDPOINT;
-  const searchServiceApiKey = process.env.AZURE_SEARCH_ADMIN_KEY;
-  const searchIndexName = process.env.AZURE_SEARCH_INDEX_NAME;
+  if (semanticReranker) {
+    if (queryKind == "text" || queryKind == "hybrid") {
+      options["queryType"] = "semantic";
+    } else {
+      options["semanticQuery"] = query;
+    }
 
-  const searchClient = new SearchClient(
-    searchServiceEndpoint,
-    searchIndexName,
-    new AzureKeyCredential(searchServiceApiKey)
-  );
-
-  // e.g 'tools for software development' in Dutch)
-  const query = "tools voor softwareontwikkeling";
-  const response = await searchClient.search(undefined, {
-    vectorQueries: [{
-      kind: "vector",
-      vector: await generateEmbeddings(query),
-      kNearestNeighborsCount: 3,
-      fields: ["contentVector"],
-    }],
-    select: ["title", "content", "category"],
-  });
-
-  console.log(`\nPure vector search (multilingual) results:`);
-  for await (const result of response.results) {
-    console.log(`Title: ${result.document.title}`);
-    console.log(`Score: ${result.score}`);
-    console.log(`Content: ${result.document.content}`);
-    console.log(`Category: ${result.document.category}`);
-    console.log(`\n`);
+    options["semanticSearchOptions"] = {
+      answers: {
+        answerType: "extractive"
+      },
+      captions:{
+          captionType: "extractive"
+      },
+      configurationName: "my-semantic-config",
+    }
   }
-}
 
-async function doCrossFieldVectorSearch() {
-  const searchServiceEndpoint = process.env.AZURE_SEARCH_ENDPOINT;
-  const searchServiceApiKey = process.env.AZURE_SEARCH_ADMIN_KEY;
-  const searchIndexName = process.env.AZURE_SEARCH_INDEX_NAME;
-
-  const searchClient = new SearchClient(
-    searchServiceEndpoint,
-    searchIndexName,
-    new AzureKeyCredential(searchServiceApiKey)
-  );
-
-  const query = "tools for software development";
-  const response = await searchClient.search(undefined, {
-    vectorQueries: [{
-      kind: "vector",
-      vector: await generateEmbeddings(query),
-      kNearestNeighborsCount: 3,
-      fields: ["titleVector", "contentVector"],
-    }],
-    select: ["title", "content", "category"],
-  });
-
-  console.log(`\nCross-field vector search results:`);
-  for await (const result of response.results) {
-    console.log(`Title: ${result.document.title}`);
-    console.log(`Score: ${result.score}`);
-    console.log(`Content: ${result.document.content}`);
-    console.log(`Category: ${result.document.category}`);
-    console.log(`\n`);
+  if (categoryFilter) {
+    options["filter"] = `category eq '${categoryFilter}'`;
   }
-}
 
-async function doVectorSearchWithFilter() {
-  const searchServiceEndpoint = process.env.AZURE_SEARCH_ENDPOINT;
-  const searchServiceApiKey = process.env.AZURE_SEARCH_ADMIN_KEY;
-  const searchIndexName = process.env.AZURE_SEARCH_INDEX_NAME;
+  const searchText = queryKind == "text" || queryKind == "hybrid" ? query : "*";
+  const response = await searchClient.search(searchText, options);
 
-  const searchClient = new SearchClient(
-    searchServiceEndpoint,
-    searchIndexName,
-    new AzureKeyCredential(searchServiceApiKey)
-  );
+  if (semanticReranker) {
+    for await (const answer of response.answers) {
+      if (answer.highlights) {
+        console.log(`Semantic answer: ${answer.highlights}`);
+      } else {
+        console.log(`Semantic answer: ${answer.text}`);
+      }
 
-  const query = "tools for software development";
-  const response = await searchClient.search(undefined, {
-    vectorQueries: [{
-      kind: "vector",
-      vector: await generateEmbeddings(query),
-      kNearestNeighborsCount: 3,
-      fields: ["contentVector"],
-    }],
-    filter: "category eq 'Developer Tools'",
-    select: ["title", "content", "category"],
-  });
-
-  console.log(`\nVector search with filter results:`);
-  for await (const result of response.results) {
-    console.log(`Title: ${result.document.title}`);
-    console.log(`Score: ${result.score}`);
-    console.log(`Content: ${result.document.content}`);
-    console.log(`Category: ${result.document.category}`);
-    console.log(`\n`);
+      console.log(`Semantic answer score: ${answer.score}\n`);
+    }
   }
-}
 
-async function doHybridSearch() {
-  const searchServiceEndpoint = process.env.AZURE_SEARCH_ENDPOINT;
-  const searchServiceApiKey = process.env.AZURE_SEARCH_ADMIN_KEY;
-  const searchIndexName = process.env.AZURE_SEARCH_INDEX_NAME;
-
-  const searchClient = new SearchClient(
-    searchServiceEndpoint,
-    searchIndexName,
-    new AzureKeyCredential(searchServiceApiKey)
-  );
-
-  const query = "scalable storage solution";
-  const response = await searchClient.search(query, {
-    vectorQueries: [{
-      kind: "vector",
-      vector: await generateEmbeddings(query),
-      kNearestNeighborsCount: 3,
-      fields: ["contentVector"],
-    }],
-    select: ["title", "content", "category"],
-    top: 3,
-  });
-
-  console.log(`\nHybrid search results:`);
   for await (const result of response.results) {
+    console.log('----');
     console.log(`Title: ${result.document.title}`);
     console.log(`Score: ${result.score}`);
+    if (semanticReranker) {
+      console.log(`Reranker Score: ${result.rerankerScore}`); // Reranker score is the semantic score
+    }
     console.log(`Content: ${result.document.content}`);
     console.log(`Category: ${result.document.category}`);
+
+    if (result.captions) {
+      const caption = result.captions[0];
+      if (caption.highlights) {
+        console.log(`Caption: ${caption.highlights}`);
+      } else {
+        console.log(`Caption: ${caption.text}`);
+      }
+    }
+
+    console.log('----');
     console.log(`\n`);
   }
 }
