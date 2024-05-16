@@ -5,8 +5,7 @@ import os
 import glob
 
 current_file_directory = os.path.dirname(os.path.abspath(__file__))
-apples_path = os.path.join(current_file_directory, "..", "..", "..", "data", "apples")
-
+apples_path = os.path.join(current_file_directory, "..", "..", "..", "data", "images", "apples")
 async def main():
     credential = DefaultAzureCredential()
     blob_client = BlobServiceClient(account_url=os.getenv("AZURE_STORAGE_ACCOUNT_BLOB_URL"), credential=credential)
