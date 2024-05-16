@@ -52,6 +52,9 @@
     },
     "searchServiceSemanticRanker": {
       "value": "${AZURE_SEARCH_SERVICE_SEMANTIC_RANKER=free}"
+    },
+    "searchIndexName": {
+      "value": "${AZURE_SEARCH_INDEX=multimodalembeddings}"
     }
   }
 }

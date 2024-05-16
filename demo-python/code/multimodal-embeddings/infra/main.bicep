@@ -54,6 +54,8 @@ param searchServiceSkuName string // Set in main.parameters.json
 
 param searchServiceSemanticRanker string // Set in main.parameters.json
 
+param searchIndexName string // Set in main.parameters.json
+
 // Tags that should be applied to all resources.
 // 
 // Note that 'azd-service-name' tags should be applied separately to service host resources.
@@ -180,4 +182,9 @@ output AZURE_STORAGE_ACCOUNT_RESOURCE_GROUP string = storageResourceGroup.name
 output AZURE_STORAGE_ACCOUNT string = storage.outputs.name
 output AZURE_STORAGE_ACCOUNT_BLOB_URL string = storage.outputs.primaryBlobEndpoint
 output AZURE_STORAGE_CONTAINER string = storageContainerName
-
+output AZURE_SEARCH_INDEX string = searchIndexName
+output AZURE_SEARCH_SKILLSET string = '${searchIndexName}-skillset'
+output AZURE_SEARCH_DATASOURCE string = '${searchIndexName}-datasource'
+output AZURE_SEARCH_INDEXER string = '${searchIndexName}-indexer'
+output AZURE_SEARCH_ENDPOINT string = search.outputs.endpoint
+output AZURE_AI_SERVICES_ENDPOINT string = aiServices.outputs.endpoint
