@@ -7,6 +7,7 @@ param containers array = []
 param kind string = 'StorageV2'
 param minimumTlsVersion string = 'TLS1_2'
 param sku object = { name: 'Standard_LRS' }
+param allowSharedKeyAccess bool = false
 
 resource storage 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: name
@@ -21,6 +22,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2022-05-01' = {
       bypass: 'AzureServices'
       defaultAction: 'Allow'
     }
+    allowSharedKeyAccess: allowSharedKeyAccess
   }
 
   resource blobServices 'blobServices' = if (!empty(containers)) {

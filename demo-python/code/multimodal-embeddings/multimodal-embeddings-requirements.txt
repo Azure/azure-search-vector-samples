@@ -1,0 +1,4 @@
+azure-search-documents==11.6.0b4
+azure-storage-blob==12.20.0
+azure-identity==1.16.0
+aiohttp
