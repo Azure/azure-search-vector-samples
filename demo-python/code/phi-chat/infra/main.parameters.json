@@ -17,9 +17,6 @@
     "openAiAccountName": {
       "value": "${AZURE_OPENAI_ACCOUNT}"
     },
-    "openAiSkuName": {
-      "value": "${AZURE_OPENAI_SKU=S0}"
-    },
     "openAiLocation": {
       "value": "${AZURE_OPENAI_LOCATION}"
     },
@@ -29,6 +26,9 @@
     "openAiEmbeddingModelName": {
       "value": "${AZURE_OPENAI_EMB_MODEL_NAME=text-embedding-3-large}"
     },
+    "openAiEmbeddingModelVersion": {
+      "value": "${AZURE_OPENAI_EMB_MODEL_VERSION=1}"
+    },
     "openAiEmbeddingModelDimensions": {
       "value": "${AZURE_OPENAI_EMB_MODEL_DIMENSIONS=3072}"
     },
@@ -36,19 +36,37 @@
       "value": "${AZURE_OPENAI_EMB_DEPLOYMENT=text-embedding-3-large}"
     },
     "openAiEmbeddingDeploymentCapacity": {
-      "value": "${AZURE_OPENAI_EMB_DEPLOYMENT_CAPACITY=100}"
+      "value": "${AZURE_OPENAI_EMB_DEPLOYMENT_CAPACITY=120}"
     },
-    "storageLocation": {
-      "value": "${AZURE_STORAGE_ACCOUNT_LOCATION}"
+    "enableGpt35Turbo" : {
+      "value": "${ENABLE_GPT35TURBO=true}"
     },
-    "storageResourceGroupName": {
-      "value": "${AZURE_STORAGE_ACCOUNT_RESOURCE_GROUP}"
+    "openAiGpt35TurboDeploymentName": {
+      "value": "${AZURE_OPENAI_GPT35TURBO_DEPLOYMENT_NAME=gpt-35-turbo}"
     },
-    "storageAccountName": {
-      "value": "${AZURE_STORAGE_ACCOUNT}"
+    "openAiGpt35TurboVersion": {
+      "value": "${AZURE_OPENAI_GPT35TURBO_VERSION=0613}"
     },
-    "storageSkuName": {
-      "value": "${AZURE_STORAGE_SKU=Standard_LRS}"
+    "openAiGpt35TurboCapacity": {
+      "value": "${AZURE_OPENAI_GPT35TURBO_CAPACITY=120}"
+    },
+    "enableGpt4": {
+      "value": "${ENABLE_GPT4=true}"
+    },
+    "openAiGpt4DeploymentName": {
+      "value": "${AZURE_OPENAI_GPT4_DEPLOYMENT_NAME=gpt-4}"
+    },
+    "openAiGpt4Version": {
+      "value": "${AZURE_OPENAI_GPT4_VERSION=turbo-2024-04-09}"
+    },
+    "openAiGpt4Capacity": {
+      "value": "${AZURE_OPENAI_GPT4_CAPACITY=10}"
+    },
+    "aiHubName": {
+      "value": "${AZURE_AI_HUB}"
+    },
+    "aiProjectName": {
+      "value": "${AZURE_AI_PROJECT}"
     },
     "searchServiceLocation": {
       "value": "${AZURE_SEARCH_SERVICE_LOCATION}"
@@ -66,7 +84,7 @@
       "value": "${AZURE_SEARCH_SERVICE_SEMANTIC_RANKER=free}"
     },
     "searchIndexName": {
-      "value": "${AZURE_SEARCH_INDEX=phirag}"
+      "value": "${AZURE_SEARCH_INDEX=rag}"
     }
   }
 }

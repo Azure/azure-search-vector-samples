@@ -10,7 +10,9 @@ param deployments array = []
 
 @allowed([ 'Enabled', 'Disabled' ])
 param publicNetworkAccess string = 'Enabled'
-param sku object
+param sku object = {
+  name: 'S0'
+}
 
 param allowedIpRules array = []
 param networkAcls object = empty(allowedIpRules) ? {
@@ -48,6 +50,7 @@ resource deployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01
 }]
 
 output endpoint string = account.properties.endpoint
+output endpoints object = account.properties.endpoints
 output id string = account.id
 output name string = account.name
 

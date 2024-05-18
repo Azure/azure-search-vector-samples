@@ -6,3 +6,4 @@ aiohttp
 ipykernel
 python-dotenv
 requests
+openai
