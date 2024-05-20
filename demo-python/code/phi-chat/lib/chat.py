@@ -6,6 +6,7 @@ from openai import AsyncAzureOpenAI
 import os
 from enum import Enum
 from typing import List, Optional
+import aiohttp
 
 def create_openai_client(credential: AsyncTokenCredential) -> AsyncAzureOpenAI:
     token_provider = get_bearer_token_provider(credential, "https://cognitiveservices.azure.com/.default")
@@ -99,6 +100,28 @@ class ChatThread:
             model=model
         )
         self.append_message(role="assistant", message=response.choices[0].message.content)
+
+    async def get_phi3_response(self, endpoint_scoring_uri: str, endpoint_authorization: str, deployment: str, temperature: float = 0.7, top_p: float = 0.9, do_sample: bool = True, max_new_tokens: int = 128):
+        headers = {
+            "Authorization": endpoint_authorization,
+            "azureml-model-deployment": deployment
+        }
+        body = {
+            "input_data": {
+                "input_string": self.messages,
+                "parameters": {
+                    "temperature": temperature,
+                    "top_p": top_p,
+                    "do_sample": do_sample,
+                    "max_new_tokens": max_new_tokens
+                }
+            }
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url=endpoint_scoring_uri, headers=headers, json=body) as response:
+                response.raise_for_status()
+                response_body = await response.json()
+                self.append_message(role="assistant", message=response_body["output"])
 
     def get_last_message(self) -> Optional[object]:
         return self.messages[-1] if len(self.messages) > 0 else None

@@ -68,6 +68,21 @@
     "aiProjectName": {
       "value": "${AZURE_AI_PROJECT}"
     },
+    "onlineEndpointName": {
+      "value": "${AZURE_AI_ONLINE_ENDPOINT}"
+    },
+    "deploymentName": {
+      "value": "${AZURE_AI_DEPLOYMENT}"
+    },
+    "deploymentModel": {
+      "value": "${AZURE_DEPLOYMENT_MODEL=azureml://registries/azureml/models/Phi-3-mini-4k-instruct/versions/6}"
+    },
+    "deploymentInstanceType": {
+      "value": "${AZURE_DEPLOYMENT_INSTANCE_TYPE=Standard_NC6s_v3}"
+    },
+    "deploymentCapacity": {
+      "value": "${AZURE_DEPLOYMENT_CAPACITY=1}"
+    },
     "searchServiceLocation": {
       "value": "${AZURE_SEARCH_SERVICE_LOCATION}"
     },

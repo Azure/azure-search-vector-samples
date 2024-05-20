@@ -6,6 +6,11 @@ param location string
 param hubName string
 @description('The AI Project resource name.')
 param projectName string
+param onlineEndpointName string
+param deploymentName string
+param deploymentModel string
+param deploymentInstanceType string
+param deploymentCapacity int
 @description('The Key Vault resource name.')
 param keyVaultName string
 @description('The Storage Account resource name.')
@@ -87,6 +92,32 @@ module project '../ai/project.bicep' = {
   }
 }
 
+module onlineEndpoint '../host/ml-online-endpoint.bicep' = {
+  name: 'online-endpoint'
+  params: {
+    location: location
+    tags: tags
+    name: onlineEndpointName
+    aiHubName: hub.outputs.name
+    aiProjectName: project.outputs.name
+    keyVaultName: hubDependencies.outputs.keyVaultName
+  }
+}
+
+module modelDeployment '../host/ml-deployment.bicep' = {
+  name: 'deployment'
+  params: {
+    location: location
+    tags: tags
+    name: deploymentName
+    aiProjectName: project.outputs.name
+    onlineEndpointName: onlineEndpoint.outputs.name
+    instanceType: deploymentInstanceType
+    capacity: deploymentCapacity
+    model: deploymentModel
+  }
+}
+
 // Outputs
 // Resource Group
 output resourceGroupName string = resourceGroup().name
@@ -98,6 +129,10 @@ output hubPrincipalId string = hub.outputs.principalId
 // Project
 output projectName string = project.outputs.name
 output projectPrincipalId string = project.outputs.principalId
+
+// Online endpoint and deployment
+output endpointName string = onlineEndpoint.outputs.name
+output deploymentName string = modelDeployment.outputs.name
 
 // Key Vault
 output keyVaultName string = hubDependencies.outputs.keyVaultName

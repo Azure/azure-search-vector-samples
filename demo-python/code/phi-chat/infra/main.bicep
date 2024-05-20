@@ -68,6 +68,16 @@ param aiHubName string = '' // Set in main.parameters.json
 
 param aiProjectName string = '' // Set in main.parameters.json
 
+param onlineEndpointName string = '' // Set in main.parameters.json
+
+param deploymentName string = '' // Set in main.parameters.json
+
+param deploymentInstanceType string // Set in main.parameters.json
+
+param deploymentCapacity int // Set in main.parameters.json
+
+param deploymentModel string // Set in main.parameters.json
+
 param logAnalyticsName string = '' // Set in main.parameters.json
 
 param appInsightsName string  = '' // Set in main.parameters.json
@@ -156,6 +166,11 @@ module ai 'core/host/ai-environment.bicep' = {
       ? storageAccountName
       : '${abbrs.storageStorageAccounts}${resourceToken}'
     storageContainerName: storageContainerName
+    onlineEndpointName: !empty(onlineEndpointName) ? onlineEndpointName : 'mloe-${resourceToken}'
+    deploymentName: !empty(deploymentName) ? deploymentName : 'mld-${resourceToken}'
+    deploymentModel: deploymentModel
+    deploymentInstanceType: deploymentInstanceType
+    deploymentCapacity: deploymentCapacity
     openAiName: openAiAccountName
     openAiModelDeployments: openAiModelDeployments
     openAiLocation: openAiLocation
@@ -231,3 +246,7 @@ output USE_GPT4TURBO bool = enableGpt4
 output AZURE_OPENAI_GPT4_DEPLOYMENT_NAME string = openAiGpt4DeploymentName
 output AZURE_OPENAI_GPT4_VERSION string = openAiGpt4Version
 output AZURE_OPENAI_GPT4_CAPACITY int = openAiGpt4Capacity
+output AZUREAI_HUB_NAME string = ai.outputs.hubName
+output AZUREAI_PROJECT_NAME string = ai.outputs.projectName
+output AZUREAI_ONLINE_ENDPOINT_NAME string = ai.outputs.endpointName
+output AZUREAI_DEPLOYMENT_NAME string = ai.outputs.deploymentName
