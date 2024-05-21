@@ -63,16 +63,16 @@
       "value": "${AZURE_OPENAI_GPT4_CAPACITY=10}"
     },
     "aiHubName": {
-      "value": "${AZURE_AI_HUB}"
+      "value": "${AZUREAI_HUB_NAME}"
     },
     "aiProjectName": {
-      "value": "${AZURE_AI_PROJECT}"
+      "value": "${AZUREAI_PROJECT_NAME}"
     },
     "onlineEndpointName": {
-      "value": "${AZURE_AI_ONLINE_ENDPOINT}"
+      "value": "${AZUREAI_ONLINE_ENDPOINT_NAME}"
     },
     "deploymentName": {
-      "value": "${AZURE_AI_DEPLOYMENT}"
+      "value": "${AZUREAI_DEPLOYMENT_NAME}"
     },
     "deploymentModel": {
       "value": "${AZURE_DEPLOYMENT_MODEL=azureml://registries/azureml/models/Phi-3-mini-4k-instruct/versions/6}"

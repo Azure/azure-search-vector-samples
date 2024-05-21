@@ -65,9 +65,10 @@ async def get_sources(search_client: SearchClient, query: str, search_type: Sear
     return [ document async for document in response ]
 
 GROUNDED_PROMPT="""
-Answer the query using only the sources provided below.
-Answer ONLY with the facts listed in the list of sources below. If there isn't enough information below, say you don't know. Do not generate answers that don't use the sources below. If asking a clarifying question to the user would help, ask the question.
-Each source has a name followed by colon and the actual information, always include the source name for each fact you use in the response. Use square brackets to reference the source, for example [info1.txt]. Don't combine sources, list each source separately, for example [info1.txt][info2.pdf].
+Answer the query using only the sources provided below in a concise bulleted manner.
+Answer ONLY with the facts listed in the list of sources below.
+If there isn't enough information below, say you don't know.
+Do not generate answers that don't use the sources below.
 Query: {query}
 Sources:\n{sources}
 """
