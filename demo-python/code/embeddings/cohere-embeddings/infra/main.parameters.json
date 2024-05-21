@@ -1,0 +1,60 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "resourceGroupName": {
+      "value": "${AZURE_RESOURCE_GROUP}"
+    },
+    "principalId": {
+      "value": "${AZURE_PRINCIPAL_ID}"
+    },
+    "aiHubName": {
+      "value": "${AZUREAI_HUB_NAME}"
+    },
+    "aiProjectName": {
+      "value": "${AZUREAI_PROJECT_NAME}"
+    },
+    "aiHubLocation": {
+      "value": "${AZUREAI_HUB_LOCATION}"
+    },
+    "serverlessEndpointName": {
+      "value": "${AZUREAI_SERVERLESS_ENDPOINT_NAME}"
+    },
+    "serverlessModelId": {
+      "value": "${AZUREAI_SERVERLESS_MODEL=azureml://registries/azureml-cohere/models/Cohere-embed-v3-english/versions/3}"
+    },
+    "marketplaceSubscriptionName": {
+      "value": "${AZUREAI_MARKETPLACE_SUBSCRIPTION}"
+    },
+    "searchServiceLocation": {
+      "value": "${AZURE_SEARCH_SERVICE_LOCATION}"
+    },
+    "searchServiceResourceGroupName": {
+      "value": "${AZURE_SEARCH_SERVICE_RESOURCE_GROUP}"
+    },
+    "searchServiceName": {
+      "value": "${AZURE_SEARCH_SERVICE}"
+    },
+    "searchServiceSkuName": {
+      "value": "${AZURE_SEARCH_SERVICE_SKU=standard}"
+    },
+    "searchServiceSemanticRanker": {
+      "value": "${AZURE_SEARCH_SERVICE_SEMANTIC_RANKER=free}"
+    },
+    "searchIndexName": {
+      "value": "${AZURE_SEARCH_INDEX=cohereembeddings}"
+    },
+    "keyVaultName": {
+      "value": "${AZURE_KEY_VAULT}"
+    },
+    "storageAccountName": {
+      "value": "${AZURE_STORAGE_ACCOUNT}"
+    }
+  }
+}
