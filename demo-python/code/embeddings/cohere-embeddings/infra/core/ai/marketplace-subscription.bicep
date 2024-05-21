@@ -13,3 +13,5 @@ resource marketplaceSubscription 'Microsoft.MachineLearningServices/workspaces/m
     modelId: modelId
   }
 }
+
+output name string = marketplaceSubscription.name

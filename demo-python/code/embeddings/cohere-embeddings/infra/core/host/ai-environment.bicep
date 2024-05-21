@@ -114,6 +114,7 @@ output projectPrincipalId string = project.outputs.principalId
 
 // Serverless endpoint
 output endpointName string = serverlessEndpoint.outputs.name
+output marketplaceSubscriptionName string = marketplaceSubscription.outputs.name
 
 // Key Vault
 output keyVaultName string = hubDependencies.outputs.keyVaultName

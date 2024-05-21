@@ -121,4 +121,5 @@ output AZURE_SEARCH_ENDPOINT string = ai.outputs.searchEndpoint
 output AZUREAI_HUB_NAME string = ai.outputs.hubName
 output AZUREAI_PROJECT_NAME string = ai.outputs.projectName
 output AZUREAI_SERVERLESS_MODEL string = serverlessModelId
+output AZUREAI_MARKETPLACE_SUBSCRIPTION string = ai.outputs.marketplaceSubscriptionName
 output AZUREAI_SERVERLESS_ENDPOINT_NAME string = ai.outputs.endpointName
