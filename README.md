@@ -12,10 +12,11 @@ Vector support consists of generally available features and preview features.
 |---------|--------|
 | [vector indexing](https://learn.microsoft.com/azure/search/vector-search-how-to-create-index) | generally available (2023-11-01 and stable SDK packages) |
 | [vector queries](https://learn.microsoft.com/azure/search/vector-search-how-to-query) | generally available (2023-11-01 and stable SDK packages)|
-| [integrated data chunking](https://learn.microsoft.com/azure/search/cognitive-search-skill-textsplit) | public preview (2023-10-01-preview and beta SDK packages) |
-| [integrated embedding](https://learn.microsoft.com/azure/search/cognitive-search-skill-azure-openai-embedding) | public preview (2023-10-01-preview and beta SDK packages) |
-| [index projections](https://learn.microsoft.com/azure/search/index-projections-concept-intro) | public preview (2023-10-01-preview and beta SDK packages) |
-| [vectorizer](https://learn.microsoft.com/azure/search/vector-search-how-to-configure-vectorizer)a | public preview (2023-10-01-preview and beta SDK packages) |
+| [integrated data chunking](https://learn.microsoft.com/azure/search/cognitive-search-skill-textsplit) | public preview (2023-10-01-preview and later, plus beta SDK packages) |
+| [integrated embedding](https://learn.microsoft.com/azure/search/cognitive-search-skill-azure-openai-embedding) | public preview (2023-10-01-preview and later, plus beta SDK packages) |
+| [index projections](https://learn.microsoft.com/azure/search/index-projections-concept-intro) | public preview (2023-10-01-preview and later, plus beta SDK packages) |
+| [vectorizers](https://learn.microsoft.com/azure/search/vector-search-how-to-configure-vectorizer) | public preview (2023-10-01-preview and later, plus beta SDK packages) |
+| [scalar quantization](https://learn.microsoft.com/azure/search/vector-search-how-to-configure-compression-storage) | public preview (2024-03-01-preview and later, plus beta SDK packages) |
 
 Preview features are available under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/). 
 
@@ -25,6 +26,7 @@ Preview features are available under [Supplemental Terms of Use](https://azure.m
 | ------ | ------------|--------|
 | [DotNetVectorDemo](demo-dotnet/DotNetVectorDemo/readme.md) | A .NET console app that calls Azure OpenAI to vectorize data. It then calls Azure AI Search to create, load, and query vector data.| Generally available (GA) |
 | [DotNetIntegratedVectorizationDemo](demo-dotnet/DotNetIntegratedVectorizationDemo/readme.md) | A .NET console app that calls Azure AI Search to create an index, indexer, data source, and skillset. An Azure Storage account provides the data. Azure OpenAI is called by the skillset during indexing, and again during query execution to vectorize text queries. | Public preview |
+| [QuantizationAndStorageOptions](demo-dotnet/demo-dotnet/QuantizationAndStorageOptions/readme.md) | A .NET console app that demonstrates [narrow data types](https://learn.microsoft.com/rest/api/searchservice/supported-data-types#edm-data-types-for-vector-fields) and built-in scalar quantization, reducing vector index size in memory and on disk. It also disables storage of vectors returned in query response, which you don't need if you're not returning vectors in a query.  | Public preview |
 
 ## demo-python samples
 

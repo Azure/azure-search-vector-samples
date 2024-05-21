@@ -1,0 +1,105 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "resourceGroupName": {
+      "value": "${AZURE_RESOURCE_GROUP}"
+    },
+    "principalId": {
+      "value": "${AZURE_PRINCIPAL_ID}"
+    },
+    "openAiAccountName": {
+      "value": "${AZURE_OPENAI_ACCOUNT}"
+    },
+    "openAiLocation": {
+      "value": "${AZURE_OPENAI_LOCATION}"
+    },
+    "openAiResourceGroupName": {
+      "value": "${AZURE_OPENAI_RESOURCE_GROUP}"
+    },
+    "openAiEmbeddingModelName": {
+      "value": "${AZURE_OPENAI_EMB_MODEL_NAME=text-embedding-3-large}"
+    },
+    "openAiEmbeddingModelVersion": {
+      "value": "${AZURE_OPENAI_EMB_MODEL_VERSION=1}"
+    },
+    "openAiEmbeddingModelDimensions": {
+      "value": "${AZURE_OPENAI_EMB_MODEL_DIMENSIONS=3072}"
+    },
+    "openAiEmbeddingDeploymentName": {
+      "value": "${AZURE_OPENAI_EMB_DEPLOYMENT=text-embedding-3-large}"
+    },
+    "openAiEmbeddingDeploymentCapacity": {
+      "value": "${AZURE_OPENAI_EMB_DEPLOYMENT_CAPACITY=120}"
+    },
+    "enableGpt35Turbo" : {
+      "value": "${ENABLE_GPT35TURBO=true}"
+    },
+    "openAiGpt35TurboDeploymentName": {
+      "value": "${AZURE_OPENAI_GPT35TURBO_DEPLOYMENT_NAME=gpt-35-turbo}"
+    },
+    "openAiGpt35TurboVersion": {
+      "value": "${AZURE_OPENAI_GPT35TURBO_VERSION=0613}"
+    },
+    "openAiGpt35TurboCapacity": {
+      "value": "${AZURE_OPENAI_GPT35TURBO_CAPACITY=120}"
+    },
+    "enableGpt4": {
+      "value": "${ENABLE_GPT4=true}"
+    },
+    "openAiGpt4DeploymentName": {
+      "value": "${AZURE_OPENAI_GPT4_DEPLOYMENT_NAME=gpt-4}"
+    },
+    "openAiGpt4Version": {
+      "value": "${AZURE_OPENAI_GPT4_VERSION=turbo-2024-04-09}"
+    },
+    "openAiGpt4Capacity": {
+      "value": "${AZURE_OPENAI_GPT4_CAPACITY=10}"
+    },
+    "aiHubName": {
+      "value": "${AZUREAI_HUB_NAME}"
+    },
+    "aiProjectName": {
+      "value": "${AZUREAI_PROJECT_NAME}"
+    },
+    "onlineEndpointName": {
+      "value": "${AZUREAI_ONLINE_ENDPOINT_NAME}"
+    },
+    "deploymentName": {
+      "value": "${AZUREAI_DEPLOYMENT_NAME}"
+    },
+    "deploymentModel": {
+      "value": "${AZURE_DEPLOYMENT_MODEL=azureml://registries/azureml/models/Phi-3-mini-4k-instruct/versions/6}"
+    },
+    "deploymentInstanceType": {
+      "value": "${AZURE_DEPLOYMENT_INSTANCE_TYPE=Standard_NC6s_v3}"
+    },
+    "deploymentCapacity": {
+      "value": "${AZURE_DEPLOYMENT_CAPACITY=1}"
+    },
+    "searchServiceLocation": {
+      "value": "${AZURE_SEARCH_SERVICE_LOCATION}"
+    },
+    "searchServiceResourceGroupName": {
+      "value": "${AZURE_SEARCH_SERVICE_RESOURCE_GROUP}"
+    },
+    "searchServiceName": {
+      "value": "${AZURE_SEARCH_SERVICE}"
+    },
+    "searchServiceSkuName": {
+      "value": "${AZURE_SEARCH_SERVICE_SKU=standard}"
+    },
+    "searchServiceSemanticRanker": {
+      "value": "${AZURE_SEARCH_SERVICE_SEMANTIC_RANKER=free}"
+    },
+    "searchIndexName": {
+      "value": "${AZURE_SEARCH_INDEX=rag}"
+    }
+  }
+}
