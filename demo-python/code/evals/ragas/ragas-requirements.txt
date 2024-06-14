@@ -1,0 +1,11 @@
+python-dotenv
+azure-search-documents==11.6.0b4
+azure-storage-blob
+azure-identity
+ragas
+langchain==0.2.3
+langchain-openai==0.1.8
+langchain-community==0.2.4
+pypdf
+ipywidgets
+matplotlib
