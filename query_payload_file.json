@@ -1,0 +1,13 @@
+{
+  "requests": [
+    {
+      "document_id" : "e7ec9e900556d9d9e47b274911ad304bcf198256",
+      "search": "Common Mode EMI Noise Suppression for Bridgeless PFC Converters",
+      "searchMode": "any",
+      "searchFields": "title",
+      "queryType": "semantic",
+      "semanticConfiguration": "default",
+      "select": "document_id,content"
+    }
+  ]
+}

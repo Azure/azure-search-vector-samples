@@ -1,0 +1,121 @@
+{
+    "name": "test-index1",
+    "defaultScoringProfile": null,
+    "fields": [
+      {
+        "name": "document_id",
+        "type": "Edm.String",
+        "searchable": false,
+        "filterable": true,
+        "retrievable": true,
+        "stored": true,
+        "sortable": true,
+        "facetable": false,
+        "key": true,
+        "indexAnalyzer": null,
+        "searchAnalyzer": null,
+        "analyzer": null,
+        "normalizer": null,
+        "dimensions": null,
+        "vectorSearchProfile": null,
+        "vectorEncoding": null,
+        "synonymMaps": []
+      },
+      {
+        "name": "title",
+        "type": "Edm.String",
+        "searchable": true,
+        "filterable": false,
+        "retrievable": true,
+        "stored": true,
+        "sortable": false,
+        "facetable": false,
+        "key": false,
+        "indexAnalyzer": null,
+        "searchAnalyzer": null,
+        "analyzer": null,
+        "normalizer": null,
+        "dimensions": null,
+        "vectorSearchProfile": null,
+        "vectorEncoding": null,
+        "synonymMaps": []
+      },
+      {
+        "name": "content",
+        "type": "Edm.String",
+        "searchable": false,
+        "filterable": false,
+        "retrievable": true,
+        "stored": true,
+        "sortable": false,
+        "facetable": false,
+        "key": false,
+        "indexAnalyzer": null,
+        "searchAnalyzer": null,
+        "analyzer": null,
+        "normalizer": null,
+        "dimensions": null,
+        "vectorSearchProfile": null,
+        "vectorEncoding": null,
+        "synonymMaps": []
+      },
+      {
+        "name": "filename",
+        "type": "Edm.String",
+        "searchable": false,
+        "filterable": false,
+        "retrievable": true,
+        "stored": true,
+        "sortable": false,
+        "facetable": false,
+        "key": false,
+        "indexAnalyzer": null,
+        "searchAnalyzer": null,
+        "analyzer": null,
+        "normalizer": null,
+        "dimensions": null,
+        "vectorSearchProfile": null,
+        "vectorEncoding": null,
+        "synonymMaps": []
+      }
+    ],
+    "scoringProfiles": [],
+    "corsOptions": {
+      "allowedOrigins": [
+        "*"
+      ],
+      "maxAgeInSeconds": 300
+    },
+    "suggesters": [],
+    "analyzers": [],
+    "normalizers": [],
+    "tokenizers": [],
+    "tokenFilters": [],
+    "charFilters": [],
+    "encryptionKey": null,
+    "similarity": {
+      "@odata.type": "#Microsoft.Azure.Search.BM25Similarity",
+      "k1": null,
+      "b": null
+    },
+    "semantic": {
+      "defaultConfiguration": null,
+      "configurations": [
+        {
+          "name": "default",
+          "prioritizedFields": {
+            "titleField": {
+              "fieldName": "filename"
+            },
+            "prioritizedContentFields": [
+              {
+                "fieldName": "content"
+              }
+            ],
+            "prioritizedKeywordsFields": []
+          }
+        }
+      ]
+    },
+    "vectorSearch": null
+  }
