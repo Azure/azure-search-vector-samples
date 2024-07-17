@@ -34,7 +34,7 @@ For further exploration and chat interaction, connect to your index using Azure 
 
 - Azure AI Search, any version, but make sure search service capacity is sufficient for the workload. We recommend Basic or higher for this demo.
 
-- A deployment of the `text-embedding-ada-002` embedding model in your Azure OpenAI service. We recommend Azure OpenAI REST API version `2023-05-15`. As a naming convention, we name deployments after the model name: "text-embedding-ada-002".
+- A deployment of the `text-embedding-3-large` embedding model in your Azure OpenAI service. We recommend Azure OpenAI REST API version `2024-06-01`. As a naming convention, we name deployments after the model name: "text-embedding-3-large". By default, 1024 dimensions are used.
 
 - Python (these instructions were tested with version 3.11.x)
 
