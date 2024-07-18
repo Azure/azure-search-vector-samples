@@ -1,0 +1,128 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #0078d7;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.sidebar .logo img {
+    margin: 20px 0;
+    width: 100px;
+    height: 75px;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    margin: 20px 0;
+}
+
+.sidebar nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+main {
+    margin-left: 250px; /* Adjust the margin to match the width of the sidebar */
+    flex-grow: 1;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.search-bar input {
+    width: 400px;
+    padding: 8px;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.search-bar button {
+    padding: 8px 16px;
+    background-color: #0078d7;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.search-bar button:hover {
+    background-color: #005a9e;
+}
+
+.params select {
+    padding: 8px;
+    margin: 5px 0;
+}
+
+.metrics {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.metrics h1 {
+    margin-top: 0;
+}
+
+.metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.metric span {
+    font-size: 18px;
+}
+
+.metric .increase {
+    color: green;
+}
+
+.metric .decrease {
+    color: red;
+}
+
+.metric a {
+    color: #0078d7;
+    text-decoration: none;
+}
+
+.metric a:hover {
+    text-decoration: underline;
+}

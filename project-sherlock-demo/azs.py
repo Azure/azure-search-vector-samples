@@ -1,27 +1,22 @@
 import json
-import string
 import requests
 import pandas as pd
 import numpy as np
-from jsonpath_ng import jsonpath, parse
+from jsonpath_ng import parse
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
-from io import StringIO
 # from evaluation import evaluate
 from datasets import load_dataset
 from mteb.evaluation.evaluators import RetrievalEvaluator
-import mlflow
 from collections import defaultdict
-from dotenv import load_dotenv
-import os
+import fire 
+from flask import Flask, request, jsonify
+import cProfile
+import pstats
 
 
 
-
-key_vault_url = "https://tidickerson-kv.vault.azure.net/"
-secret_name = "apikey"
-
-
+app = Flask(__name__)
 credential = DefaultAzureCredential()
 
 
@@ -69,12 +64,13 @@ class AzureSearch:
     def search(self, index, q):
         headers = {
             'Content-Type': 'application/json',
-            'api-key': api_key  # Ensure api_key is defined or passed correctly
+            'api-key': retrieve_key()  # Ensure api_key is defined or passed correctly
         }
         params = {
-            'api-version': api_version  # Ensure api_version is defined or passed correctly
+            'api-version': self.api_version  # Ensure api_version is defined or passed correctly
         }
-        url = f"https://{service_name}.search.windows.net/indexes/{index}/docs/search"
+        url = f"https://{self.service_name}.search.windows.net/indexes/{index}/docs/search"
+        print(url)
 
         try:
             response = requests.post(url, json=q, headers=headers, params=params)
@@ -94,129 +90,129 @@ class AzureSearch:
 
 
             
-    def create_fields(self,dimension=1024,profile="hnsw"):
-        fields = [
-            {
-                "name": "id",
-                "type": "Edm.String",
-                "key": True,
-                "searchable": True
-            },
-            {
-                "name": "title",
-                "type": "Edm.String",
-                "searchable": True,
-                "analyzer": "standard.lucene",
-                "filterable": "false",
-                "retrievable": True,
-                "sortable": False,
-                "facetable": False
-            },
-            {
-                "name": "text",
-                "type": "Edm.String",
-                "searchable": True,
-                "analyzer": "standard.lucene",
-                "filterable": "false",
-                "retrievable": True,
-                "sortable": False,
-                "facetable": False
-            },
-            {
-                "name": "cohere_embedding_binary",
-                "type": "Collection(Edm.Byte)",
-                "vectorEncoding": "packedBit",
-                "dimensions": dimension,
-                "searchable": True,
-                "retrievable": True,
-                "filterable": False,
-                "facetable": False,
-                "sortable": False,
-                "vectorSearchProfile": "binaryhnsw"
-            },
-            {
-                "name": "cohere_embedding_float",
-                "type": "Collection(Edm.Single)",
-                "dimensions": dimension,
-                "searchable": True,
-                "retrievable": True,
-                "filterable": False,
-                "facetable": False,
-                "sortable": False,
-                "vectorSearchProfile": profile
-            }
-        ]
-        return fields
+    # def create_fields(self,dimension=1024,profile="hnsw"):
+    #     fields = [
+    #         {
+    #             "name": "id",
+    #             "type": "Edm.String",
+    #             "key": True,
+    #             "searchable": True
+    #         },
+    #         {
+    #             "name": "title",
+    #             "type": "Edm.String",
+    #             "searchable": True,
+    #             "analyzer": "standard.lucene",
+    #             "filterable": "false",
+    #             "retrievable": True,
+    #             "sortable": False,
+    #             "facetable": False
+    #         },
+    #         {
+    #             "name": "text",
+    #             "type": "Edm.String",
+    #             "searchable": True,
+    #             "analyzer": "standard.lucene",
+    #             "filterable": "false",
+    #             "retrievable": True,
+    #             "sortable": False,
+    #             "facetable": False
+    #         },
+    #         {
+    #             "name": "cohere_embedding_binary",
+    #             "type": "Collection(Edm.Byte)",
+    #             "vectorEncoding": "packedBit",
+    #             "dimensions": dimension,
+    #             "searchable": True,
+    #             "retrievable": True,
+    #             "filterable": False,
+    #             "facetable": False,
+    #             "sortable": False,
+    #             "vectorSearchProfile": "binaryhnsw"
+    #         },
+    #         {
+    #             "name": "cohere_embedding_float",
+    #             "type": "Collection(Edm.Single)",
+    #             "dimensions": dimension,
+    #             "searchable": True,
+    #             "retrievable": True,
+    #             "filterable": False,
+    #             "facetable": False,
+    #             "sortable": False,
+    #             "vectorSearchProfile": profile
+    #         }
+    #     ]
+    #     return fields
     
-    def create_profiles(self,metric='cosine'):
-        vector_search = {
-                "profiles": [
-                    {
-                        "name": "eknn",
-                        "algorithm": "exhaustive"
-                    },
-                    {
-                        "name": "hnsw",
-                        "algorithm": "defaulthnsw"
-                    },
-                    {
-                        "name": "binaryhnsw",
-                        "algorithm": "binaryhnsw"
-                    },
-                    {
-                        "name": "hnswsq",
-                        "compression": "mysq",
-                        "algorithm": "defaulthnsw"
-                    }
-                ],
-                "compressions": [
-                    {
-                        "name": "mysq",
-                        "kind": "scalarQuantization",
-                        "rerankWithOriginalVectors": True,
-                        "defaultOversampling": 2,
-                        "scalarQuantizationParameters": { 
-                            "quantizedDataType": "int8"
-                        } 
-                    }
-                ],
-                "algorithms": [
-                    {
-                        "name": "exhaustive",
-                        "kind": "exhaustiveKnn",
-                        "exhaustiveKnnParameters": {
-                            "metric": metric
-                        }
-                    },      
-                    {
-                        "name": "defaulthnsw",
-                        "kind": "hnsw",
-                        "hnswParameters": {
-                            "m": 4,
-                            "efConstruction": 400,
-                            "metric": metric
-                        }
-                    },
-                    {
-                        "name": "binaryhnsw",
-                        "kind": "hnsw",
-                        "hnswParameters": {
-                            "m": 4,
-                            "efConstruction": 400,
-                            "metric": "hamming"
-                        }
-                    }
-                ]
-            }
-        return vector_search
+    # def create_profiles(self,metric='cosine'):
+    #     vector_search = {
+    #             "profiles": [
+    #                 {
+    #                     "name": "eknn",
+    #                     "algorithm": "exhaustive"
+    #                 },
+    #                 {
+    #                     "name": "hnsw",
+    #                     "algorithm": "defaulthnsw"
+    #                 },
+    #                 {
+    #                     "name": "binaryhnsw",
+    #                     "algorithm": "binaryhnsw"
+    #                 },
+    #                 {
+    #                     "name": "hnswsq",
+    #                     "compression": "mysq",
+    #                     "algorithm": "defaulthnsw"
+    #                 }
+    #             ],
+    #             "compressions": [
+    #                 {
+    #                     "name": "mysq",
+    #                     "kind": "scalarQuantization",
+    #                     "rerankWithOriginalVectors": True,
+    #                     "defaultOversampling": 2,
+    #                     "scalarQuantizationParameters": { 
+    #                         "quantizedDataType": "int8"
+    #                     } 
+    #                 }
+    #             ],
+    #             "algorithms": [
+    #                 {
+    #                     "name": "exhaustive",
+    #                     "kind": "exhaustiveKnn",
+    #                     "exhaustiveKnnParameters": {
+    #                         "metric": metric
+    #                     }
+    #                 },      
+    #                 {
+    #                     "name": "defaulthnsw",
+    #                     "kind": "hnsw",
+    #                     "hnswParameters": {
+    #                         "m": 4,
+    #                         "efConstruction": 400,
+    #                         "metric": metric
+    #                     }
+    #                 },
+    #                 {
+    #                     "name": "binaryhnsw",
+    #                     "kind": "hnsw",
+    #                     "hnswParameters": {
+    #                         "m": 4,
+    #                         "efConstruction": 400,
+    #                         "metric": "hamming"
+    #                     }
+    #                 }
+    #             ]
+    #         }
+    #     return vector_search
     
-    def set_vectorizer(self, vectorizer_model):
-        self.vectorizer = vectorizer_model
+    # def set_vectorizer(self, vectorizer_model):
+    #     self.vectorizer = vectorizer_model
     
-    def vectorize(self,text,embedding_type):
-        if self.vectorizer is None:
-            raise Exception("Vectorizer not set")
-        return self.vectorizer.embed(text,embedding_type)
+    # def vectorize(self,text,embedding_type):
+    #     if self.vectorizer is None:
+    #         raise Exception("Vectorizer not set")
+    #     return self.vectorizer.embed(text,embedding_type)
 
     def get_search_results(self, queries, index_name):
         results = {}
@@ -235,6 +231,13 @@ class AzureSearch:
                 raise
         return results
 
+def retrieve_key():
+    key_vault_url = "https://tidickerson-kv.vault.azure.net/"
+    secret_name = "apikey"
+    client = SecretClient(vault_url=key_vault_url, credential=credential)
+    retrieved_secret = client.get_secret(secret_name)
+    api_key = retrieved_secret.value
+    return api_key
 
         
 
@@ -245,8 +248,6 @@ def batch_dataframe(df, batch_size=100):
         yield df.iloc[start:end]
     
 def create_index(endpoint, key, version, service, name, output, data=None, dimensions=None):
-    secret = secret_client.get_secret(key).value
-
     ss = AzureSearch(endpoint,key,version,service)
     if data is not None:
         with open(data,'r') as f:
@@ -302,17 +303,38 @@ def index_data(endpoint, key, version, service, index, data, output, columns=Non
     print("Indexed %d data successfully"%len(df))
     with open(output,'w') as f:
         f.write("Indexed %d data successfully"%len(df))
+        
+@app.route('/search', methods=['POST'])
+def search_advanced():
+
+    endpoint = request.args.get('endpoint')
+    version = request.args.get('version')
+    service = request.args.get('service')
+    index = request.args.get('index')
+    result_file = request.args.get('result_file')
     
-def search_advanced(endpoint, key, version, service, index, query_payload, result_file):
+    # Get JSON body
+
+    # Print or process the retrieved data
+    # print(f"Endpoint: {endpoint}, Version: {version}, Service: {service}, Index: {index}, Result File: {result_file}")
+    # print("Query Payload:", query_payload)
+
+    # Example response
     # Assuming query_payload is the path to the JSON file
-    df_queries = pd.read_json('query_payload_file.json')
+   
+    query_payload = request.get_json()
+
 
     # Expand the 'requests' column into separate columns
+    df_queries = pd.DataFrame(query_payload)
+
     df_expanded = pd.json_normalize(df_queries['requests'])
 
     # Set 'document_id' as the index
     dict_expanded = df_expanded.set_index('document_id').to_dict(orient='index')
-
+    print(dict_expanded)
+    
+    key = retrieve_key()
     # Create an instance of AzureSearch
     ss = AzureSearch(endpoint, key, version, service)
 
@@ -322,6 +344,8 @@ def search_advanced(endpoint, key, version, service, index, query_payload, resul
     # Write the results to the result file
     with open(result_file, 'w') as f:
         json.dump(results, f, indent=4)
+    
+    return jsonify(results)
 
 
 def search(endpoint, key, version, service, index, query_file, vector_column, field, k, result_file, oversampling=None):
@@ -462,94 +486,64 @@ def evaluate(result_file, output, dataset_name=None, qrel_path=None, corpus_ids=
     print(recall)
     print(precision)
 
+@app.route('/create', methods=['POST'])
+def create_index():
+        # Load the index definition from JSON file
+        # with open(self.index_definition, 'r') as f:
+        #     index_definition = json.load(f)
+        endpoint = request.args.get('endpoint')
+        version = request.args.get('version')
+        service = request.args.get('service')
+        index_name = request.args.get('index')
+    
+        query_payload = request.get_json()
+
+         
+        key = retrieve_key()
+        # Create an instance of AzureSearch
+        azure_search = AzureSearch(endpoint, key, version, service)
+
+        # Create the index
+        create_index_response = azure_search.create_index(index_name, query_payload)
+        return create_index_response
+
+@app.route('/index', methods=['POST'])
+def index_documents():
+    # Load dataset, transform, and save as Feather file
+    df = pd.read_json("hf://datasets/mteb/scidocs/corpus.jsonl", lines=True)
+    
+    new_column_names = {
+        '_id': 'document_id',
+        'title': 'title',
+        'text': 'content'
+    }
+    new_df = select_and_rename_columns(df, new_column_names)
+    new_df.to_feather('input.feather')
+    print("DataFrame Columns:", df.columns)
+    endpoint = request.args.get('endpoint')
+    version = request.args.get('version')
+    service = request.args.get('service')
+    index_name = request.args.get('index')
+    key = retrieve_key()
+
+
+    # Index documents
+    index_data(endpoint, key, version, service, index_name, 'input.feather', 'output.txt')
+    return jsonify("Indexing documents is complete")
+
+
+
+
+
     
 
-if __name__ == "__main__":
-    endpoint = "https://tidickerson2"
-    api_version = '2024-05-01-preview'
-    service_name = "tidickerson2"
-    index_name = "test-index1"
-    self_base = f"https://{service_name}.search.windows.net"
-    index_definition = 'index_def.json'
-    query_payload_file = 'query_payload.json'
-    result_file = 'output.json'
-    
-    client = SecretClient(vault_url=key_vault_url, credential=credential)
-    retrieved_secret = client.get_secret(secret_name)
-    api_key = retrieved_secret.value
-
-
-
-
-
-
-    #import the dataset from metb-corpus, loads in
-
-  
-
-    
-
-    # #initialize the service
-
-    azure_search = AzureSearch(endpoint,api_key,api_version,service_name)
-
-
-    
-
-    
-    # with open(index_definition,'r') as f:
-    #     index_definition = json.load(f)
-
-    # # print(index_definition)
-
-    # # #create the index
-    
-    # # #index is able to be successfully created from json file
-    
-    # create_index_response = azure_search.create_index(index_name, index_definition)
-    # print("Create Index Response:", create_index_response)
-    
+if __name__ == '__main__':
    
 
-    # # # #index documents
+    # Run your Flask app
+    app.run(debug=True)
 
-    # # Define the file path
-    # #able to index documents based on filepath if in same directory
-    # """
-    # converted loaded in dataset, converted df to feather file, renamed all of the columns to match the index definition, and indexed the data successfully
-    # """
-
-    # df = pd.read_json("hf://datasets/mteb/scidocs/corpus.jsonl", lines=True)
-    # new_column_names = {
-    #     '_id': 'document_id',
-    #     'title':'title',
-    #     'text': 'content'
-    # }
-    # new_df = select_and_rename_columns(df,new_column_names)
-    # new_df.to_feather('input.feather')
-    # print("DataFrame Columns:", df.columns)
 
     
-    # index_data(endpoint, api_key, api_version, service_name, index_name, 'input.feather','output.txt')
-
-        
-    # """
-    # POST INDEX CREATION AND DOCUMENT INDEXING
-    # """
    
-
-    search_advanced(endpoint, api_key, api_version, service_name, index_name, r'C:\Users\t-idickerson\project\query_payload_file.json', result_file)
-
-    # # #evaluate the search results
-
-    evaluate('output.json', 'result_file.txt', dataset_name="mteb/scidocs", qrel_path=None, corpus_ids=None)
-    
-
-
-   
-
-   
-
-
-
     
