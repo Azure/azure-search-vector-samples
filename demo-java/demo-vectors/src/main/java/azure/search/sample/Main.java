@@ -189,6 +189,7 @@ public class Main {
         singleVectorSearchWithFilter(searchClient, "tools for software development");
         simpleHybridSearch(searchClient, "scalable storage solution");
         semanticHybridSearch(searchClient, "scalable storage solution");
+        semanticFullSearch(searchClient, "title:Azure AND \"scalable\"^3", "Azure scalable");
         multiVectorSearch(searchClient, "tools for software development");
     }
 
@@ -345,6 +346,50 @@ public class Main {
 
         System.out.println("===================================");
         System.out.println("Semantic Hybrid Search Results:");
+        System.out.println("===================================");
+
+        System.out.println("Query Answer:");
+        for (QueryAnswerResult result : results.getSemanticResults().getQueryAnswers()) {
+            System.out.println("Answer Highlights: " + result.getHighlights());
+            System.out.println("Answer Text: " + result.getText());
+        }
+
+        for (SearchResult result : results) {
+            SearchDocument doc = result.getDocument(SearchDocument.class);
+            System.out.printf("Score: %f, Title: %s: Content: %s%n", result.getScore(), doc.get("title"), doc.get("content"));
+
+            if (result.getSemanticSearch().getQueryCaptions() != null) {
+                QueryCaptionResult caption = result.getSemanticSearch().getQueryCaptions().get(0);
+                if (!caption.getHighlights().isBlank()) {
+                    System.out.println("Caption Highlights: " + caption.getHighlights());
+                } else {
+                    System.out.println("Caption Text: " + caption.getText());
+                }
+            }
+        }
+    }
+
+        /**
+     * Example of using vector search with a semantic query and full lucene query syntax in addition to vectorization.
+     *
+     */
+    public static void semanticFullSearch(SearchClient searchClient, String fullQuery, String semanticQuery) {
+        SearchOptions searchOptions = new SearchOptions()
+            .setTop(3)
+            .setQueryType(QueryType.FULL)
+            .setSemanticSearchOptions(new SemanticSearchOptions()
+                // Set a separate search query that will be solely used for semantic reranking, semantic captions and semantic answers.
+                .setSemanticQuery(semanticQuery)
+                .setSemanticConfigurationName("my-semantic-config")
+                .setQueryAnswer(new QueryAnswer(QueryAnswerType.EXTRACTIVE))
+                .setQueryCaption(new QueryCaption(QueryCaptionType.EXTRACTIVE)));
+
+        SearchPagedIterable results = searchClient.search(
+            fullQuery,
+            searchOptions, Context.NONE);
+
+        System.out.println("===================================");
+        System.out.println("Semantic Full Text Search Results:");
         System.out.println("===================================");
 
         System.out.println("Query Answer:");
