@@ -40,11 +40,11 @@ from tenacity import (
 )
 
 function_name = "GetTextEmbedding"
-sample_index_name = "custom-embedding-index"
-sample_container_name = "custom-embedding-sample-data"
-sample_datasource_name = "custom-embedding-datasource"
-sample_skillset_name = "custom-embedding-skillset"
-sample_indexer_name = "custom-embedding-indexer"
+sample_index_name = "document-intelligence-index"
+sample_container_name = "document-intelligence-sample-data"
+sample_datasource_name = "document-intelligence-datasource"
+sample_skillset_name = "document-intelligence-skillset"
+sample_indexer_name = "document-intelligence-indexer"
 
 def main():
     credential = DefaultAzureCredential()
