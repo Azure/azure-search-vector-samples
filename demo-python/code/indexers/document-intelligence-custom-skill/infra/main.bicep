@@ -190,7 +190,7 @@ module storageContribRoleUser 'br/public:avm/ptn/authorization/resource-role-ass
     principalId: principalId
     roleDefinitionId: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
     principalType: 'User'
-    resourceId:  resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
+    resourceId:  storage.outputs.resourceId
   }
 }
 
@@ -202,7 +202,7 @@ module storageReaderRoleSearchService 'br/public:avm/ptn/authorization/resource-
     principalId: searchService.outputs.systemAssignedMIPrincipalId
     roleDefinitionId: '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1'
     principalType: 'ServicePrincipal'
-    resourceId:  resourceId('Microsoft.Authorization/roleDefinitions', '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1')
+    resourceId:  storage.outputs.resourceId
   }
 }
 
@@ -214,7 +214,7 @@ module cognitiveServicesRoleFunction 'br/public:avm/ptn/authorization/resource-r
     principalId: functionApp.outputs.systemAssignedMIPrincipalId
     roleDefinitionId: 'a97b65f3-24c7-4388-baec-2e87135dc908'
     principalType: 'ServicePrincipal'
-    resourceId:  resourceId('Microsoft.Authorization/roleDefinitions', 'a97b65f3-24c7-4388-baec-2e87135dc908')
+    resourceId:  documentIntelligence.outputs.resourceId
   }
 }
 
@@ -223,10 +223,10 @@ module storageOwnerRoleFunction 'br/public:avm/ptn/authorization/resource-role-a
   scope: resourceGroup
   name: 'storage-owner-role-function'
   params: {
-    principalId: principalId
+    principalId: functionApp.outputs.systemAssignedMIPrincipalId
     roleDefinitionId: 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
-    principalType: 'User'
-    resourceId:  resourceId('Microsoft.Authorization/roleDefinitions', 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b')
+    principalType: 'ServicePrincipal'
+    resourceId:  storage.outputs.resourceId
   }
 }
 
@@ -262,7 +262,7 @@ module appServicePlan 'br/public:avm/res/web/serverfarm:0.2.2' = {
     tags: tags
     skuName: 'Y1'
     skuCapacity: 1
-    kind: 'FunctionApp'
+    kind: 'Linux'
   }
 }
 
@@ -283,9 +283,14 @@ module functionApp 'br/public:avm/res/web/site:0.3.11' = {
         FUNCTIONS_EXTENSION_VERSION: '~4'
         FUNCTIONS_WORKER_RUNTIME: 'python'
         AZURE_DOCUMENTINTELLIGENCE_ENDPOINT: documentIntelligence.outputs.endpoint
+        PYTHON_ISOLATE_WORKER_DEPENDENCIES: 1
+        WEBSITES_ENABLE_APP_SERVICE_STORAGE: false
+        SCM_DO_BUILD_DURING_DEPLOYMENT: true
+        ENABLE_ORYX_BUILD: true
     }
     siteConfig: {
       alwaysOn: false
+      linuxFxVersion: 'python|3.10'
     }
   }
 }
