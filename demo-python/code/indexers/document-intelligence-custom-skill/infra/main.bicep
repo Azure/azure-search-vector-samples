@@ -10,46 +10,60 @@ param environmentName string
 param location string
 
 @description('Id of the user or app to assign application roles')
-param principalId string = ''
+param principalId string
 
 @description('Name of the resource group the search service and deployed embedding model are in')
-param resourceGroupName string  = ''// Set in main.parameters.json
+param resourceGroupName string
 
 // Free tier does not support managed identity which is used in the sample
 @allowed([ 'basic', 'standard', 'standard2', 'standard3', 'storage_optimized_l1', 'storage_optimized_l2' ])
 param searchServiceSkuName string // Set in main.parameters.json
 
-param searchServiceLocation string = '' // set in main.parameters.json
+param searchServiceLocation string // set in main.parameters.json
 
-param searchServiceName string = '' // Set in main.parameters.json
+param searchServiceName string // Set in main.parameters.json
 
-param searchServiceResourceGroupName string = ''// Set in main.parameters.json
+param searchServiceResourceGroupName string // Set in main.parameters.json
 
-param semanticSearchSkuName string = '' // Set in main.parameters.json
+param semanticSearchSkuName string // Set in main.parameters.json
 
-param storageLocation string = '' // Set in main.parameters.json
+param storageLocation string // Set in main.parameters.json
 
-param storageResourceGroupName string = '' // Set in main.parameters.json
+param storageResourceGroupName string // Set in main.parameters.json
 
-param storageAccountName string = '' // Set in main.parameters.json
+param storageAccountName string // Set in main.parameters.json
 
-param appServicePlanName string = '' // Set in main.parameters.json
+param appServicePlanName string // Set in main.parameters.json
 
-param apiServiceName string = '' // Set in main.parameters.json
+param apiServiceName string // Set in main.parameters.json
 
-param apiServiceLocation string = '' // Set in main.parameters.json
+param apiServiceLocation string // Set in main.parameters.json
 
-param apiServiceResourceGroupName string = '' // Set in main.parameters.json
+param apiServiceResourceGroupName string // Set in main.parameters.json
 
-param documentIntelligenceAccountName string = '' // Set in main.parameters.json
+param documentIntelligenceAccountName string // Set in main.parameters.json
 
-param documentIntelligenceLocation string = '' // Set in main.parameters.json
+param documentIntelligenceLocation string // Set in main.parameters.json
 
-param documentIntelligenceResourceGroupName string = '' // Set in main.parameters.json
+param documentIntelligenceResourceGroupName string // Set in main.parameters.json
 
-param logAnalyticsName string = '' // Set in main.parameters.json
+param openAiAccountName string // Set in main.parameters.json
 
-param applicationInsightsName string = '' // Set in main.parameters.json
+param openAiLocation string // Set in main.parameters.json
+
+param openAiEmbeddingDeploymentName string
+
+param openAiEmbeddingModelName string
+
+param openAiEmbeddingDeploymentCapacity int
+
+param openAiEmbeddingModelVersion string
+
+param openAiResourceGroupName string // Set in main.parameters.json
+
+param logAnalyticsName string // Set in main.parameters.json
+
+param applicationInsightsName string // Set in main.parameters.json
 
 // Tags that should be applied to all resources.
 // 
@@ -85,57 +99,34 @@ resource documentIntelligenceResourceGroup 'Microsoft.Resources/resourceGroups@2
   name: !empty(documentIntelligenceResourceGroupName) ? documentIntelligenceResourceGroupName : resourceGroup.name
 }
 
-module searchService 'core/search/search-services.bicep' = {
+resource openAiResourceGroup 'Microsoft.Resources/resourceGroups@2022-09-01' existing = if (!empty(openAiResourceGroupName)) {
+  name: !empty(openAiResourceGroupName) ? openAiResourceGroupName : resourceGroup.name
+}
+
+module searchService 'br/public:avm/res/search/search-service:0.4.4' = {
   name: 'search-service'
   scope: searchServiceResourceGroup
   params: {
     name: empty(searchServiceName) ? '${abbrs.searchSearchServices}${resourceToken}' : searchServiceName
     location: empty(searchServiceLocation) ? location : searchServiceLocation
-    authOptions: {
-      aadOrApiKey: {
-        aadAuthFailureMode: 'http401WithBearerChallenge'  
-      }
-    }
-    identity: {
-      type: 'SystemAssigned'
-    }
-    sku: {
-      name: searchServiceSkuName
-    }
+    authOptions: null
+    disableLocalAuth: true
+    managedIdentities: { systemAssigned: true }
+    sku: searchServiceSkuName
     semanticSearch: semanticSearchSkuName
     tags: tags
   }
 }
 
-// Create an App Service Plan to group applications under the same payment plan and SKU
-module appServicePlan './core/host/appserviceplan.bicep' = {
-  name: 'appserviceplan'
-  scope: apiServiceResourceGroup
-  params: {
-    name: !empty(appServicePlanName) ? appServicePlanName : '${abbrs.webServerFarms}${resourceToken}'
-    location: empty(apiServiceLocation) ? location : apiServiceLocation
-    tags: tags
-    sku: {
-      name: 'EP1'
-      tier: 'ElasticPremium'
-      family: 'EP'
-    }
-    kind: 'elastic'
-    properties: {
-      maximumElasticWorkerCount: 2
-      reserved: true // This property determines if the app service plan is Linux https://github.com/Azure/bicep/discussions/7029
-    }
-  }
-}
-
 // Backing storage for Azure functions backend API and sample data
-module storage './core/storage/storage-account.bicep' = {
+module storage 'br/public:avm/res/storage/storage-account:0.11.0' = {
   name: 'storage'
   scope: storageResourceGroup
   params: {
     name: !empty(storageAccountName) ? storageAccountName : '${abbrs.storageStorageAccounts}${resourceToken}'
     location: empty(storageLocation) ? location : storageLocation
     tags: tags
+    allowSharedKeyAccess: false
   }
 }
 
@@ -144,6 +135,7 @@ module documentIntelligence 'br/public:avm/res/cognitive-services/account:0.5.4'
   name: 'documentintelligence'
   scope: documentIntelligenceResourceGroup
   params: {
+    location: empty(documentIntelligenceLocation) ? location : documentIntelligenceLocation
     kind: 'FormRecognizer'
     customSubDomainName: !empty(documentIntelligenceAccountName) ? documentIntelligenceAccountName : '${abbrs.cognitiveServicesDocumentIntelligence}${resourceToken}'
     name: !empty(documentIntelligenceAccountName) ? documentIntelligenceAccountName : '${abbrs.cognitiveServicesDocumentIntelligence}${resourceToken}'
@@ -151,72 +143,145 @@ module documentIntelligence 'br/public:avm/res/cognitive-services/account:0.5.4'
       defaultAction: 'Allow'
     }
     sku: 'S0'
+    disableLocalAuth: true
+  }
+}
+
+var openAiDeployments = [
+  {
+    name: openAiEmbeddingDeploymentName
+    model: {
+      format: 'OpenAI'
+      name: openAiEmbeddingModelName
+      version: openAiEmbeddingModelVersion
+    }
+    sku: {
+      name: 'Standard'
+      capacity: openAiEmbeddingDeploymentCapacity
+    }
+  }
+]
+// Backing OpenAI account for Azure OpenAI
+module openAi 'br/public:avm/res/cognitive-services/account:0.5.4' = {
+  name: 'openai'
+  scope: openAiResourceGroup
+  params: {
+    name: !empty(openAiAccountName) ? openAiAccountName : '${abbrs.cognitiveServicesAccounts}${resourceToken}'
+    location: empty(openAiLocation) ? location : openAiLocation
+    tags: tags
+    kind: 'OpenAI'
+    customSubDomainName: !empty(openAiAccountName) ? openAiAccountName : '${abbrs.cognitiveServicesAccounts}${resourceToken}'
+    networkAcls: {
+      defaultAction: 'Allow'
+    }
+    sku: 'S0'
+    deployments: openAiDeployments
+    disableLocalAuth: true
   }
 }
 
 // Storage contributor role to upload sample data
-module storageContribRoleUser 'core/security/role.bicep' = {
-  scope: storageResourceGroup
+module storageContribRoleUser 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.1' = {
+  scope: resourceGroup
   name: 'storage-contribrole-user'
   params: {
     principalId: principalId
     roleDefinitionId: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
     principalType: 'User'
+    resourceId:  resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
   }
 }
 
 // Storage blob reader role for indexer
-module storageReaderRoleSearchService 'core/security/role.bicep' = {
+module storageReaderRoleSearchService 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.1' = {
   scope: storageResourceGroup
   name: 'storage-readerrole-search'
   params: {
-    principalId: searchService.outputs.principalId
+    principalId: searchService.outputs.systemAssignedMIPrincipalId
     roleDefinitionId: '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1'
     principalType: 'ServicePrincipal'
-  }
-}
-
-// Monitor application with Azure Monitor
-module monitoring './core/monitor/monitoring.bicep' = {
-  name: 'monitoring'
-  scope: apiServiceResourceGroup
-  params: {
-    location: location
-    tags: tags
-    logAnalyticsName: !empty(logAnalyticsName) ? logAnalyticsName : '${abbrs.operationalInsightsWorkspaces}${resourceToken}'
-    applicationInsightsName: !empty(applicationInsightsName) ? applicationInsightsName : '${abbrs.insightsComponents}${resourceToken}'
-  }
-}
-
-// The application backend
-module api './app/api.bicep' = {
-  name: 'api'
-  scope: apiServiceResourceGroup
-  params: {
-    name: !empty(apiServiceName) ? apiServiceName : '${abbrs.webSitesFunctions}api-${resourceToken}'
-    location: location
-    tags: tags
-    applicationInsightsName: monitoring.outputs.applicationInsightsName
-    appServicePlanId: appServicePlan.outputs.id
-    storageAccountName: storage.outputs.name
-    alwaysOn: false
-    minimumElasticInstanceCount: 1
-    scmDoBuildDuringDeployment: true
-    appSettings: {
-      AI_SERVICES_ACCOUNT_ENDPOINT: documentIntelligence.outputs.endpoint
-      AzureWebJobsFeatureFlags: 'EnableWorkerIndexing'
-    }
+    resourceId:  resourceId('Microsoft.Authorization/roleDefinitions', '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1')
   }
 }
 
 // For document intelligence custom skill
-module cognitiveServicesRoleUser 'core/security/role.bicep' = {
+module cognitiveServicesRoleFunction 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.1' = {
   scope: resourceGroup
-  name: 'cognitiveservices-role-user'
+  name: 'cognitiveservices-role-function'
   params: {
-    principalId: api.outputs.principalId
+    principalId: functionApp.outputs.systemAssignedMIPrincipalId
     roleDefinitionId: 'a97b65f3-24c7-4388-baec-2e87135dc908'
     principalType: 'ServicePrincipal'
+    resourceId:  resourceId('Microsoft.Authorization/roleDefinitions', 'a97b65f3-24c7-4388-baec-2e87135dc908')
+  }
+}
+
+// For function connection to storage
+module storageOwnerRoleFunction 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.1' = {
+  scope: resourceGroup
+  name: 'storage-owner-role-function'
+  params: {
+    principalId: principalId
+    roleDefinitionId: 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
+    principalType: 'User'
+    resourceId:  resourceId('Microsoft.Authorization/roleDefinitions', 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b')
+  }
+}
+
+// Monitor application with Azure Monitor
+module logAnalytics 'br/public:avm/res/operational-insights/workspace:0.4.0' = {
+  name: 'logAnalytics'
+  scope: apiServiceResourceGroup
+  params: {
+    location: location
+    tags: tags
+    name: !empty(logAnalyticsName) ? logAnalyticsName : '${abbrs.operationalInsightsWorkspaces}${resourceToken}'
+  }
+}
+
+module applicationInsights 'br/public:avm/res/insights/component:0.3.1' = {
+  name: 'appInsights'
+  scope: apiServiceResourceGroup
+  params: {
+    location: location
+    tags: tags
+    workspaceResourceId: logAnalytics.outputs.resourceId
+    name: !empty(applicationInsightsName) ? applicationInsightsName : '${abbrs.insightsComponents}${resourceToken}'
+  }
+}
+
+// Create an App Service Plan to group applications under the same payment plan and SKU
+module appServicePlan 'br/public:avm/res/web/serverfarm:0.2.2' = {
+  name: 'appServicePlan'
+  scope: apiServiceResourceGroup
+  params: {
+    name: !empty(appServicePlanName) ? appServicePlanName : '${abbrs.webServerFarms}${resourceToken}'
+    location: empty(apiServiceLocation) ? location : apiServiceLocation
+    tags: tags
+    skuName: 'Y1'
+    skuCapacity: 1
+    kind: 'FunctionApp'
+  }
+}
+
+module functionApp 'br/public:avm/res/web/site:0.3.11' = {
+  name: 'api'
+  scope: apiServiceResourceGroup
+  params: {
+    kind: 'functionapp,linux'
+    name: !empty(apiServiceName) ? apiServiceName : '${abbrs.webSitesFunctions}api-${resourceToken}'
+    serverFarmResourceId: appServicePlan.outputs.resourceId
+    location: empty(apiServiceLocation) ? location : apiServiceLocation
+    tags: union(tags, { 'azd-service-name': 'api' })
+    appInsightResourceId: applicationInsights.outputs.resourceId
+    storageAccountResourceId: storage.outputs.resourceId
+    storageAccountUseIdentityAuthentication: true
+    managedIdentities: { systemAssigned: true }
+    appSettingsKeyValuePairs: {
+        FUNCTIONS_EXTENSION_VERSION: '~4'
+        FUNCTIONS_WORKER_RUNTIME: 'python'
+        AZURE_DOCUMENTINTELLIGENCE_ENDPOINT: documentIntelligence.outputs.endpoint
+    }
   }
 }
 
@@ -225,16 +290,19 @@ output AZURE_SEARCH_SERVICE string = searchService.outputs.name
 output AZURE_SEARCH_SERVICE_RESOURCE_GROUP string = searchServiceResourceGroup.name
 output AZURE_SEARCH_SERVICE_LOCATION string = searchService.outputs.location
 
-output AZURE_STORAGE_ACCOUNT_ID string = storage.outputs.id
+output AZURE_STORAGE_ACCOUNT_ID string = storage.outputs.resourceId
 output AZURE_STORAGE_ACCOUNT_LOCATION string = storage.outputs.location
 output AZURE_STORAGE_ACCOUNT_RESOURCE_GROUP string = storageResourceGroup.name
 output AZURE_STORAGE_ACCOUNT string = storage.outputs.name
 output AZURE_STORAGE_ACCOUNT_BLOB_URL string = storage.outputs.primaryBlobEndpoint
 output AZURE_APP_SERVICE_PLAN string = appServicePlan.outputs.name
-output AZURE_API_SERVICE string = api.outputs.SERVICE_API_NAME
-output AZURE_API_SERVICE_LOCATION string = api.outputs.location
+output AZURE_API_SERVICE string = functionApp.outputs.name
+output AZURE_API_SERVICE_LOCATION string = functionApp.outputs.location
 output AZURE_API_SERVICE_RESOURCE_GROUP string = apiServiceResourceGroup.name
-output AZURE_LOG_ANALYTICS string = monitoring.outputs.logAnalyticsWorkspaceName
-output AZURE_APPINSIGHTS string = monitoring.outputs.applicationInsightsName
+output AZURE_LOG_ANALYTICS string = logAnalytics.outputs.location
+output AZURE_APPINSIGHTS string = applicationInsights.outputs.name
+output AZURE_OPENAI_LOCATION string = openAi.outputs.location
+output AZURE_OPENAI_ACCOUNT string = openAi.outputs.name
+output AZURE_OPENAI_RESOURCE_GROUP string = openAi.outputs.resourceGroupName
 
-output AZURE_FUNCTION_URL string = api.outputs.SERVICE_API_URI
+output AZURE_FUNCTION_URL string = 'https://${functionApp.outputs.defaultHostname}'

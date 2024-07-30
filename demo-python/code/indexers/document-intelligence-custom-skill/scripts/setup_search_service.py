@@ -5,8 +5,8 @@ from azure.mgmt.web import WebSiteManagementClient
 from azure.storage.blob import BlobServiceClient
 from azure.search.documents.indexes import SearchIndexClient, SearchIndexerClient
 from azure.search.documents.indexes.models import (
-    CustomWebApiParameters,  
-    CustomVectorizer,
+    AzureOpenAIParameters,  
+    AzureOpenAIVectorizer,
     SearchField,
     SearchFieldDataType,
     HnswAlgorithmConfiguration,
@@ -22,6 +22,7 @@ from azure.search.documents.indexes.models import (
     SplitSkill,
     SearchIndexer,
     WebApiSkill,
+    AzureOpenAIEmbeddingSkill,
     InputFieldMappingEntry,
     OutputFieldMappingEntry,
     FieldMapping,
@@ -50,7 +51,7 @@ def main():
     credential = DefaultAzureCredential()
     search_service_name = os.environ["AZURE_SEARCH_SERVICE"]
     search_url = f"https://{search_service_name}.search.windows.net"
-    search_index_client = SearchIndexClient(endpoint=search_url, credential=credential, per_call_policies=[CustomVectorizerRewritePolicy()])
+    search_index_client = SearchIndexClient(endpoint=search_url, credential=credential)
     search_indexer_client = SearchIndexerClient(endpoint=search_url, credential=credential)
 
     print("Uploading sample data...")
@@ -108,15 +109,19 @@ def upload_sample_data(credential: DefaultAzureCredential):
                 blob_client.upload_blob(data=f)
 
 def create_or_update_sample_index(search_index_client: SearchIndexClient, custom_vectorizer_url: str):
+    vector_dimensions = os.environ["AZURE_OPENAI_EMB_DIMENSIONS"]
     # Create a search index  
     fields = [  
         SearchField(name="parent_id", type=SearchFieldDataType.String, sortable=True, filterable=True, facetable=True),  
         SearchField(name="title", type=SearchFieldDataType.String),  
         SearchField(name="chunk_id", type=SearchFieldDataType.String, key=True, sortable=True, filterable=True, facetable=True, analyzer_name="keyword"),  
         SearchField(name="chunk", type=SearchFieldDataType.String, sortable=False, filterable=False, facetable=False),  
-        SearchField(name="vector", type=SearchFieldDataType.Collection(SearchFieldDataType.Single), vector_search_dimensions=384, vector_search_profile_name="hnswProfile"),  
+        SearchField(name="vector", type=SearchFieldDataType.Collection(SearchFieldDataType.Single), vector_search_dimensions=vector_dimensions, vector_search_profile_name="hnswProfile"),  
     ]  
     
+    vectorizer_resource_uri = os.environ["AZURE_OPENAI_ENDPOINT"]
+    vectorizer_deployment = os.environ["AZURE_OPENAI_EMB_DEPLOYMENT"]
+    vectorizer_model = os.environ["AZURE_OPENAI_EMB_MODEL"]
     # Configure the vector search configuration  
     vector_search = VectorSearch(  
         algorithms=[  
@@ -128,12 +133,19 @@ def create_or_update_sample_index(search_index_client: SearchIndexClient, custom
             VectorSearchProfile(  
                 name="hnswProfile",  
                 algorithm_configuration_name="hnsw",  
-                vectorizer="customVectorizer",  
+                vectorizer="vectorizer",  
             )
         ],  
         vectorizers=[  
-            CustomVectorizer(name="customVectorizer", custom_web_api_parameters=CustomWebApiParameters(uri=custom_vectorizer_url))
-        ],  
+            AzureOpenAIVectorizer(
+                name="vectorizer",
+                azure_open_ai_parameters=AzureOpenAIParameters(
+                    resource_uri=vectorizer_resource_uri,
+                    deployment_id=vectorizer_deployment,
+                    model_name=vectorizer_model
+                )
+            )
+        ]
     )  
     
     semantic_config = SemanticConfiguration(  
@@ -159,7 +171,19 @@ def create_or_update_datasource(search_indexer_client: SearchIndexerClient):
         container=SearchIndexerDataContainer(name=sample_container_name))
     search_indexer_client.create_or_update_data_source_connection(data_source)
 
-def create_or_update_skillset(search_indexer_client: SearchIndexerClient, custom_vectorizer_url: str):
+def create_or_update_skillset(search_indexer_client: SearchIndexerClient, document_skill_url: str):
+    document_skill = WebApiSkill(
+        description="Document intelligence skill to extract content from documents",
+        context="/document",
+        uri=document_skill_url,
+        inputs=[
+            InputFieldMappingEntry(name="file_data", source="/document/file_data")
+        ],
+        outputs=[
+            OutputFieldMappingEntry(name="content", target_name="file_content")
+        ]
+    )
+
     split_skill = SplitSkill(  
         description="Split skill to chunk documents",  
         text_split_mode="pages",  
@@ -167,24 +191,29 @@ def create_or_update_skillset(search_indexer_client: SearchIndexerClient, custom
         maximum_page_length=300,  
         page_overlap_length=20,  
         inputs=[  
-            InputFieldMappingEntry(name="text", source="/document/content"),  
+            InputFieldMappingEntry(name="text", source="/document/file_content"),  
         ],  
         outputs=[  
             OutputFieldMappingEntry(name="textItems", target_name="pages")  
         ],  
     )  
-    
-    embedding_skill = WebApiSkill(  
+
+    vectorizer_resource_uri = os.environ["AZURE_OPENAI_ENDPOINT"]
+    vectorizer_deployment = os.environ["AZURE_OPENAI_EMB_DEPLOYMENT"]
+    vectorizer_model = os.environ["AZURE_OPENAI_EMB_MODEL"]
+    embedding_skill = AzureOpenAIEmbeddingSkill(  
         description="Skill to generate embeddings via a custom endpoint",  
         context="/document/pages/*",
-        uri=custom_vectorizer_url, 
+        resource_uri=vectorizer_resource_uri,
+        deployment_id=vectorizer_deployment,
+        model_name=vectorizer_model,
         inputs=[
             InputFieldMappingEntry(name="text", source="/document/pages/*"),  
         ],  
         outputs=[  
-            OutputFieldMappingEntry(name="vector", target_name="vector")  
-        ],
-    )  
+            OutputFieldMappingEntry(name="embedding", target_name="vector")  
+        ]
+    )
     
     index_projections = SearchIndexerIndexProjections(  
         selectors=[  
@@ -201,12 +230,12 @@ def create_or_update_skillset(search_indexer_client: SearchIndexerClient, custom
         ],  
         parameters=SearchIndexerIndexProjectionsParameters(  
             projection_mode=IndexProjectionMode.SKIP_INDEXING_PARENT_DOCUMENTS  
-        ),  
+        ),
     )  
     
     skillset = SearchIndexerSkillset(  
         name=sample_skillset_name,  
-        description="Skillset to chunk documents and generating embeddings",  
+        description="Skillset to use document intelligence, chunk documents and generating embeddings",  
         skills=[split_skill, embedding_skill],  
         index_projections=index_projections,  
     )
@@ -224,12 +253,6 @@ def create_or_update_indexer(search_indexer_client: SearchIndexerClient):
     )  
     
     search_indexer_client.create_or_update_indexer(indexer)  
-
-# Workaround required to use the preview SDK
-class CustomVectorizerRewritePolicy(HTTPPolicy):
-    def send(self, request):
-        request.http_request.body = request.http_request.body.replace('customVectorizerParameters', 'customWebApiParameters')
-        return self.next.send(request)
 
 if __name__ == "__main__":
     main()
