@@ -115,6 +115,8 @@ module searchService 'br/public:avm/res/search/search-service:0.4.4' = {
     sku: searchServiceSkuName
     semanticSearch: semanticSearchSkuName
     tags: tags
+    partitionCount: 1
+    replicaCount: 1
   }
 }
 
@@ -281,6 +283,9 @@ module functionApp 'br/public:avm/res/web/site:0.3.11' = {
         FUNCTIONS_EXTENSION_VERSION: '~4'
         FUNCTIONS_WORKER_RUNTIME: 'python'
         AZURE_DOCUMENTINTELLIGENCE_ENDPOINT: documentIntelligence.outputs.endpoint
+    }
+    siteConfig: {
+      alwaysOn: false
     }
   }
 }
