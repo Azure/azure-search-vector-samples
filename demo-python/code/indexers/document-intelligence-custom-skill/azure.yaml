@@ -7,11 +7,6 @@ services:
     language: python
     host: function
 hooks:
-  prepackage:
-    shell: pwsh
-    run: ./scripts/download_embedding_model.ps1
-    interactive: true
-    continueOnError: false
   postdeploy:
     shell: pwsh
     run: ./scripts/setup_search_service.ps1

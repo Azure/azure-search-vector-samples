@@ -27,10 +27,10 @@ async def ReadDocument(req: func.HttpRequest) -> func.HttpResponse:
             status_code=400
         )
 
-    client = DocumentIntelligenceClient(endpoint=os.environ["AZURE_DOCUMENTINTELLIGENCE_ENDPOINT"], credential=DefaultAzureCredential())
-    result_content = []
-    for record_id, file in input_files.items():
-           result_content.append(await process_file(client, record_id, file))
+    async with DocumentIntelligenceClient(endpoint=os.environ["AZURE_DOCUMENTINTELLIGENCE_ENDPOINT"], credential=DefaultAzureCredential()) as client:
+        result_content = []
+        for record_id, file in input_files.items():
+            result_content.append(await process_file(client, record_id, file))
 
     response = { "values": result_content }
     return func.HttpResponse(body=json.dumps(response), mimetype="application/json", status_code=200)

@@ -117,9 +117,11 @@ module searchService 'br/public:avm/res/search/search-service:0.4.4' = {
     tags: tags
     partitionCount: 1
     replicaCount: 1
+    publicNetworkAccess: 'enabled'
   }
 }
 
+var functionAppName = !empty(apiServiceName) ? apiServiceName : '${abbrs.webSitesFunctions}api-${resourceToken}'
 // Backing storage for Azure functions backend API and sample data
 module storage 'br/public:avm/res/storage/storage-account:0.11.0' = {
   name: 'storage'
@@ -129,8 +131,20 @@ module storage 'br/public:avm/res/storage/storage-account:0.11.0' = {
     location: empty(storageLocation) ? location : storageLocation
     tags: tags
     allowSharedKeyAccess: false
+    blobServices: {
+      containers: [
+        {
+          name: functionAppName
+        }
+      ]
+    }
+    publicNetworkAccess: 'Enabled'
+    networkAcls: {
+      defaultAction: 'Allow'
+    }
   }
 }
+
 
 // Backing AI Services account for Document Intelligence
 module documentIntelligence 'br/public:avm/res/cognitive-services/account:0.5.4' = {
@@ -141,6 +155,7 @@ module documentIntelligence 'br/public:avm/res/cognitive-services/account:0.5.4'
     kind: 'FormRecognizer'
     customSubDomainName: !empty(documentIntelligenceAccountName) ? documentIntelligenceAccountName : '${abbrs.cognitiveServicesDocumentIntelligence}${resourceToken}'
     name: !empty(documentIntelligenceAccountName) ? documentIntelligenceAccountName : '${abbrs.cognitiveServicesDocumentIntelligence}${resourceToken}'
+    publicNetworkAccess: 'Enabled'
     networkAcls: {
       defaultAction: 'Allow'
     }
@@ -173,6 +188,7 @@ module openAi 'br/public:avm/res/cognitive-services/account:0.5.4' = {
     tags: tags
     kind: 'OpenAI'
     customSubDomainName: !empty(openAiAccountName) ? openAiAccountName : '${abbrs.cognitiveServicesAccounts}${resourceToken}'
+    publicNetworkAccess: 'Enabled'
     networkAcls: {
       defaultAction: 'Allow'
     }
@@ -211,7 +227,7 @@ module cognitiveServicesRoleFunction 'br/public:avm/ptn/authorization/resource-r
   scope: resourceGroup
   name: 'cognitiveservices-role-function'
   params: {
-    principalId: functionApp.outputs.systemAssignedMIPrincipalId
+    principalId: functionApp.outputs.identityPrincipalId
     roleDefinitionId: 'a97b65f3-24c7-4388-baec-2e87135dc908'
     principalType: 'ServicePrincipal'
     resourceId:  documentIntelligence.outputs.resourceId
@@ -223,7 +239,7 @@ module storageOwnerRoleFunction 'br/public:avm/ptn/authorization/resource-role-a
   scope: resourceGroup
   name: 'storage-owner-role-function'
   params: {
-    principalId: functionApp.outputs.systemAssignedMIPrincipalId
+    principalId: functionApp.outputs.identityPrincipalId
     roleDefinitionId: 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
     principalType: 'ServicePrincipal'
     resourceId:  storage.outputs.resourceId
@@ -260,38 +276,30 @@ module appServicePlan 'br/public:avm/res/web/serverfarm:0.2.2' = {
     name: !empty(appServicePlanName) ? appServicePlanName : '${abbrs.webServerFarms}${resourceToken}'
     location: empty(apiServiceLocation) ? location : apiServiceLocation
     tags: tags
-    skuName: 'Y1'
+    skuName: 'FC1'
     skuCapacity: 1
     kind: 'Linux'
   }
 }
 
-module functionApp 'br/public:avm/res/web/site:0.3.11' = {
+module functionApp 'core/host/functions-flex.bicep' = {
   name: 'api'
   scope: apiServiceResourceGroup
   params: {
-    kind: 'functionapp,linux'
-    name: !empty(apiServiceName) ? apiServiceName : '${abbrs.webSitesFunctions}api-${resourceToken}'
-    serverFarmResourceId: appServicePlan.outputs.resourceId
-    location: empty(apiServiceLocation) ? location : apiServiceLocation
+    name: functionAppName
+    location: location
     tags: union(tags, { 'azd-service-name': 'api' })
-    appInsightResourceId: applicationInsights.outputs.resourceId
-    storageAccountResourceId: storage.outputs.resourceId
-    storageAccountUseIdentityAuthentication: true
-    managedIdentities: { systemAssigned: true }
-    appSettingsKeyValuePairs: {
-        FUNCTIONS_EXTENSION_VERSION: '~4'
-        FUNCTIONS_WORKER_RUNTIME: 'python'
-        AZURE_DOCUMENTINTELLIGENCE_ENDPOINT: documentIntelligence.outputs.endpoint
-        PYTHON_ISOLATE_WORKER_DEPENDENCIES: 1
-        WEBSITES_ENABLE_APP_SERVICE_STORAGE: false
-        SCM_DO_BUILD_DURING_DEPLOYMENT: true
-        ENABLE_ORYX_BUILD: true
+    alwaysOn: false
+    appSettings: {
+      FUNCTIONS_EXTENSION_VERSION: '~4'
+      AzureWebJobsStorage__accountName: storage.outputs.name
+      AZURE_DOCUMENTINTELLIGENCE_ENDPOINT: documentIntelligence.outputs.endpoint
     }
-    siteConfig: {
-      alwaysOn: false
-      linuxFxVersion: 'python|3.10'
-    }
+    appServicePlanId: appServicePlan.outputs.resourceId
+    runtimeName: 'python'
+    runtimeVersion: '3.10'
+    storageAccountName: storage.outputs.name
+    applicationInsightsName: applicationInsights.outputs.name
   }
 }
 
@@ -307,7 +315,7 @@ output AZURE_STORAGE_ACCOUNT string = storage.outputs.name
 output AZURE_STORAGE_ACCOUNT_BLOB_URL string = storage.outputs.primaryBlobEndpoint
 output AZURE_APP_SERVICE_PLAN string = appServicePlan.outputs.name
 output AZURE_API_SERVICE string = functionApp.outputs.name
-output AZURE_API_SERVICE_LOCATION string = functionApp.outputs.location
+output AZURE_API_SERVICE_LOCATION string = location
 output AZURE_API_SERVICE_RESOURCE_GROUP string = apiServiceResourceGroup.name
 output AZURE_LOG_ANALYTICS string = logAnalytics.outputs.location
 output AZURE_APPINSIGHTS string = applicationInsights.outputs.name
@@ -315,4 +323,4 @@ output AZURE_OPENAI_LOCATION string = openAi.outputs.location
 output AZURE_OPENAI_ACCOUNT string = openAi.outputs.name
 output AZURE_OPENAI_RESOURCE_GROUP string = openAi.outputs.resourceGroupName
 
-output AZURE_FUNCTION_URL string = 'https://${functionApp.outputs.defaultHostname}'
+output AZURE_FUNCTION_URL string = functionApp.outputs.uri
