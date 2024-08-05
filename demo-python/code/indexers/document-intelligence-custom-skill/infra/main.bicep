@@ -59,6 +59,8 @@ param openAiEmbeddingDeploymentCapacity int
 
 param openAiEmbeddingModelVersion string
 
+param openAiEmbeddingModelDimensions string
+
 param openAiResourceGroupName string // Set in main.parameters.json
 
 param logAnalyticsName string // Set in main.parameters.json
@@ -130,7 +132,7 @@ module storage 'br/public:avm/res/storage/storage-account:0.11.0' = {
     name: !empty(storageAccountName) ? storageAccountName : '${abbrs.storageStorageAccounts}${resourceToken}'
     location: empty(storageLocation) ? location : storageLocation
     tags: tags
-    allowSharedKeyAccess: false
+    allowSharedKeyAccess: true
     blobServices: {
       containers: [
         {
@@ -159,6 +161,7 @@ module documentIntelligence 'br/public:avm/res/cognitive-services/account:0.5.4'
     networkAcls: {
       defaultAction: 'Allow'
     }
+    restrictOutboundNetworkAccess: false
     sku: 'S0'
     disableLocalAuth: true
   }
@@ -313,6 +316,7 @@ output AZURE_STORAGE_ACCOUNT_LOCATION string = storage.outputs.location
 output AZURE_STORAGE_ACCOUNT_RESOURCE_GROUP string = storageResourceGroup.name
 output AZURE_STORAGE_ACCOUNT string = storage.outputs.name
 output AZURE_STORAGE_ACCOUNT_BLOB_URL string = storage.outputs.primaryBlobEndpoint
+output AZURE_STORAGE_SUFFIX string = environment().suffixes.storage
 output AZURE_APP_SERVICE_PLAN string = appServicePlan.outputs.name
 output AZURE_API_SERVICE string = functionApp.outputs.name
 output AZURE_API_SERVICE_LOCATION string = location
@@ -322,5 +326,9 @@ output AZURE_APPINSIGHTS string = applicationInsights.outputs.name
 output AZURE_OPENAI_LOCATION string = openAi.outputs.location
 output AZURE_OPENAI_ACCOUNT string = openAi.outputs.name
 output AZURE_OPENAI_RESOURCE_GROUP string = openAi.outputs.resourceGroupName
+output AZURE_OPENAI_ENDPOINT string = openAi.outputs.endpoint
+output AZURE_OPENAI_EMB_DEPLOYMENT string = openAiEmbeddingDeploymentName
+output AZURE_OPENAI_EMB_MODEL string = openAiEmbeddingModelName
+output AZURE_OPENAI_EMB_MODEL_DIMENSIONS string = openAiEmbeddingModelDimensions
 
 output AZURE_FUNCTION_URL string = functionApp.outputs.uri

@@ -2,6 +2,7 @@ from azure.core.exceptions import ResourceNotFoundError
 from azure.core.pipeline.policies import HTTPPolicy
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.web import WebSiteManagementClient
+from azure.mgmt.storage import StorageManagementClient
 from azure.storage.blob import BlobServiceClient
 from azure.search.documents.indexes import SearchIndexClient, SearchIndexerClient
 from azure.search.documents.indexes.models import (
@@ -39,14 +40,19 @@ from tenacity import (
     wait_random_exponential,
     stop_after_attempt
 )
+from datetime import timedelta
 
-function_name = "GetTextEmbedding"
+# Must match function name in api/functions/function_app.py
+function_name = "read"
 sample_index_name = "document-intelligence-index"
 sample_container_name = "document-intelligence-sample-data"
 sample_datasource_name = "document-intelligence-datasource"
 sample_skillset_name = "document-intelligence-skillset"
 sample_indexer_name = "document-intelligence-indexer"
 
+sample_data_directory_name = os.path.join(os.getcwd(), "..", "..", "..", "data", "documents")
+
+# Any environment variables referenced in this file must be output by the bicep deployment
 def main():
     credential = DefaultAzureCredential()
     search_service_name = os.environ["AZURE_SEARCH_SERVICE"]
@@ -55,16 +61,16 @@ def main():
     search_indexer_client = SearchIndexerClient(endpoint=search_url, credential=credential)
 
     print("Uploading sample data...")
-    upload_sample_data(credential)
+    upload_sample_data(credential, sample_data_directory_name)
 
     print("Getting function URL...")
     function_url = get_function_url(credential)
 
     print(f"Create or update sample index {sample_index_name}...")
-    create_or_update_sample_index(search_index_client, function_url)
+    create_or_update_sample_index(search_index_client)
 
     print(f"Create or update sample data source {sample_datasource_name}...")
-    create_or_update_datasource(search_indexer_client)
+    create_or_update_datasource(search_indexer_client, storage_connection_string=get_storage_connection_string(credential))
 
     print(f"Create or update sample skillset {sample_skillset_name}")
     create_or_update_skillset(search_indexer_client, function_url)
@@ -92,15 +98,23 @@ def get_function_url(credential: DefaultAzureCredential) -> str:
             function_key = embedding_function_keys.additional_properties["default"]
             return f"{function_url_template}?code={function_key}"
 
-def upload_sample_data(credential: DefaultAzureCredential):
+def get_storage_connection_string(credential: DefaultAzureCredential) -> str:
+    subscription_id = os.environ["AZURE_SUBSCRIPTION_ID"]
+    client = StorageManagementClient(credential=credential, subscription_id=subscription_id)
+
+    resource_group = os.environ["AZURE_STORAGE_ACCOUNT_RESOURCE_GROUP"]
+    storage_name = os.environ["AZURE_STORAGE_ACCOUNT"]
+    storage_account_keys = client.storage_accounts.list_keys(resource_group_name=resource_group, account_name=storage_name)
+    storage_suffix = os.environ["AZURE_STORAGE_SUFFIX"]
+    return f"DefaultEndpointsProtocol=https;AccountName={storage_name};AccountKey={storage_account_keys.keys[0].value};EndpointSuffix={storage_suffix}"
+
+def upload_sample_data(credential: DefaultAzureCredential, sample_data_directory: str):
     # Connect to Blob Storage
     account_url = os.environ["AZURE_STORAGE_ACCOUNT_BLOB_URL"]
     blob_service_client = BlobServiceClient(account_url=account_url, credential=credential)
     container_client = blob_service_client.get_container_client(sample_container_name)
     if not container_client.exists():
         container_client.create_container()
-    sample_data_directory_name = os.path.join("..", "..", "data", "documents")
-    sample_data_directory = os.path.join(os.getcwd(), sample_data_directory_name)
     for filename in os.listdir(sample_data_directory):
         with open(os.path.join(sample_data_directory, filename), "rb") as f:
             blob_client = container_client.get_blob_client(filename)
@@ -108,8 +122,8 @@ def upload_sample_data(credential: DefaultAzureCredential):
                 print(f"Uploading {filename}...")
                 blob_client.upload_blob(data=f)
 
-def create_or_update_sample_index(search_index_client: SearchIndexClient, custom_vectorizer_url: str):
-    vector_dimensions = os.environ["AZURE_OPENAI_EMB_DIMENSIONS"]
+def create_or_update_sample_index(search_index_client: SearchIndexClient):
+    vector_dimensions = os.environ["AZURE_OPENAI_EMB_MODEL_DIMENSIONS"]
     # Create a search index  
     fields = [  
         SearchField(name="parent_id", type=SearchFieldDataType.String, sortable=True, filterable=True, facetable=True),  
@@ -122,6 +136,7 @@ def create_or_update_sample_index(search_index_client: SearchIndexClient, custom
     vectorizer_resource_uri = os.environ["AZURE_OPENAI_ENDPOINT"]
     vectorizer_deployment = os.environ["AZURE_OPENAI_EMB_DEPLOYMENT"]
     vectorizer_model = os.environ["AZURE_OPENAI_EMB_MODEL"]
+    vectorizer_dimensions = os.environ["AZURE_OPENAI_EMB_MODEL_DIMENSIONS"]
     # Configure the vector search configuration  
     vector_search = VectorSearch(  
         algorithms=[  
@@ -142,7 +157,8 @@ def create_or_update_sample_index(search_index_client: SearchIndexClient, custom
                 azure_open_ai_parameters=AzureOpenAIParameters(
                     resource_uri=vectorizer_resource_uri,
                     deployment_id=vectorizer_deployment,
-                    model_name=vectorizer_model
+                    model_name=vectorizer_model,
+                    dimensions=vectorizer_dimensions
                 )
             )
         ]
@@ -162,12 +178,11 @@ def create_or_update_sample_index(search_index_client: SearchIndexClient, custom
     index = SearchIndex(name=sample_index_name, fields=fields, vector_search=vector_search, semantic_search=semantic_search)  
     search_index_client.create_or_update_index(index)  
 
-def create_or_update_datasource(search_indexer_client: SearchIndexerClient):
-    storage_resource_id = os.environ["AZURE_STORAGE_ACCOUNT_ID"]
+def create_or_update_datasource(search_indexer_client: SearchIndexerClient, storage_connection_string: str):
     data_source = SearchIndexerDataSourceConnection(
         name=sample_datasource_name,
         type="azureblob",
-        connection_string=f"ResourceId={storage_resource_id};",
+        connection_string=storage_connection_string,
         container=SearchIndexerDataContainer(name=sample_container_name))
     search_indexer_client.create_or_update_data_source_connection(data_source)
 
@@ -176,8 +191,12 @@ def create_or_update_skillset(search_indexer_client: SearchIndexerClient, docume
         description="Document intelligence skill to extract content from documents",
         context="/document",
         uri=document_skill_url,
+        timeout=timedelta(seconds=230),
+        batch_size=1,
+        degree_of_parallelism=1,
         inputs=[
-            InputFieldMappingEntry(name="file_data", source="/document/file_data")
+            InputFieldMappingEntry(name="metadata_storage_path", source="/document/metadata_storage_path"),
+            InputFieldMappingEntry(name="metadata_storage_sas_token", source="/document/metadata_storage_sas_token")
         ],
         outputs=[
             OutputFieldMappingEntry(name="content", target_name="file_content")
@@ -185,7 +204,7 @@ def create_or_update_skillset(search_indexer_client: SearchIndexerClient, docume
     )
 
     split_skill = SplitSkill(  
-        description="Split skill to chunk documents",  
+        description="Split skill to chunk documents",
         text_split_mode="pages",  
         context="/document",  
         maximum_page_length=300,  
@@ -201,12 +220,14 @@ def create_or_update_skillset(search_indexer_client: SearchIndexerClient, docume
     vectorizer_resource_uri = os.environ["AZURE_OPENAI_ENDPOINT"]
     vectorizer_deployment = os.environ["AZURE_OPENAI_EMB_DEPLOYMENT"]
     vectorizer_model = os.environ["AZURE_OPENAI_EMB_MODEL"]
+    vectorizer_dimensions = os.environ["AZURE_OPENAI_EMB_MODEL_DIMENSIONS"]
     embedding_skill = AzureOpenAIEmbeddingSkill(  
-        description="Skill to generate embeddings via a custom endpoint",  
+        description="Skill to generate embeddings via an Azure OpenAI endpoint",  
         context="/document/pages/*",
         resource_uri=vectorizer_resource_uri,
         deployment_id=vectorizer_deployment,
         model_name=vectorizer_model,
+        dimensions=vectorizer_dimensions,
         inputs=[
             InputFieldMappingEntry(name="text", source="/document/pages/*"),  
         ],  
@@ -236,7 +257,7 @@ def create_or_update_skillset(search_indexer_client: SearchIndexerClient, docume
     skillset = SearchIndexerSkillset(  
         name=sample_skillset_name,  
         description="Skillset to use document intelligence, chunk documents and generating embeddings",  
-        skills=[split_skill, embedding_skill],  
+        skills=[document_skill, split_skill, embedding_skill],  
         index_projections=index_projections,  
     )
     result = search_indexer_client.create_or_update_skillset(skillset)

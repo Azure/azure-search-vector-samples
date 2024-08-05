@@ -3,4 +3,5 @@ azure-search-documents==11.6.0b4
 azure-storage-blob
 azure-identity
 azure-mgmt-web
+azure-mgmt-storage
 tenacity

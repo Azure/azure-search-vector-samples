@@ -52,6 +52,8 @@ param openAiEmbeddingModelName =  readEnvironmentVariable('AZURE_OPENAI_EMB_MODE
 
 param openAiEmbeddingModelVersion =  readEnvironmentVariable('AZURE_OPENAI_EMB_MODEL_VERSION', '1')
 
+param openAiEmbeddingModelDimensions = readEnvironmentVariable('AZURE_OPENAI_EMB_MODEL_DIMENSIONS', '1536')
+
 param openAiLocation =  readEnvironmentVariable('AZURE_OPENAI_LOCATION', '')
 
 param openAiResourceGroupName =  readEnvironmentVariable('AZURE_OPENAI_RESOURCE_GROUP', '')
