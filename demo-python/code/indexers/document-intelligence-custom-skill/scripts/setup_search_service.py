@@ -20,7 +20,6 @@ from azure.search.documents.indexes.models import (
     SemanticSearch,
     SearchIndexerDataSourceConnection,
     SearchIndexerDataContainer,
-    SplitSkill,
     SearchIndexer,
     WebApiSkill,
     AzureOpenAIEmbeddingSkill,
@@ -43,7 +42,8 @@ from tenacity import (
 from datetime import timedelta
 
 # Must match function name in api/functions/function_app.py
-function_name = "read"
+read_function_name = "read"
+split_function_name = "markdownsplit"
 sample_index_name = "document-intelligence-index"
 sample_container_name = "document-intelligence-sample-data"
 sample_datasource_name = "document-intelligence-datasource"
@@ -64,7 +64,8 @@ def main():
     upload_sample_data(credential, sample_data_directory_name)
 
     print("Getting function URL...")
-    function_url = get_function_url(credential)
+    read_function_url = get_function_url(credential, read_function_name)
+    split_function_url = get_function_url(credential, split_function_name)
 
     print(f"Create or update sample index {sample_index_name}...")
     create_or_update_sample_index(search_index_client)
@@ -73,12 +74,12 @@ def main():
     create_or_update_datasource(search_indexer_client, storage_connection_string=get_storage_connection_string(credential))
 
     print(f"Create or update sample skillset {sample_skillset_name}")
-    create_or_update_skillset(search_indexer_client, function_url)
+    create_or_update_skillset(search_indexer_client, read_function_url, split_function_url)
 
     print(f"Create or update sample indexer {sample_indexer_name}")
     create_or_update_indexer(search_indexer_client)
 
-def get_function_url(credential: DefaultAzureCredential) -> str:
+def get_function_url(credential: DefaultAzureCredential, function_name: str) -> str:
     subscription_id = os.environ["AZURE_SUBSCRIPTION_ID"]
     client = WebSiteManagementClient(credential=credential, subscription_id=subscription_id)
 
@@ -126,17 +127,17 @@ def create_or_update_sample_index(search_index_client: SearchIndexClient):
     vector_dimensions = os.environ["AZURE_OPENAI_EMB_MODEL_DIMENSIONS"]
     # Create a search index  
     fields = [  
-        SearchField(name="parent_id", type=SearchFieldDataType.String, sortable=True, filterable=True, facetable=True),  
-        SearchField(name="title", type=SearchFieldDataType.String),  
-        SearchField(name="chunk_id", type=SearchFieldDataType.String, key=True, sortable=True, filterable=True, facetable=True, analyzer_name="keyword"),  
+        SearchField(name="parent_id", type=SearchFieldDataType.String, sortable=True, filterable=True, facetable=False),  
+        SearchField(name="title", type=SearchFieldDataType.String, sortable=True, filterable=True, facetable=False),  
+        SearchField(name="chunk_id", type=SearchFieldDataType.String, key=True, sortable=True, filterable=True, facetable=False, analyzer_name="keyword"),  
         SearchField(name="chunk", type=SearchFieldDataType.String, sortable=False, filterable=False, facetable=False),  
+        SearchField(name="chunk_headers", type=SearchFieldDataType.Collection(SearchFieldDataType.String), sortable=False, filterable=False, facetable=False),
         SearchField(name="vector", type=SearchFieldDataType.Collection(SearchFieldDataType.Single), vector_search_dimensions=vector_dimensions, vector_search_profile_name="hnswProfile"),  
     ]  
     
     vectorizer_resource_uri = os.environ["AZURE_OPENAI_ENDPOINT"]
     vectorizer_deployment = os.environ["AZURE_OPENAI_EMB_DEPLOYMENT"]
     vectorizer_model = os.environ["AZURE_OPENAI_EMB_MODEL"]
-    vectorizer_dimensions = os.environ["AZURE_OPENAI_EMB_MODEL_DIMENSIONS"]
     # Configure the vector search configuration  
     vector_search = VectorSearch(  
         algorithms=[  
@@ -157,8 +158,7 @@ def create_or_update_sample_index(search_index_client: SearchIndexClient):
                 azure_open_ai_parameters=AzureOpenAIParameters(
                     resource_uri=vectorizer_resource_uri,
                     deployment_id=vectorizer_deployment,
-                    model_name=vectorizer_model,
-                    dimensions=vectorizer_dimensions
+                    model_name=vectorizer_model
                 )
             )
         ]
@@ -186,7 +186,7 @@ def create_or_update_datasource(search_indexer_client: SearchIndexerClient, stor
         container=SearchIndexerDataContainer(name=sample_container_name))
     search_indexer_client.create_or_update_data_source_connection(data_source)
 
-def create_or_update_skillset(search_indexer_client: SearchIndexerClient, document_skill_url: str):
+def create_or_update_skillset(search_indexer_client: SearchIndexerClient, document_skill_url: str, split_skill_url: str):
     document_skill = WebApiSkill(
         description="Document intelligence skill to extract content from documents",
         context="/document",
@@ -196,40 +196,46 @@ def create_or_update_skillset(search_indexer_client: SearchIndexerClient, docume
         degree_of_parallelism=1,
         inputs=[
             InputFieldMappingEntry(name="metadata_storage_path", source="/document/metadata_storage_path"),
-            InputFieldMappingEntry(name="metadata_storage_sas_token", source="/document/metadata_storage_sas_token")
+            InputFieldMappingEntry(name="metadata_storage_sas_token", source="/document/metadata_storage_sas_token"),
+            InputFieldMappingEntry(name="mode", source='="markdown"')
         ],
         outputs=[
-            OutputFieldMappingEntry(name="content", target_name="file_content")
+            OutputFieldMappingEntry(name="content", target_name="file_markdown_content")
         ]
     )
-
-    split_skill = SplitSkill(  
-        description="Split skill to chunk documents",
-        text_split_mode="pages",  
-        context="/document",  
-        maximum_page_length=300,  
-        page_overlap_length=20,  
-        inputs=[  
-            InputFieldMappingEntry(name="text", source="/document/file_content"),  
-        ],  
-        outputs=[  
-            OutputFieldMappingEntry(name="textItems", target_name="pages")  
-        ],  
-    )  
 
     vectorizer_resource_uri = os.environ["AZURE_OPENAI_ENDPOINT"]
     vectorizer_deployment = os.environ["AZURE_OPENAI_EMB_DEPLOYMENT"]
     vectorizer_model = os.environ["AZURE_OPENAI_EMB_MODEL"]
     vectorizer_dimensions = os.environ["AZURE_OPENAI_EMB_MODEL_DIMENSIONS"]
+    split_skill = WebApiSkill(
+        description="Markdown split skill to extract chunks from documents",
+        context="/document",
+        uri=split_skill_url,
+        timeout=timedelta(seconds=230),
+        batch_size=1,
+        degree_of_parallelism=1,
+        inputs=[  
+            InputFieldMappingEntry(name="content", source="/document/file_markdown_content"),
+            InputFieldMappingEntry(name="encoderModelName", source=f'="{vectorizer_model}"'),
+            InputFieldMappingEntry(name="chunkSize", source=f'=512'),
+            InputFieldMappingEntry(name="chunkOverlap", source=f'=128')
+        ],  
+        outputs=[  
+            OutputFieldMappingEntry(name="chunks", target_name="chunks")
+        ]
+    )
+
+
     embedding_skill = AzureOpenAIEmbeddingSkill(  
         description="Skill to generate embeddings via an Azure OpenAI endpoint",  
-        context="/document/pages/*",
+        context="/document/chunks/*",
         resource_uri=vectorizer_resource_uri,
         deployment_id=vectorizer_deployment,
         model_name=vectorizer_model,
         dimensions=vectorizer_dimensions,
         inputs=[
-            InputFieldMappingEntry(name="text", source="/document/pages/*"),  
+            InputFieldMappingEntry(name="text", source="/document/chunks/*/content"),  
         ],  
         outputs=[  
             OutputFieldMappingEntry(name="embedding", target_name="vector")  
@@ -241,13 +247,14 @@ def create_or_update_skillset(search_indexer_client: SearchIndexerClient, docume
             SearchIndexerIndexProjectionSelector(  
                 target_index_name=sample_index_name,  
                 parent_key_field_name="parent_id",  
-                source_context="/document/pages/*",  
+                source_context="/document/chunks/*",  
                 mappings=[  
-                    InputFieldMappingEntry(name="chunk", source="/document/pages/*"),  
-                    InputFieldMappingEntry(name="vector", source="/document/pages/*/vector"),  
-                    InputFieldMappingEntry(name="title", source="/document/metadata_storage_name"),  
+                    InputFieldMappingEntry(name="chunk", source="/document/chunks/*/content"),
+                    InputFieldMappingEntry(name="vector", source="/document/chunks/*/vector"),
+                    InputFieldMappingEntry(name="chunk_headers", source="/document/chunks/*/headers"),
+                    InputFieldMappingEntry(name="title", source="/document/metadata_storage_name")
                 ],  
-            ),  
+            )
         ],  
         parameters=SearchIndexerIndexProjectionsParameters(  
             projection_mode=IndexProjectionMode.SKIP_INDEXING_PARENT_DOCUMENTS  
@@ -260,7 +267,7 @@ def create_or_update_skillset(search_indexer_client: SearchIndexerClient, docume
         skills=[document_skill, split_skill, embedding_skill],  
         index_projections=index_projections,  
     )
-    result = search_indexer_client.create_or_update_skillset(skillset)
+    search_indexer_client.create_or_update_skillset(skillset)
 
 def create_or_update_indexer(search_indexer_client: SearchIndexerClient):
     indexer = SearchIndexer(  
@@ -270,7 +277,7 @@ def create_or_update_indexer(search_indexer_client: SearchIndexerClient):
         target_index_name=sample_index_name,  
         data_source_name=sample_datasource_name,  
         # Map the metadata_storage_name field to the title field in the index to display the PDF title in the search results  
-        field_mappings=[FieldMapping(source_field_name="metadata_storage_name", target_field_name="title")]  
+        field_mappings=[FieldMapping(source_field_name="metadata_storage_name", target_field_name="title")]
     )  
     
     search_indexer_client.create_or_update_indexer(indexer)  

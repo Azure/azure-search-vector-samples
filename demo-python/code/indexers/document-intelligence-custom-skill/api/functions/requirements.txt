@@ -6,3 +6,5 @@ azure-functions
 azure-identity
 azure-ai-documentintelligence
 aiohttp
+langchain-text-splitters==0.2.2
+tiktoken
