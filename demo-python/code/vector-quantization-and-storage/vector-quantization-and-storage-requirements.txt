@@ -1,4 +1,4 @@
 python-dotenv
-azure-search-documents==11.5.1
+azure-search-documents==11.6.0b5
 openai==1.14.3
 azure-identity

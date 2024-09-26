@@ -18,6 +18,7 @@ The Python notebook creates vectorized data on Azure AI Search and demonstrates 
 - Built-in scalar quantization that reduces vector index size in memory and on disk.
 - Disabling storage of vectors returned in query responses. These vectors are stored separately from vectors used for the queries themselves.
 - Smaller data types than `Edm.Single`.
+- Truncating dimensions of vectors.
 
 The sample data is a JSON file containing a pre-chunked version of the sample documents about a fictious company called Contoso Electronics and their policies. They have been embedded using text-embedding-3-large with 3072 dimensions.
 
