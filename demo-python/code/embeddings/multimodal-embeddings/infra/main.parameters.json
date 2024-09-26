@@ -55,6 +55,42 @@
     },
     "searchIndexName": {
       "value": "${AZURE_SEARCH_INDEX=multimodalembeddings}"
+    },
+    "openAiAccountName": {
+      "value": "${AZURE_OPENAI_ACCCOUNT}"
+    },
+    "openAiLocation": {
+      "value": "${AZURE_OPENAI_LOCATION}"
+    },
+    "openAiResourceGroupName": {
+      "value": "${AZURE_OPENAI_RESOURCE_GROUP}"
+    },
+    "openAiChatGptDeploymentName": {
+      "value": "${AZURE_OPENAI_CHATGPT_DEPLOYMENT=gpt-4o}"
+    },
+    "openAiChatGptModelName": {
+      "value": "${AZURE_OPENAI_CHATGPT_MODEL=gpt-4o}"
+    },
+    "openAiChatGptModelVersion": {
+      "value": "${AZURE_OPENAI_CHATGPT_MODEL_VERSION=2024-05-13"
+    },
+    "openAiChatGptDeploymentCapacity": {
+      "value": "${AZURE_OPENAI_CHATGPT_DEPLOYMENT_CAPACITY=10}"
+    },
+    "apiServiceName": {
+      "value": "${AZURE_API_SERVICE}"
+    },
+    "apiServiceResourceGroupName": {
+      "value": "${AZURE_API_SERVICE_RESOURCE_GROUP}"
+    },
+    "appServicePlanName": {
+      "value": "${AZURE_APP_SERVICE_PLAN}"
+    },
+    "logAnalyticsName": {
+      "value": "${AZURE_LOG_ANALYTICS}"
+    },
+    "appInsightsName": {
+      "value": "${AZURE_APPINSIGHTS}"
     }
   }
 }

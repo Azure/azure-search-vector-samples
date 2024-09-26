@@ -1,6 +1,11 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 
 name: multimodal-embedding
+services:
+api:
+  project: ./api/functions
+  language: python
+  host: function
 hooks:
   postprovision:
     shell: pwsh
