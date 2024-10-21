@@ -26,7 +26,7 @@ You can create or use an existing Azure AI Search and Azure OpenAI account with 
 
 + [azd](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd), used to deploy all Azure resources and assets used in this sample.
 
-+ You should have a **Contributor** role assignment at the subscription level, and all resources should be in the same subscription.
++ You should have an **Owner** role assignment at the subscription level, and all resources should be in the same subscription.
 
 This sample uses the [Azure Python SDK](https://learn.microsoft.com/python/api/azure-search-documents/?view=azure-python-preview) for indexing and vector query operations.
 
@@ -38,7 +38,13 @@ This sample uses [`azd`](https://learn.microsoft.com/azure/developer/azure-devel
 
 1. Open a command line prompt at the sample folder (/demo-python/code/indexers/document-intelligence-custom-skill).
 
-1. Optionally, enter variables if you have an existing search service or Azure OpenAI account:
+1. If you're a member of multiple tenants and subscriptions, get your Azure subscription and tenant IDs: `az account show`
+
+1. To specify a subscription, create an environment: `azd env new "<PROVIDE AN ENVIRONMENT NAME>" --subscription "<PROVIDE YOUR SUBSCRIPTION ID>"`
+
+1. To specify your Azure tenant: `azd auth login --tenant-id "<PROVIDE YOUR TENANT ID>"`
+
+1. Optionally, enter variables if you have an existing search service or Azure OpenAI account. Otherwise, the script creates all resources for you.
 
    + `azd env set AZURE_SEARCH_SERVICE <your-search-service-name>`. Provide just the service name.
    + `azd env set AZURE_SEARCH_SERVICE_LOCATION <your-search-service-region>`. Provide a quote-enclosed string if using a full name, such as "West US2".
@@ -62,11 +68,13 @@ This sample uses [`azd`](https://learn.microsoft.com/azure/developer/azure-devel
 
    If you aren't prompted for an environment or region, retry `azd env new` to specify a new environment.
 
-   The deployment creates multiple Azure resources and runs multiple jobs. It takes several minutes to complete.
+   The deployment creates multiple Azure resources and runs multiple jobs. It takes several minutes to complete. The deployment is complete when you get a command line notification stating "SUCCESS: Your up workflow to provision and deploy to Azure completed."
 
 1. Open the [notebook](./document-intelligence-custom-skill.ipynb) to run sample queries once the sample is provisioned and the indexer has finished running.
 
-1. If you can't run the queries, check your search service to make sure the index, indexer, data source, and skillset exist. Object creation won't occur if your function app isn't fully warmed up when `azd` gets to this step. To create the objects manually, run  `./scripts/setup_search_service.ps1` at the command line prompt.
+1. If you can't run the queries, navigate to your search service in the Azure portal and confirm the document-intelligence-index exists and has a positive document count. You should also check the indexer for errors.
+
+1. If the index, indexer, and other objects don't exist, rerun the script for object creation. Object creation won't occur if your function app isn't fully warmed up when `azd` gets to this step. To create the objects manually, open a PowerShell prompt and run  `./scripts/setup_search_service.ps1` at the command line.
 
    You should see the following output statements:
 
@@ -78,3 +86,5 @@ This sample uses [`azd`](https://learn.microsoft.com/azure/developer/azure-devel
    Create or update sample skillset document-intelligence-skillset
    Create or update sample indexer document-intelligence-indexer
    ```
+
+1. If you get **HttpResponseError: Operation returned an invalid status 'Forbidden'**, make sure that your Azure resources have key-based authentication enabled. This sample uses API keys. For Azure AI Search, you can use the Azure portal and the **Settings** > **Keys** page to confirm that either the **API keys** or the **Both** option is enabled.
