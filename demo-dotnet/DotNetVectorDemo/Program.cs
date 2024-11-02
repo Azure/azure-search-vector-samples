@@ -1,338 +1,353 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.CommandLine;
+using System.Text.Json;
 using Azure;
 using Azure.AI.OpenAI;
+using Azure.Identity;
 using Azure.Search.Documents;
 using Azure.Search.Documents.Indexes;
 using Azure.Search.Documents.Indexes.Models;
 using Azure.Search.Documents.Models;
+using DotNetIntegratedVectorizationDemo;
 using Microsoft.Extensions.Configuration;
+using OpenAI;
+using OpenAI.Embeddings;
+using System.Reflection;
 
 namespace DotNetVectorDemo
 {
     class Program
     {
-        private const string ModelName = "text-embedding-ada-002";
-        private const int ModelDimensions = 1536;
-        private const string SemanticSearchConfigName = "my-semantic-config";
+        public const string SampleVectorDocumentsPath = "vector-sample.json";
 
-        static async Task Main(string[] args)
+        /// <summary>
+        /// .NET Vector demo
+        /// </summary>
+        /// <param name="setupIndex">Indexes sample documents. text-embedding-3-small embeddings with a dimension of 1024 are used</param>
+        /// <param name="query">Optional text of the search query. By default no query is run. Unless --textOnly is specified, this query is automatically vectorized.</param>
+        /// <param name="filter">Optional filter of the search query. By default no filter is applied</param>
+        /// <param name="k">How many nearest neighbors to use for vector search. Defaults to 50</param>
+        /// <param name="top">How nany results to return. Defaults to 3</param>
+        /// <param name="exhaustive">Optional, specifies if the query skips using the index and computes the true nearest neighbors. Can only be used with vector or hybrid queries.</param>
+        /// <param name="textOnly">Optional, specifies if the query is vectorized before searching. If true, only the text indexed is used for search.</param>
+        /// <param name="hybrid">Optional, specifies if the query combines text and vector results.</param>
+        /// <param name="semantic">Optional, specifies if the semantic reranker is used to rerank results from the query.</param>
+        /// <param name="debug">Optional, specifies if debug output is included from the query. Only valid values are disabled (default), semantic, or vector</param>
+        static async Task Main(bool setupIndex, string query = null, string filter = null, int k = 50, int top = 3, bool exhaustive = false, bool textOnly = false, bool hybrid = false, bool semantic = false, string debug = "disabled")
         {
-            var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("local.settings.json").Build();
+            var configuration = new Configuration();
+            new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddEnvironmentVariables()
+                .AddJsonFile("local.settings.json")
+                .Build()
+                .Bind(configuration);
 
-            // Load environment variables  
-            var serviceEndpoint = configuration["AZURE_SEARCH_SERVICE_ENDPOINT"] ?? string.Empty;
-            var indexName = configuration["AZURE_SEARCH_INDEX_NAME"] ?? string.Empty;
-            var key = configuration["AZURE_SEARCH_ADMIN_KEY"] ?? string.Empty;
-            var openaiApiKey = configuration["AZURE_OPENAI_API_KEY"] ?? string.Empty;
-            var openaiEndpoint = configuration["AZURE_OPENAI_ENDPOINT"] ?? string.Empty;
-
-            // Initialize OpenAI client  
-            var credential = new AzureKeyCredential(openaiApiKey);
-            var openAIClient = new OpenAIClient(new Uri(openaiEndpoint), credential);
-
-            // Initialize Azure AI Search clients  
-            var searchCredential = new AzureKeyCredential(key);
-            var indexClient = new SearchIndexClient(new Uri(serviceEndpoint), searchCredential);
-            var searchClient = indexClient.GetSearchClient(indexName);
-
-            Console.Write("Would you like to index (y/n)? ");
-            string indexChoice = Console.ReadLine()?.ToLower() ?? string.Empty;
-
-            if (indexChoice == "y")
+            if (textOnly && hybrid)
             {
-                // Create the search index  
-                indexClient.CreateOrUpdateIndex(GetSampleIndex(indexName));
-
-                // Read input documents and generate embeddings  
-                var inputJson = File.ReadAllText("../data/text-sample.json");
-                var inputDocuments = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(inputJson) ?? new List<Dictionary<string, object>>();
-
-                var sampleDocuments = await GetSampleDocumentsAsync(openAIClient, inputDocuments);
-                await searchClient.IndexDocumentsAsync(IndexDocumentsBatch.Upload(sampleDocuments));
+                throw new ArgumentException("Cannot specify textOnly with hybrid", nameof(textOnly));
             }
 
-            Console.WriteLine("Choose a query approach:");
-            Console.WriteLine("1. Single Vector Search");
-            Console.WriteLine("2. Single Vector Search with Filter");
-            Console.WriteLine("3. Simple Hybrid Search");
-            Console.WriteLine("4. Semantic Hybrid Search");
-            Console.Write("Enter the number of the desired approach: ");
-            int choice = int.Parse(Console.ReadLine() ?? "0");
-
-            Console.WriteLine("Type a Vector search query:");
-            string inputQuery = Console.ReadLine() ?? string.Empty;
-
-            switch (choice)
+            if (exhaustive && textOnly)
             {
-                case 1:
-                    await SingleVectorSearch(searchClient, openAIClient, inputQuery);
-                    break;
-                case 2:
-                    Console.Write("Enter a filter for the search (e.g., category eq 'Databases'): ");
-                    string filter = Console.ReadLine() ?? string.Empty;
-                    await SingleVectorSearchWithFilter(searchClient, openAIClient, inputQuery, filter);
-                    break;
-                case 3:
-                    await SimpleHybridSearch(searchClient, openAIClient, inputQuery);
-                    break;
-                case 4:
-                    await SemanticHybridSearch(searchClient, openAIClient, inputQuery);
-                    break;
-                default:
-                    Console.WriteLine("Invalid choice. Exiting...");
-                    break;
+                throw new ArgumentException("Cannot specify exhaustive with textOnly", nameof(exhaustive));
+            }
+
+            if (debug != "disabled" && debug != "semantic" && debug != "vector")
+            {
+                throw new ArgumentException("Debug must be disabled (default), semantic, or vector");
+            }
+
+            configuration.Validate();
+            var defaultCredential = new DefaultAzureCredential();
+            var azureOpenAIClient = InitializeOpenAIClient(configuration, defaultCredential);
+            var indexClient = InitializeSearchIndexClient(configuration, defaultCredential);
+            var searchClient = indexClient.GetSearchClient(configuration.IndexName);
+
+            if (setupIndex)
+            {
+                await SetupIndexAsync(configuration, indexClient);
+                await UploadSampleDocumentsAsync(configuration, searchClient, SampleVectorDocumentsPath);
+            }
+
+            if (!string.IsNullOrEmpty(query))
+            {
+                await Search(searchClient, query, k, top, filter, exhaustive, textOnly, hybrid, semantic, debug);
             }
         }
 
-        // Function to generate embeddings  
-        private static async Task<IReadOnlyList<float>> GenerateEmbeddings(string text, OpenAIClient openAIClient)
+        internal static AzureOpenAIClient InitializeOpenAIClient(Configuration configuration, DefaultAzureCredential defaultCredential)
         {
-            var response = await openAIClient.GetEmbeddingsAsync(ModelName, new EmbeddingsOptions(text));
-            return response.Value.Data[0].Embedding;
+            if (!string.IsNullOrEmpty(configuration.AzureOpenAIApiKey))
+            {
+                return new AzureOpenAIClient(new Uri(configuration.AzureOpenAIEndpoint), new AzureKeyCredential(configuration.AzureOpenAIApiKey));
+            }
+
+            return new AzureOpenAIClient(new Uri(configuration.AzureOpenAIEndpoint), defaultCredential);
         }
 
-        internal static async Task SingleVectorSearch(SearchClient searchClient, OpenAIClient openAIClient, string query, int k = 3)
+        internal static SearchIndexClient InitializeSearchIndexClient(Configuration configuration, DefaultAzureCredential defaultCredential)
         {
-            // Generate the embedding for the query  
-            var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
+            if (!string.IsNullOrEmpty(configuration.AdminKey))
+            {
+                return new SearchIndexClient(new Uri(configuration.ServiceEndpoint), new AzureKeyCredential(configuration.AdminKey));
+            }
 
+            return new SearchIndexClient(new Uri(configuration.ServiceEndpoint), defaultCredential);
+        }
+
+        internal static async Task Search(SearchClient searchClient, string query, int k = 50, int top = 3, string filter = null, bool textOnly = false, bool exhaustive = false, bool hybrid = false, bool semantic = false, string debug = "disabled")
+        {
             // Perform the vector similarity search  
             var searchOptions = new SearchOptions
             {
-                VectorSearch = new()
-                {
-                    Queries = { new VectorizedQuery(queryEmbeddings.ToArray()) { KNearestNeighborsCount = 3, Fields = { "contentVector" } } }
-                },
-                Size = k,
-                Select = { "title", "content", "category" },
-            };
-
-            SearchResults<SearchDocument> response = await searchClient.SearchAsync<SearchDocument>(null, searchOptions);
-
-            int count = 0;
-            await foreach (SearchResult<SearchDocument> result in response.GetResultsAsync())
-            {
-                count++;
-                Console.WriteLine($"Title: {result.Document["title"]}");
-                Console.WriteLine($"Score: {result.Score}\n");
-                Console.WriteLine($"Content: {result.Document["content"]}");
-                Console.WriteLine($"Category: {result.Document["category"]}\n");
-            }
-            Console.WriteLine($"Total Results: {count}");
-        }
-
-        internal static async Task SingleVectorSearchWithFilter(SearchClient searchClient, OpenAIClient openAIClient, string query, string filter, int k = 3)
-        {
-            // Generate the embedding for the query  
-            var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
-
-            // Perform the vector similarity search  
-            var searchOptions = new SearchOptions
-            {
-                VectorSearch = new()
-                {
-                    Queries = { new VectorizedQuery(queryEmbeddings.ToArray()) { KNearestNeighborsCount = k, Fields = { "contentVector" } } }
-                },
                 Filter = filter,
-                Select = { "title", "content", "category" },
+                Size = top,
+                Select = { "title", "id", "content", },
+                IncludeTotalCount = true
             };
-
-            SearchResults<SearchDocument> response = await searchClient.SearchAsync<SearchDocument>(null, searchOptions);
-
-            int count = 0;
-            await foreach (SearchResult<SearchDocument> result in response.GetResultsAsync())
+            if (!textOnly)
             {
-                count++;
-                Console.WriteLine($"Title: {result.Document["title"]}");
-                Console.WriteLine($"Score: {result.Score}\n");
-                Console.WriteLine($"Content: {result.Document["content"]}");
-                Console.WriteLine($"Category: {result.Document["category"]}\n");
-            }
-            Console.WriteLine($"Total Results: {count}");
-        }
-
-        internal static async Task SimpleHybridSearch(SearchClient searchClient, OpenAIClient openAIClient, string query, int k = 3)
-        {
-            // Generate the embedding for the query  
-            var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
-
-            // Perform the vector similarity search  
-            var searchOptions = new SearchOptions
-            {
-                VectorSearch = new()
+                searchOptions.VectorSearch = new()
                 {
-                    Queries = { new VectorizedQuery(queryEmbeddings.ToArray()) { KNearestNeighborsCount = k, Fields = { "contentVector" } } }
-                },
-                Size = k,
-                Select = { "title", "content", "category" },
-            };
-
-            SearchResults<SearchDocument> response = await searchClient.SearchAsync<SearchDocument>(query, searchOptions);
-
-            int count = 0;
-            await foreach (SearchResult<SearchDocument> result in response.GetResultsAsync())
-            {
-                count++;
-                Console.WriteLine($"Title: {result.Document["title"]}");
-                Console.WriteLine($"Score: {result.Score}\n");
-                Console.WriteLine($"Content: {result.Document["content"]}");
-                Console.WriteLine($"Category: {result.Document["category"]}\n");
-            }
-            Console.WriteLine($"Total Results: {count}");
-        }
-
-        internal static async Task SemanticHybridSearch(SearchClient searchClient, OpenAIClient openAIClient, string query, int k = 3)
-        {
-            try
-            {
-                // Generate the embedding for the query  
-                var queryEmbeddings = await GenerateEmbeddings(query, openAIClient);
-
-                // Perform the vector similarity search  
-                var searchOptions = new SearchOptions
-                {
-                    VectorSearch = new()
-                    {
-                        Queries = { new VectorizedQuery(queryEmbeddings.ToArray()) { KNearestNeighborsCount = 3, Fields = { "contentVector" } } }
+                    Queries = {
+                        new VectorizableTextQuery(text: query)
+                        {
+                            KNearestNeighborsCount = k,
+                            Fields = { "titleVector" },
+                            Exhaustive = exhaustive
+                        },
+                        new VectorizableTextQuery(text: query)
+                        {
+                            KNearestNeighborsCount = k,
+                            Fields = { "contentVector" },
+                            Exhaustive = exhaustive
+                        },
                     },
-                    SemanticSearch = new()
-                    {
-                        SemanticConfigurationName = "my-semantic-config",
-                        QueryCaption = new(QueryCaptionType.Extractive),
-                        QueryAnswer = new(QueryAnswerType.Extractive),
-                    },
-                    QueryType = SearchQueryType.Semantic,
-                    Size = k,
-                    Select = { "title", "content", "category" },
 
                 };
-
-                SearchResults<SearchDocument> response = await searchClient.SearchAsync<SearchDocument>(query, searchOptions);
-
-                int count = 0;
-                Console.WriteLine($"Semantic Hybrid Search Results:");
-
-                Console.WriteLine($"\nQuery Answer:");
-                foreach (QueryAnswerResult result in response.SemanticSearch.Answers)
+            }
+            if (semantic)
+            {
+                searchOptions.QueryType = SearchQueryType.Semantic;
+                searchOptions.SemanticSearch = new SemanticSearchOptions
                 {
-                    Console.WriteLine($"Answer Highlights: {result.Highlights}");
-                    Console.WriteLine($"Answer Text: {result.Text}");
+                    SemanticConfigurationName = "my-semantic-config",
+                    QueryCaption = new QueryCaption(QueryCaptionType.Extractive),
+                    QueryAnswer = new QueryAnswer(QueryAnswerType.Extractive),
+                };
+            }
+            if (!string.IsNullOrEmpty(debug) && debug != "disabled")
+            {
+                if (!semantic)
+                {
+                    searchOptions.SemanticSearch = new SemanticSearchOptions();
                 }
+                searchOptions.SemanticSearch.Debug = new QueryDebugMode(debug);
+            }
+            string queryText = (textOnly || hybrid || semantic) ? query : null;
+            SearchResults<SearchDocument> response = await searchClient.SearchAsync<SearchDocument>(queryText, searchOptions);
 
-                await foreach (SearchResult<SearchDocument> result in response.GetResultsAsync())
+            if (response.SemanticSearch?.Answers?.Count > 0)
+            {
+                Console.WriteLine("Query Answers:");
+                foreach (QueryAnswerResult answer in response.SemanticSearch.Answers)
                 {
-                    count++;
-                    Console.WriteLine($"Title: {result.Document["title"]}");
-                    Console.WriteLine($"Reranker Score: {result.SemanticSearch.RerankerScore}");
-                    Console.WriteLine($"Score: {result.Score}");
-                    Console.WriteLine($"Content: {result.Document["content"]}");
-                    Console.WriteLine($"Category: {result.Document["category"]}\n");
+                    Console.WriteLine($"Answer Highlights: {answer.Highlights}");
+                    Console.WriteLine($"Answer Text: {answer.Text}");
+                }
+            }
 
-                    if (result.SemanticSearch.Captions != null)
+            await foreach (SearchResult<SearchDocument> result in response.GetResultsAsync())
+            {
+                Console.WriteLine($"Title: {result.Document["title"]}");
+                Console.WriteLine($"Score: {result.Score}\n");
+                Console.WriteLine($"Content: {result.Document["content"]}");
+                if (result.SemanticSearch?.Captions?.Count > 0)
+                {
+                    QueryCaptionResult firstCaption = result.SemanticSearch.Captions[0];
+                    Console.WriteLine($"First Caption Highlights: {firstCaption.Highlights}");
+                    Console.WriteLine($"First Caption Text: {firstCaption.Text}");
+                }
+                DocumentDebugInfo debugInfo = result.DocumentDebugInfo?.FirstOrDefault();
+                if (debugInfo != null)
+                {
+                    if (debugInfo.Semantic != null)
                     {
-                        var caption = result.SemanticSearch.Captions.FirstOrDefault();
-                        if (caption != null)
+                        var getFieldMessage = (QueryResultDocumentSemanticField field) => $"Field {field.Name}, State {field.State}";
+
+                        if (debugInfo.Semantic.TitleField != null)
                         {
-                            if (!string.IsNullOrEmpty(caption.Highlights))
+                            Console.WriteLine($"Title {getFieldMessage(debugInfo.Semantic.TitleField)}");
+                        }
+
+                        if (debugInfo.Semantic.ContentFields != null)
+                        {
+                            foreach (var contentField in debugInfo.Semantic.ContentFields)
                             {
-                                Console.WriteLine($"Caption Highlights: {caption.Highlights}\n");
+                                Console.WriteLine($"Content {getFieldMessage(contentField)}");
                             }
-                            else
+                        }
+
+
+                        if (debugInfo.Semantic.KeywordFields != null)
+                        {
+                            foreach (var keywordField in debugInfo.Semantic.KeywordFields)
                             {
-                                Console.WriteLine($"Caption Text: {caption.Text}\n");
+                                Console.WriteLine($"Keyword {getFieldMessage(keywordField)}");
                             }
                         }
                     }
+
+                    if (debugInfo.Vectors?.Subscores != null)
+                    {
+                        if (debugInfo.Vectors.Subscores.DocumentBoost != null)
+                        {
+                            Console.WriteLine($"Document Boost: {debugInfo.Vectors.Subscores.DocumentBoost}");
+                        }
+
+                        if (debugInfo.Vectors.Subscores.Text != null)
+                        {
+                            Console.WriteLine($"Document Text Score: {debugInfo.Vectors.Subscores.Text.SearchScore}");
+                        }
+
+                        int index = 1;
+                        foreach (IDictionary<string, SingleVectorFieldResult> querySubscore in debugInfo.Vectors.Subscores.Vectors)
+                        {
+                            Console.WriteLine($"Vector Query {index} Debug Info:");
+                            foreach (KeyValuePair<string, SingleVectorFieldResult> fieldSubscore in querySubscore) {
+                                Console.WriteLine($"Vector Field: {fieldSubscore.Key}");
+                                Console.WriteLine($"Vector Field @search.score: {fieldSubscore.Value.SearchScore}");
+                                Console.WriteLine($"Vector Field similarity: {fieldSubscore.Value.VectorSimilarity}");
+                            }
+                            index++;
+                        }
+                    }
                 }
-                Console.WriteLine($"Total Results: {count}");
             }
-            catch (NullReferenceException)
-            {
-                Console.WriteLine("Total Results: 0");
-            }
+            Console.WriteLine($"Total Results: {response.TotalCount}");
         }
 
-        internal static SearchIndex GetSampleIndex(string name)
+        internal static async Task SetupIndexAsync(Configuration configuration, SearchIndexClient indexClient)
         {
-            string vectorSearchProfile = "my-vector-profile";
-            string vectorSearchHnswConfig = "my-hnsw-vector-config";
+            const string vectorSearchHnswProfile = "my-vector-profile";
+            const string vectorSearchHnswConfig = "myHnsw";
+            const string vectorSearchVectorizer = "myOpenAIVectorizer";
+            const string semanticSearchConfig = "my-semantic-config";
 
-            SearchIndex searchIndex = new(name)
+            SearchIndex searchIndex = new(configuration.IndexName)
             {
                 VectorSearch = new()
                 {
                     Profiles =
-                {
-                    new VectorSearchProfile(vectorSearchProfile, vectorSearchHnswConfig)
-                },
+                    {
+                        new VectorSearchProfile(vectorSearchHnswProfile, vectorSearchHnswConfig)
+                        {
+                            VectorizerName = vectorSearchVectorizer
+                        }
+                    },
                     Algorithms =
-                {
-                    new HnswAlgorithmConfiguration(vectorSearchHnswConfig)
-                }
+                    {
+                        new HnswAlgorithmConfiguration(vectorSearchHnswConfig)
+                    },
+                    Vectorizers =
+                    {
+                        new AzureOpenAIVectorizer(vectorSearchVectorizer)
+                        {
+                            Parameters = new AzureOpenAIVectorizerParameters
+                            {
+                                ResourceUri = new Uri(configuration.AzureOpenAIEndpoint),
+                                ModelName = configuration.AzureOpenAIEmbeddingModel,
+                                DeploymentName = configuration.AzureOpenAIEmbeddingDeployment
+                            }
+                        }
+                    }
                 },
                 SemanticSearch = new()
                 {
-
                     Configurations =
-                    {
-                       new SemanticConfiguration(SemanticSearchConfigName, new()
-                       {
-                           TitleField = new SemanticField("title"),
-                           ContentFields =
+                        {
+                           new SemanticConfiguration(semanticSearchConfig, new()
                            {
-                            new SemanticField("content")
-                           },
-                KeywordsFields =
-                {
-                    new SemanticField("category")
-                }
+                                TitleField = new SemanticField("title"),
+                                ContentFields =
+                                {
+                                    new SemanticField("content")
+                                },
+                                KeywordsFields =
+                                {
+                                    new SemanticField("category")
+                                }
+                           })
 
-                       })
-
-                },
+                    },
                 },
                 Fields =
-            {
-                new SimpleField("id", SearchFieldDataType.String) { IsKey = true, IsFilterable = true, IsSortable = true, IsFacetable = true },
-                new SearchableField("title") { IsFilterable = true, IsSortable = true },
-                new SearchableField("content") { IsFilterable = true },
-                new SearchField("titleVector", SearchFieldDataType.Collection(SearchFieldDataType.Single))
                 {
-                    IsSearchable = true,
-                    VectorSearchDimensions = ModelDimensions,
-                    VectorSearchProfileName = vectorSearchProfile
-                },
-                new SearchField("contentVector", SearchFieldDataType.Collection(SearchFieldDataType.Single))
-                {
-                    IsSearchable = true,
-                    VectorSearchDimensions = ModelDimensions,
-                    VectorSearchProfileName = vectorSearchProfile
-                },
-                new SearchableField("category") { IsFilterable = true, IsSortable = true, IsFacetable = true }
-            }
+                    new SimpleField("id", SearchFieldDataType.String) { IsKey = true, IsFilterable = true, IsSortable = true, IsFacetable = true },
+                    new SearchableField("title") { IsFilterable = true, IsSortable = true },
+                    new SearchableField("content") { IsFilterable = true },
+                    new SearchField("titleVector", SearchFieldDataType.Collection(SearchFieldDataType.Single))
+                    {
+                        IsSearchable = true,
+                        VectorSearchDimensions = int.Parse(configuration.AzureOpenAIEmbeddingDimensions),
+                        VectorSearchProfileName = vectorSearchHnswProfile
+                    },
+                    new SearchField("contentVector", SearchFieldDataType.Collection(SearchFieldDataType.Single))
+                    {
+                        IsSearchable = true,
+                        VectorSearchDimensions = int.Parse(configuration.AzureOpenAIEmbeddingDimensions),
+                        VectorSearchProfileName = vectorSearchHnswProfile
+                    },
+                    new SearchableField("category") { IsFilterable = true, IsSortable = true, IsFacetable = true }
+                }
             };
 
-            return searchIndex;
+            await indexClient.CreateOrUpdateIndexAsync(searchIndex);
         }
 
-        internal static async Task<List<SearchDocument>> GetSampleDocumentsAsync(OpenAIClient openAIClient, List<Dictionary<string, object>> inputDocuments)
+        internal static async Task UploadSampleDocumentsAsync(Configuration configuration, SearchClient searchClient, string sampleDocumentsPath)
         {
-            List<SearchDocument> sampleDocuments = new List<SearchDocument>();
+            string sampleDocumentContent = File.ReadAllText(sampleDocumentsPath);
+            var sampleDocuments = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(sampleDocumentContent);
 
-            foreach (var document in inputDocuments)
+            var options = new SearchIndexingBufferedSenderOptions<Dictionary<string, object>>
             {
-                string title = document["title"]?.ToString() ?? string.Empty;
-                string content = document["content"]?.ToString() ?? string.Empty;
+                KeyFieldAccessor = (o) => o["id"].ToString()
+            };
+            using SearchIndexingBufferedSender<Dictionary<string, object>> bufferedSender = new(searchClient, options);
+            await bufferedSender.UploadDocumentsAsync(sampleDocuments);
+            await bufferedSender.FlushAsync();
+        }
 
-                float[] titleEmbeddings = (await GenerateEmbeddings(title, openAIClient)).ToArray();
-                float[] contentEmbeddings = (await GenerateEmbeddings(content, openAIClient)).ToArray();
+        /// <summary>
+        /// Generates embeddings for sample documents and saves the output to a specified path.
+        /// </summary>
+        /// <param name="configuration">The configuration settings for the Azure OpenAI service.</param>
+        /// <param name="azureOpenAIClient">The AzureOpenAIClient instance for embedding generation.</param>
+        /// <param name="inputSampleDocumentPath">The file path of the input sample document containing JSON content.</param>
+        /// <param name="outputSampleDocumentPath">The file path where the output with embeddings will be saved.</param>
+        internal static async Task GenerateAndSaveSampleDocumentsAsync(Configuration configuration, AzureOpenAIClient azureOpenAIClient, string inputSampleDocumentPath, string outputSampleDocumentPath)
+        {
+            string sampleDocumentContent = File.ReadAllText(inputSampleDocumentPath);
+            var sampleDocuments = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(sampleDocumentContent);
 
-                document["titleVector"] = titleEmbeddings;
-                document["contentVector"] = contentEmbeddings;
-                sampleDocuments.Add(new SearchDocument(document));
+            EmbeddingClient embeddingClient = azureOpenAIClient.GetEmbeddingClient(configuration.AzureOpenAIEmbeddingDeployment);
+            var embeddingOptions = new EmbeddingGenerationOptions { Dimensions = int.Parse(configuration.AzureOpenAIEmbeddingDimensions) };
+            foreach (Dictionary<string, object> sampleDocument in sampleDocuments)
+            {
+                string title = sampleDocument["title"]?.ToString() ?? string.Empty;
+                string content = sampleDocument["content"]?.ToString() ?? string.Empty;
+
+                OpenAIEmbedding titleEmbedding = await embeddingClient.GenerateEmbeddingAsync(title, embeddingOptions);
+                OpenAIEmbedding contentEmbedding = await embeddingClient.GenerateEmbeddingAsync(content, embeddingOptions);
+
+                sampleDocument["titleVector"] = titleEmbedding.ToFloats();
+                sampleDocument["contentVector"] = contentEmbedding.ToFloats();
             }
 
-            return sampleDocuments;
+            string serializedSampleDocuments = JsonSerializer.Serialize(sampleDocuments);
+            File.WriteAllText(outputSampleDocumentPath, serializedSampleDocuments);
         }
     }
 }
