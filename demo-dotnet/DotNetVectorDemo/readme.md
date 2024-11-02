@@ -13,19 +13,19 @@ urlFragment: csharp-vector-search
 
 # Vector search in C# (Azure AI Search)  
 
-In this .NET console application for Azure AI Search, **DotNetVectorDemo** provides raw data for which embeddings are generated externally and then pushed into a search index for queries. First, it calls Azure OpenAI resource and a deployment of the text-embedding-ada-002 model to create embeddings for text in a local `text-sample.json` file. Next, it pushes the embeddings and other textual content to a search index. The searchable output is a combination of human-readable text and embeddings that can be queried from your code. 
+In this .NET console application for Azure AI Search, **DotNetVectorDemo** provides raw data for which embeddings are generated externally and then pushed into a search index for queries. First, it calls Azure OpenAI resource and a deployment of the text-embedding-3-small model to create embeddings for text in a local `text-sample.json` file. Next, it pushes the embeddings and other textual content to a search index. The searchable output is a combination of human-readable text and embeddings that can be queried from your code. Note that a pre-populated set of these embeddings is already provided in `vector-sample.json`.
 
 ## Prerequisites  
 
-+ An Azure subscription, with [access to Azure OpenAI service](https://aka.ms/oai/access). You must have the Azure OpenAI service endpoint and an API key.
++ An Azure subscription, with [access to Azure OpenAI service](https://aka.ms/oai/access). You must have the Azure OpenAI service endpoint and an API key if you are not using RBAC authentication.
 
-+ A deployment of the **text-embedding-ada-002** embedding model. We use API version 2023-05-15 in these demos. For the deployment name, the deployment name is the same as the model, "text-embedding-ada-002".  
++ A deployment of the **text-embedding-3-small** embedding model. For the deployment name, the deployment name is the same as the model, "text-embedding-3-small".  
 
 + Model capacity should be sufficient to handle the load. We successfully tested these samples on a deployment model having a 33K tokens per minute rate limit.  
 
-+ An Azure AI Search service with room for a new index. You must have full endpoint and an admin API key.  
++ An Azure AI Search service with room for a new index. You must have full endpoint and an admin API key if you are not using RBAC authentication.  
 
-+ Azure SDK for .NET 5.0 or later. 
++ Azure SDK for .NET 5.0 or later. The project specifies 11.7.0-beta.1 to use preview features
 
 You can use [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Studio Code with the C# extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) for these demos.  
 
@@ -36,15 +36,11 @@ You can use [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Stud
 2. Create a `local.settings.json` file in the same directory as the code for each project and include the following variables:  
   
    ```json  
-   {  
-    "AZURE_SEARCH_SERVICE_ENDPOINT": "YOUR-SEARCH-SERVICE-ENDPOINT",  
-    "AZURE_SEARCH_INDEX_NAME": "YOUR-SEARCH-SERVICE-INDEX-NAME",  
-    "AZURE_SEARCH_ADMIN_KEY": "YOUR-SEARCH-SERVICE-ADMIN-KEY",  
-    "AZURE_OPENAI_ENDPOINT": "YOUR-OPENAI-ENDPOINT",  
-    "AZURE_OPENAI_API_KEY": "YOUR-OPENAI-API-KEY",  
-    "AZURE_OPENAI_API_VERSION": "YOUR-OPENAI-API-VERSION",  
-    "AZURE_OPENAI_EMBEDDING_DEPLOYED_MODEL": "YOUR-OPENAI-MODEL-DEPLOYMENT-NAME"  
-   }  
+    {
+      "AZURE_SEARCH_SERVICE_ENDPOINT": "YOUR-SEARCH-SERVICE-ENDPOINT",
+      "AZURE_SEARCH_INDEX_NAME": "YOUR-SEARCH-INDEX",
+      "AZURE_OPENAI_ENDPOINT": "YOUR-AZURE-OPENAI-ENDPOINT"
+    }
    ```  
   
    Here's an example with fictitious values:  
@@ -53,13 +49,10 @@ You can use [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Stud
    {  
     "AZURE_SEARCH_SERVICE_ENDPOINT": "https://demo-srch-eastus.search.windows.net",  
     "AZURE_SEARCH_INDEX_NAME": "demo-vector-index",  
-    "AZURE_SEARCH_ADMIN_KEY": "000000000000000000000000000000000",  
     "AZURE_OPENAI_ENDPOINT": "https://demo-openai-southcentralus.openai.azure.com/",  
-    "AZURE_OPENAI_API_KEY": "0000000000000000000000000000000000",  
-    "AZURE_OPENAI_API_VERSION": "2023-05-15",  
-    "AZURE_OPENAI_EMBEDDING_DEPLOYED_MODEL": "text-embedding-ada-002"  
-   }  
-   ```  
+   ```
+
+You can find more values to set by checking `Configuration.cs`
 
 ## Run the code  
 
@@ -69,21 +62,47 @@ Before running the code, ensure you have the .NET SDK installed on your machine.
   
 1. For each project, navigate to the project folder (e.g., `demo-dotnet/DotNetVectorDemo` or `demo-dotnet/DotNetIntegratedVectorizationDemo`) in your terminal and execute the following command to verify .Net 5.0 or later is installed:  
   
-   ```bash  
-   dotnet build  
-   ```  
+    ```bash  
+    dotnet run -- -h
+    ```
 
-1. Run the program:  
+    ```
+    dotnet run -- -h
+    Description:
+      .NET Vector demo
+
+    Usage:
+      DotNetVector [options]
+
+    Options:
+      --setup-index      Indexes sample documents. text-embedding-3-small embeddings with a dimension of 1024 are used
+      --query <query>    Optional text of the search query. By default no query is run. Unless --textOnly is specified, this query is automatically vectorized. []
+      --filter <filter>  Optional filter of the search query. By default no filter is applied []
+      -k <k>             How many nearest neighbors to use for vector search. Defaults to 50 [default: 50]
+      --top <top>        How nany results to return. Defaults to 3 [default: 3]
+      --exhaustive       Optional, specifies if the query skips using the index and computes the true nearest neighbors. Can only be used with vector or hybrid queries. [default:
+                         False]
+      --text-only        Optional, specifies if the query is vectorized before searching. If true, only the text indexed is used for search. [default: False]
+      --hybrid           Optional, specifies if the query combines text and vector results. [default: False]
+      --semantic         Optional, specifies if the semantic reranker is used to rerank results from the query. [default: False]
+      --debug <debug>    Optional, specifies if debug output is included from the query. Only valid values are disabled (default), semantic, or vector [default: disabled]
+      --version          Show version information
+      -?, -h, --help     Show help and usage information
+    ```
+
+1. Setup a sample index using the following command. It will use a file of pre-populated embeddings created by `text-embedding-3-small` with a dimension of 1024
   
    ```bash  
-   dotnet run  
+   dotnet run -- --setup-index
    ```  
 
-1. When prompted, select "Y" to create and load the index. Wait for the query prompt.  
+1. Run a test query using the following examples:
 
-1. Choose a query type, such as single vector query or a hybrid query. The program calls Azure OpenAI service to convert your query string into a vector.  
-  
-   For **DotNetVectorDemo**, sample data is 108 descriptions of Azure services, so your query should be about Azure. For example, for a vector query, type in "what Azure services support full text search" or "what product has OCR".  
+```bash
+dotnet run -- --query "What is Azure Search" --hybrid --semantic
+```
+
+The output will be the chunks matched by the query and their relevance score. If [semantic](https://learn.microsoft.com/azure/search/semantic-search-overview) is specified, [captions and answers](https://learn.microsoft.com/azure/search/semantic-answers) will be included in the output if they are available.
 
 ## Output  
 
