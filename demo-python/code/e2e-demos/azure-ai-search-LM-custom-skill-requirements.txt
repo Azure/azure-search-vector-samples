@@ -1,0 +1,5 @@
+python-dotenv
+azure-identity
+azure-search-documents==11.6.0b6
+ipykernel
+ipywidgets
