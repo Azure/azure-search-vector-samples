@@ -1,6 +1,7 @@
 python-dotenv
-azure-search-documents==11.6.0b3
+azure-search-documents==11.6.0b7
 azure-identity
 openai
 pandas
 pyarrow
+pydantic
