@@ -24,15 +24,17 @@ The Java demo in this repository creates vectorized data on Azure AI Search and 
 
 The sample data is a JSON file of 108 descriptions of various Azure services. The descriptions are short, which makes data chunking unnecessary.
 
+Indexing is based on the [push model API](https://learn.microsoft.com/azure/search/search-what-is-data-import) that uploads JSON documents to a search index. During indexing, the code calls an Azure OpenAI embedding model, vectorizing two fields to create an index having both human readable and vector content.
+
 The queries are articulated as strings. An Azure OpenAI embedding model converts the strings to vectors at run time. Queries include a pure vector query, vector with fitlers, hybrid query, hybrid with semantic ranking, and a multivector query.
 
-For further exploration and chat interaction, connect to your index using Azure OpenAI Studio.
+For further exploration and chat interaction, connect to your index using Azure Foundry portal.
 
 ## Prerequisites
 
 + An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access). You must have the Azure OpenAI service name and an API key.
 
-+ A deployment of the **text-embedding-ada-002** embedding model.
++ A deployment of the **text-embedding-ada-002** embedding model. You can change this to a newer embedding model.
 
 + Azure AI Search, any tier, but choose a service that has sufficient capacity for your vector index. We recommend Basic or higher.
 
@@ -76,9 +78,9 @@ For further exploration and chat interaction, connect to your index using Azure 
 
 1. [Sign in to the Azure portal](https://portal.azure.com) to confirm you have an index on Azure AI Search.
 
-## Query your index in Azure OpenAI Studio
+## Query your index in Azure AI Foundry portal
 
-1. [Sign in to Azure OpenAI Studio](https://oai.azure.com/portal/).
+1. [Sign in to Azure AI Foundry portal](https://oai.azure.com/portal/) and [create a hub](https://learn.microsoft.com/azure/ai-studio/how-to/create-azure-ai-resource?tabs=portal).
 1. On the left nav pane, under **Playground**, select **Chat**.
 1. In the chat playground, select **Add your data**, and then select **Add a data source**.
 1. Choose **Azure AI Search**.

@@ -49,7 +49,6 @@ You can use [Visual Studio Code with the JavaScript extension](https://code.visu
 
 ## Run the end-to-end sample program
 
-
 This section explains how to run the separate vectorization programs that call Azure OpenAI. Enter the following statement at the command line:
 
 ```bash
@@ -93,7 +92,7 @@ Once the sample data and embeddings have been uploaded, continue to issue a quer
 
 #### Query the sample data
 
-You can issue vector, text, and hybrid queries. The semantic re-ranker is used by default but can be disabled. You can also issue a cross-field vector query against both the content and the title embeddings, and filter based on the category field. Below is a sample query and its result:
+You can issue vector, text, and hybrid queries. The semantic reranker is used by default but can be disabled. You can also issue a cross-field vector query against both the content and the title embeddings, and filter based on the category field. Below is a sample query and its result:
 
 ```bash
 node .\azure-search-vector-sample.js  --query "what is azure search" --query-kind hybrid --include-title
