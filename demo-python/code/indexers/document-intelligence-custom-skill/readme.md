@@ -1,10 +1,12 @@
 # Readme for semantic chunking demo
 
-This end-to-end sample demonstrates how to deploy [Document Intelligence](https://learn.microsoft.com/azure/ai-services/document-intelligence/overview?view=doc-intel-4.0.0) for [semantic chunking](https://learn.microsoft.com/azure/ai-services/document-intelligence/concept-retrieval-augmented-generation?view=doc-intel-4.0.0). Semantic chunking divides the text into chunks based on semantic understanding. Division boundaries are focused on sentence subject, maintaining semantic consistency within each chunk. It's useful for text summarization, sentiment analysis, and document classification tasks.
+This end-to-end sample demonstrates how to deploy [Document Intelligence](https://learn.microsoft.com/azure/ai-services/document-intelligence/overview?view=doc-intel-4.0.0) for [semantic chunking](https://learn.microsoft.com/azure/ai-services/document-intelligence/concept-retrieval-augmented-generation?view=doc-intel-4.0.0) when creating indexes in Azure AI Search.
+
+Semantic chunking divides text into chunks based on semantic understanding. Division boundaries are focused on sentence subject, maintaining semantic consistency within each chunk. It's useful for text summarization, sentiment analysis, and document classification tasks. It's also useful for RAG applications where the original source data is verbose or unstructured text, and you want to provide the chat completion model with chunks that retain structural and semantic coherence.
 
 API calls to Document Intelligence come from an Azure function app. This function is used as a [custom skill](https://learn.microsoft.com/azure/search/cognitive-search-custom-skill-web-api) to automatically convert documents to Markdown and chunk them in Azure AI Search.
 
-This sample uses [indexer-based indexing](https://learn.microsoft.com/azure/search/search-howto-create-indexers) with a [skillset](https://learn.microsoft.com/azure/search/cognitive-search-defining-skillset) having two [custom skills](https://learn.microsoft.com/azure/search/cognitive-search-custom-skill-web-api) to automatically extract and chunk documents in a [blob data source](https://learn.microsoft.com/azure/search/search-howto-indexing-azure-blob-storage). The code vectorizes those chunks using an Azure OpenAI embedding model.
+This sample uses [indexer-based indexing](https://learn.microsoft.com/azure/search/search-howto-create-indexers) with a [skillset](https://learn.microsoft.com/azure/search/cognitive-search-defining-skillset) having two [custom skills](https://learn.microsoft.com/azure/search/cognitive-search-custom-skill-web-api) to automatically extract and chunk documents in a [blob data source](https://learn.microsoft.com/azure/search/search-howto-indexing-azure-blob-storage). The code vectorizes those chunks using an Azure OpenAI embedding model. The sample concludes with several queries against the index so that you can review the types of chunks that the skill creates.
 
 All resources and sample data are deployed automatically, resulting in a populated vector index on Azure AI Search that's ready to query.
 
@@ -30,7 +32,7 @@ You can create or use an existing Azure AI Search and Azure OpenAI account with 
 
 This sample uses the [Azure Python SDK](https://learn.microsoft.com/python/api/azure-search-documents/?view=azure-python-preview) for indexing and vector query operations.
 
-We recommend creating a virtual environment so that you can control which package versions are used. Use Ctrl+shift+P to open a command palette. Search for `Python: Create environment`. Select `Venv` to create an environment within the current workspace. When prompted, select `scripts\requirements.txt` and `api\functions-requirements.txt` for the dependencies.
+We recommend creating a virtual environment so that you can control which package versions are used. The next section includes commands for setting up a virtual environment from the command line. 
 
 ## Set variables and run the script
 
