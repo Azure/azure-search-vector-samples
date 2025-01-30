@@ -24,9 +24,9 @@ The code reads the `data/text-sample.json` file, which contains the input string
 
 - Azure AI Search, any version, but make sure search service capacity is sufficient for the workload. We recommend Basic or higher for this demo.
 
-- Azure Storage, with a blob container contaning documents to load, chunk, and vectorize. We recommend the PDFs in the `data/documents` folder.
+- Azure Storage, with a blob container contaning documents to load, chunk, and vectorize. Depending on which integrated vectorization options you choose, different sample data is provided
 
-- A deployment of the `text-embedding-ada-002` embedding model in your Azure OpenAI service. We recommend Azure OpenAI REST API version `2023-05-15`. As a naming convention, we name deployments after the model name: "text-embedding-ada-002".
+- A deployment of the `text-embedding-3-large` or `text-embedding-3-small` embedding model in your Azure OpenAI service. We recommend Azure OpenAI REST API version `2024-10-21`. As a naming convention, we name deployments after the model name: "text-embedding-3-large".
 
 - Python (these instructions were tested with version 3.11.x)
 
@@ -35,6 +35,8 @@ We used Visual Studio Code with the [Python extension](https://marketplace.visua
 ## Run the code
 
 1. Use the `code/.env-sample` as a template for a new `.env` file located in the subfolder containing the notebook. Review the variables to make sure you have values for Azure AI Search and Azure OpenAI.
+
+1. The Document Intelligence layout skill is only available in the regions listed here: https://learn.microsoft.com/azure/search/cognitive-search-skill-document-intelligence-layout
 
 1. Open `demo-python/code/integrated-vectorization/azure-search-integrated-vectorization-sample.ipynb` file in Visual Studio Code.
 
