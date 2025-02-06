@@ -1,0 +1,8 @@
+azure-search-documents==11.6.0b9
+azure-identity
+python-dotenv
+aiohttp
+openai
+ipykernel
+pandas
+jinja2
