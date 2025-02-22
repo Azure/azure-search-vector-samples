@@ -98,7 +98,7 @@ def upload_sample_data(credential: DefaultAzureCredential):
     container_client = blob_service_client.get_container_client(sample_container_name)
     if not container_client.exists():
         container_client.create_container()
-    sample_data_directory_name = os.path.join("..", "..", "data", "documents")
+    sample_data_directory_name = os.path.join("..", "..", "..", "data", "benefitdocs")
     sample_data_directory = os.path.join(os.getcwd(), sample_data_directory_name)
     for filename in os.listdir(sample_data_directory):
         with open(os.path.join(sample_data_directory, filename), "rb") as f:
