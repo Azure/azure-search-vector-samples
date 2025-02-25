@@ -24,7 +24,7 @@ The code reads the `data/text-sample.json` file, which contains the input string
 
 - Azure AI Search, any version, but make sure search service capacity is sufficient for the workload. We recommend Basic or higher for this demo.
 
-- Azure Storage, with a blob container contaning documents to load, chunk, and vectorize. Depending on which integrated vectorization options you choose, different sample data is provided
+- Azure Storage, with a blob container containing documents to load, chunk, and vectorize. Depending on which integrated vectorization options you choose, different sample data is provided
 
 - A deployment of the `text-embedding-3-large` or `text-embedding-3-small` embedding model in your Azure OpenAI service. We recommend Azure OpenAI REST API version `2024-10-21`. As a naming convention, we name deployments after the model name: "text-embedding-3-large".
 

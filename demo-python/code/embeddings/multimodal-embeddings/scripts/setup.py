@@ -36,7 +36,7 @@ import glob
 import datetime
 
 current_file_directory = os.path.dirname(os.path.abspath(__file__))
-samples_path = os.path.join(current_file_directory, "..", "..", "..", "..", "data", "images", "apples")
+samples_path = os.path.join(current_file_directory, "..", "..", "..", "..", "..", "data", "images", "apples")
 vision_model_version = "2023-04-15"
 
 async def main():
