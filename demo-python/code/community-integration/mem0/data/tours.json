@@ -1,0 +1,604 @@
+[
+    {
+      "TourId": "tour1",
+      "TourName": "Statue of Liberty Express",
+      "Description": "A fast-paced tour to the iconic Statue of Liberty with expert commentary.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Une visite express de la Statue de la Liberté avec des commentaires d'experts.",
+      "Description_fr_Embedding": [],
+      "Category": "Landmark",
+      "Tags": ["historic", "iconic"],
+      "Price": 45.0,
+      "DurationMinutes": 120,
+      "Rating": 4.7,
+      "MeetingPoint": {
+        "StreetAddress": "Battery Park West",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10004",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0160, 40.7033] },
+      "Schedule": [
+        { "Date": "2023-07-01T00:00:00Z", "Time": "09:00 AM" },
+        { "Date": "2023-07-02T00:00:00Z", "Time": "09:00 AM" }
+      ]
+    },
+    {
+      "TourId": "tour2",
+      "TourName": "Central Park Stroll",
+      "Description": "Enjoy a leisurely walk through Central Park with stops at key attractions.",
+      "Description_fr": "Profitez d'une promenade paisible dans Central Park avec des arrêts aux points forts.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Walking",
+      "Tags": ["park", "nature", "relaxing"],
+      "Price": 30.0,
+      "DurationMinutes": 90,
+      "Rating": 4.5,
+      "MeetingPoint": {
+        "StreetAddress": "East 72nd Street",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10021",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9665, 40.7789] },
+      "Schedule": [
+        { "Date": "2023-07-03T00:00:00Z", "Time": "10:00 AM" }
+      ]
+    },
+    {
+      "TourId": "tour3",
+      "TourName": "Brooklyn Bridge Walk",
+      "Description": "Experience stunning views on a guided walk across the Brooklyn Bridge.",
+      "Description_fr": "Découvrez des vues imprenables lors d'une promenade guidée sur le pont de Brooklyn.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Walking",
+      "Tags": ["bridge", "scenic"],
+      "Price": 25.0,
+      "DurationMinutes": 80,
+      "Rating": 4.6,
+      "MeetingPoint": {
+        "StreetAddress": "Brooklyn Bridge Park",
+        "City": "Brooklyn",
+        "StateProvince": "NY",
+        "PostalCode": "11201",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9969, 40.7061] },
+      "Schedule": [
+        { "Date": "2023-07-04T00:00:00Z", "Time": "08:30 AM" }
+      ]
+    },
+    {
+      "TourId": "tour4",
+      "TourName": "Harlem Heritage Tour",
+      "Description": "Discover Harlem's rich culture and history on this engaging tour.",
+      "Description_fr": "Découvrez la riche culture et l'histoire de Harlem lors de cette visite captivante.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Cultural",
+      "Tags": ["historic", "music", "culture"],
+      "Price": 35.0,
+      "DurationMinutes": 100,
+      "Rating": 4.4,
+      "MeetingPoint": {
+        "StreetAddress": "125 W 125th St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10027",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9442, 40.8116] },
+      "Schedule": [
+        { "Date": "2023-07-05T00:00:00Z", "Time": "11:00 AM" }
+      ]
+    },
+    {
+      "TourId": "tour5",
+      "TourName": "Times Square Nightlife",
+      "Description": "Experience the vibrant energy of Times Square at night with guided insights.",
+      "Description_fr": "Vivez l'énergie vibrante de Times Square la nuit avec des commentaires guidés.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Nightlife",
+      "Tags": ["lights", "entertainment", "city"],
+      "Price": 40.0,
+      "DurationMinutes": 110,
+      "Rating": 4.8,
+      "MeetingPoint": {
+        "StreetAddress": "7th Ave & W 47th St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10036",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9851, 40.7580] },
+      "Schedule": [
+        { "Date": "2023-07-06T00:00:00Z", "Time": "08:00 PM" }
+      ]
+    },
+    {
+      "TourId": "tour6",
+      "TourName": "Museum Mile Masterclass",
+      "Description": "A guided tour of New York's premier museums along Fifth Avenue.",
+      "Description_fr": "Une visite guidée des principaux musées de New York le long de la Cinquième Avenue.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Cultural",
+      "Tags": ["museum", "art", "history"],
+      "Price": 50.0,
+      "DurationMinutes": 150,
+      "Rating": 4.9,
+      "MeetingPoint": {
+        "StreetAddress": "1000 5th Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10028",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9632, 40.7794] },
+      "Schedule": [
+        { "Date": "2023-07-07T00:00:00Z", "Time": "10:00 AM" }
+      ]
+    },
+    {
+      "TourId": "tour7",
+      "TourName": "Wall Street Walk",
+      "Description": "Explore the financial heart of New York City with a tour of Wall Street.",
+      "Description_fr": "Explorez le cœur financier de New York avec une visite de Wall Street.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Historic",
+      "Tags": ["finance", "historic"],
+      "Price": 28.0,
+      "DurationMinutes": 70,
+      "Rating": 4.3,
+      "MeetingPoint": {
+        "StreetAddress": "11 Wall St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10005",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0089, 40.7060] },
+      "Schedule": [
+        { "Date": "2023-07-08T00:00:00Z", "Time": "09:30 AM" }
+      ]
+    },
+    {
+      "TourId": "tour8",
+      "TourName": "Greenwich Village Foodie Tour",
+      "Description": "Taste the flavors of Greenwich Village with stops at local eateries.",
+      "Description_fr": "Savourez les saveurs de Greenwich Village avec des arrêts dans des restaurants locaux.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Food",
+      "Tags": ["food", "walking", "local"],
+      "Price": 55.0,
+      "DurationMinutes": 130,
+      "Rating": 4.6,
+      "MeetingPoint": {
+        "StreetAddress": "20 W 3rd St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10012",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0027, 40.7308] },
+      "Schedule": [
+        { "Date": "2023-07-09T00:00:00Z", "Time": "12:00 PM" }
+      ]
+    },
+    {
+      "TourId": "tour9",
+      "TourName": "Broadway Backstage Pass",
+      "Description": "Go behind the scenes of Broadway with exclusive access and insider stories.",
+      "Description_fr": "Découvrez les coulisses de Broadway avec un accès exclusif et des anecdotes d'initiés.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Entertainment",
+      "Tags": ["theater", "exclusive"],
+      "Price": 75.0,
+      "DurationMinutes": 140,
+      "Rating": 4.8,
+      "MeetingPoint": {
+        "StreetAddress": "150 W 45th St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10036",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9891, 40.7580] },
+      "Schedule": [
+        { "Date": "2023-07-10T00:00:00Z", "Time": "02:00 PM" }
+      ]
+    },
+    {
+      "TourId": "tour10",
+      "TourName": "Hudson River Cruise",
+      "Description": "Relax on a scenic boat tour along the Hudson River with breathtaking views.",
+      "Description_fr": "Détendez-vous lors d'une croisière pittoresque sur le fleuve Hudson avec des vues à couper le souffle.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Boat",
+      "Tags": ["cruise", "scenic"],
+      "Price": 65.0,
+      "DurationMinutes": 100,
+      "Rating": 4.7,
+      "MeetingPoint": {
+        "StreetAddress": "Pier 83",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10018",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0101, 40.7057] },
+      "Schedule": [
+        { "Date": "2023-07-11T00:00:00Z", "Time": "01:00 PM" }
+      ]
+    },
+    {
+      "TourId": "tour11",
+      "TourName": "SoHo Art Walk",
+      "Description": "Explore the creative spirit of SoHo with visits to art galleries and street art spots.",
+      "Description_fr": "Explorez l'esprit créatif de SoHo avec des visites de galeries d'art et des spots de street art.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Art",
+      "Tags": ["art", "creative"],
+      "Price": 40.0,
+      "DurationMinutes": 90,
+      "Rating": 4.5,
+      "MeetingPoint": {
+        "StreetAddress": "100 Prince St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10012",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0007, 40.7240] },
+      "Schedule": [
+        { "Date": "2023-07-12T00:00:00Z", "Time": "11:30 AM" }
+      ]
+    },
+    {
+      "TourId": "tour12",
+      "TourName": "Lower East Side Legends",
+      "Description": "Uncover the hidden history and vibrant culture of the Lower East Side.",
+      "Description_fr": "Découvrez l'histoire cachée et la culture vibrante du Lower East Side.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Historic",
+      "Tags": ["history", "culture"],
+      "Price": 35.0,
+      "DurationMinutes": 85,
+      "Rating": 4.4,
+      "MeetingPoint": {
+        "StreetAddress": "80 Orchard St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10002",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9870, 40.7150] },
+      "Schedule": [
+        { "Date": "2023-07-13T00:00:00Z", "Time": "10:30 AM" }
+      ]
+    },
+    {
+      "TourId": "tour13",
+      "TourName": "Chelsea Architecture Tour",
+      "Description": "Admire the stunning modern and historic architecture of Chelsea.",
+      "Description_fr": "Admirez l'architecture moderne et historique impressionnante de Chelsea.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Architecture",
+      "Tags": ["architecture", "design"],
+      "Price": 42.0,
+      "DurationMinutes": 95,
+      "Rating": 4.6,
+      "MeetingPoint": {
+        "StreetAddress": "150 10th Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10011",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0000, 40.7421] },
+      "Schedule": [
+        { "Date": "2023-07-14T00:00:00Z", "Time": "01:00 PM" }
+      ]
+    },
+    {
+      "TourId": "tour14",
+      "TourName": "Upper East Side Luxury",
+      "Description": "Explore the elegant Upper East Side with stops at high-end boutiques and galleries.",
+      "Description_fr": "Explorez le luxueux Upper East Side avec des arrêts dans des boutiques et galeries haut de gamme.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Luxury",
+      "Tags": ["shopping", "upscale"],
+      "Price": 60.0,
+      "DurationMinutes": 110,
+      "Rating": 4.7,
+      "MeetingPoint": {
+        "StreetAddress": "200 Madison Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10016",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9668, 40.7635] },
+      "Schedule": [
+        { "Date": "2023-07-15T00:00:00Z", "Time": "02:00 PM" }
+      ]
+    },
+    {
+      "TourId": "tour15",
+      "TourName": "Fifth Avenue Shopping Spree",
+      "Description": "Join a guided shopping tour along Fifth Avenue's most famous stores.",
+      "Description_fr": "Participez à une visite guidée de shopping le long des magasins les plus célèbres de la Cinquième Avenue.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Shopping",
+      "Tags": ["fashion", "boutiques"],
+      "Price": 55.0,
+      "DurationMinutes": 100,
+      "Rating": 4.5,
+      "MeetingPoint": {
+        "StreetAddress": "767 5th Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10153",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9740, 40.7638] },
+      "Schedule": [
+        { "Date": "2023-07-16T00:00:00Z", "Time": "10:00 AM" }
+      ]
+    },
+    {
+      "TourId": "tour16",
+      "TourName": "NYC Skyline Helicopter",
+      "Description": "Soar above New York City in a thrilling helicopter tour for unmatched views.",
+      "Description_fr": "Survolez New York en hélicoptère pour des vues inégalées de la ville.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Aerial",
+      "Tags": ["helicopter", "adventure"],
+      "Price": 150.0,
+      "DurationMinutes": 30,
+      "Rating": 4.9,
+      "MeetingPoint": {
+        "StreetAddress": "LGA Helipad, Terminal 4",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "11371",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.8740, 40.7769] },
+      "Schedule": [
+        { "Date": "2023-07-17T00:00:00Z", "Time": "03:00 PM" }
+      ]
+    },
+    {
+      "TourId": "tour17",
+      "TourName": "Historic Downtown Tour",
+      "Description": "Step back in time exploring the historic landmarks of downtown Manhattan.",
+      "Description_fr": "Remontez le temps en explorant les monuments historiques du centre de Manhattan.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Historic",
+      "Tags": ["downtown", "history"],
+      "Price": 38.0,
+      "DurationMinutes": 90,
+      "Rating": 4.4,
+      "MeetingPoint": {
+        "StreetAddress": "50 Church St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10007",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0090, 40.7055] },
+      "Schedule": [
+        { "Date": "2023-07-18T00:00:00Z", "Time": "10:30 AM" }
+      ]
+    },
+    {
+      "TourId": "tour18",
+      "TourName": "Coney Island Fun Day",
+      "Description": "Enjoy a day of excitement at Coney Island with rides, games, and beach views.",
+      "Description_fr": "Profitez d'une journée d'amusement à Coney Island avec manèges, jeux et vue sur la plage.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Family",
+      "Tags": ["amusement", "beach"],
+      "Price": 50.0,
+      "DurationMinutes": 120,
+      "Rating": 4.5,
+      "MeetingPoint": {
+        "StreetAddress": "100 Surf Ave",
+        "City": "Brooklyn",
+        "StateProvince": "NY",
+        "PostalCode": "11224",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9667, 40.5755] },
+      "Schedule": [
+        { "Date": "2023-07-19T00:00:00Z", "Time": "11:00 AM" }
+      ]
+    },
+    {
+      "TourId": "tour19",
+      "TourName": "The Bronx Zoo Expedition",
+      "Description": "Explore the renowned Bronx Zoo with a special behind-the-scenes tour.",
+      "Description_fr": "Explorez le célèbre zoo du Bronx avec une visite des coulisses.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Nature",
+      "Tags": ["zoo", "wildlife"],
+      "Price": 48.0,
+      "DurationMinutes": 130,
+      "Rating": 4.6,
+      "MeetingPoint": {
+        "StreetAddress": "2300 Southern Blvd",
+        "City": "Bronx",
+        "StateProvince": "NY",
+        "PostalCode": "10460",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.8770, 40.8506] },
+      "Schedule": [
+        { "Date": "2023-07-20T00:00:00Z", "Time": "09:00 AM" }
+      ]
+    },
+    {
+      "TourId": "tour20",
+      "TourName": "NYC Food Truck Fiesta",
+      "Description": "Taste a variety of cuisines from the best food trucks in New York City.",
+      "Description_fr": "Goûtez à une variété de cuisines des meilleurs food trucks de New York.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Food",
+      "Tags": ["food truck", "street food"],
+      "Price": 35.0,
+      "DurationMinutes": 95,
+      "Rating": 4.5,
+      "MeetingPoint": {
+        "StreetAddress": "150 7th Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10011",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9940, 40.7400] },
+      "Schedule": [
+        { "Date": "2023-07-21T00:00:00Z", "Time": "12:30 PM" }
+      ]
+    },
+    {
+      "TourId": "tour21",
+      "TourName": "Literary Landmarks Tour",
+      "Description": "Visit the famous literary sites of New York, from old bookstores to historic libraries.",
+      "Description_fr": "Visitez les sites littéraires célèbres de New York, des librairies anciennes aux bibliothèques historiques.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Cultural",
+      "Tags": ["literature", "historic"],
+      "Price": 40.0,
+      "DurationMinutes": 100,
+      "Rating": 4.4,
+      "MeetingPoint": {
+        "StreetAddress": "120 W 57th St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10019",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9808, 40.7644] },
+      "Schedule": [
+        { "Date": "2023-07-22T00:00:00Z", "Time": "02:00 PM" }
+      ]
+    },
+    {
+      "TourId": "tour22",
+      "TourName": "The High Line Journey",
+      "Description": "Walk along the famous High Line park and learn about its transformation.",
+      "Description_fr": "Promenez-vous le long du célèbre parc High Line et découvrez son histoire.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Walking",
+      "Tags": ["park", "urban", "green"],
+      "Price": 32.0,
+      "DurationMinutes": 85,
+      "Rating": 4.5,
+      "MeetingPoint": {
+        "StreetAddress": "Entrance at Gansevoort St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10014",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0048, 40.7479] },
+      "Schedule": [
+        { "Date": "2023-07-23T00:00:00Z", "Time": "10:00 AM" }
+      ]
+    },
+    {
+      "TourId": "tour23",
+      "TourName": "NYC Sports Legends Tour",
+      "Description": "Discover the iconic sports landmarks and stories behind New York's famous teams.",
+      "Description_fr": "Découvrez les lieux emblématiques du sport et les histoires des équipes célèbres de New York.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Sports",
+      "Tags": ["sports", "history"],
+      "Price": 38.0,
+      "DurationMinutes": 90,
+      "Rating": 4.3,
+      "MeetingPoint": {
+        "StreetAddress": "1 Mets Way",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10029",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9300, 40.7506] },
+      "Schedule": [
+        { "Date": "2023-07-24T00:00:00Z", "Time": "11:00 AM" }
+      ]
+    },
+    {
+      "TourId": "tour24",
+      "TourName": "NYC Waterfront Walk",
+      "Description": "A scenic tour along New York's waterfront with views of the harbor and skyline.",
+      "Description_fr": "Une visite pittoresque le long du front de mer de New York avec vue sur le port et la skyline.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Walking",
+      "Tags": ["waterfront", "scenic"],
+      "Price": 33.0,
+      "DurationMinutes": 80,
+      "Rating": 4.4,
+      "MeetingPoint": {
+        "StreetAddress": "10 South St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10004",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0120, 40.7065] },
+      "Schedule": [
+        { "Date": "2023-07-25T00:00:00Z", "Time": "09:30 AM" }
+      ]
+    },
+    {
+      "TourId": "tour25",
+      "TourName": "Nighttime City Lights",
+      "Description": "See New York like never before on a nighttime tour highlighting the city's dazzling lights.",
+      "Description_fr": "Découvrez New York comme jamais auparavant lors d'une visite nocturne mettant en valeur les lumières éblouissantes de la ville.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Nightlife",
+      "Tags": ["night tour", "lights"],
+      "Price": 42.0,
+      "DurationMinutes": 100,
+      "Rating": 4.7,
+      "MeetingPoint": {
+        "StreetAddress": "350 7th Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10001",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9930, 40.7500] },
+      "Schedule": [
+        { "Date": "2023-07-26T00:00:00Z", "Time": "08:00 PM" }
+      ]
+    }
+]
+  

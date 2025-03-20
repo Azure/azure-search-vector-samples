@@ -1,0 +1,828 @@
+[
+    {
+      "HotelId": "hotel1",
+      "HotelName": "Empire Suites",
+      "Description": "A luxurious retreat in the heart of New York City offering top-tier amenities and breathtaking skyline views.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Une retraite luxueuse au cœur de New York offrant des équipements haut de gamme et des vues imprenables sur la skyline.",
+      "Description_fr_Embedding": [],
+      "Category": "Luxury",
+      "Tags": ["city center", "skyline", "modern"],
+      "ParkingIncluded": true,
+      "LastRenovationDate": "2023-05-15T00:00:00Z",
+      "Rating": 4.8,
+      "Address": {
+        "StreetAddress": "123 Empire Blvd",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10001",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9857, 40.7484] },
+      "Rooms": [
+        {
+          "Description": "Spacious room with a panoramic view of the city.",
+          "Description_fr": "Chambre spacieuse avec une vue panoramique sur la ville.",
+          "Type": "Deluxe",
+          "BaseRate": 350.0,
+          "BedOptions": "King",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["city view", "luxury"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel2",
+      "HotelName": "Liberty Hotel",
+      "Description": "A historic hotel with modern comforts located near iconic landmarks.",
+      "Description_fr": "Un hôtel historique avec tout le confort moderne situé près de monuments emblématiques.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Boutique",
+      "Tags": ["historic", "iconic", "central"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2022-09-10T00:00:00Z",
+      "Rating": 4.3,
+      "Address": {
+        "StreetAddress": "45 Liberty St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10006",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0113, 40.7099] },
+      "Rooms": [
+        {
+          "Description": "Cozy room with antique decor and modern facilities.",
+          "Description_fr": "Chambre confortable avec décor antique et installations modernes.",
+          "Type": "Standard",
+          "BaseRate": 220.0,
+          "BedOptions": "Queen",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["historic", "cozy"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel3",
+      "HotelName": "Central Park Inn",
+      "Description": "Steps away from Central Park, this hotel combines nature and urban luxury.",
+      "Description_fr": "À quelques pas de Central Park, cet hôtel allie nature et luxe urbain.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Premium",
+      "Tags": ["park", "urban", "luxury"],
+      "ParkingIncluded": true,
+      "LastRenovationDate": "2021-11-20T00:00:00Z",
+      "Rating": 4.6,
+      "Address": {
+        "StreetAddress": "200 Central Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10023",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9654, 40.7829] },
+      "Rooms": [
+        {
+          "Description": "Elegant room with garden views and modern amenities.",
+          "Description_fr": "Chambre élégante avec vue sur le jardin et commodités modernes.",
+          "Type": "Executive",
+          "BaseRate": 400.0,
+          "BedOptions": "King",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["garden view", "executive"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel4",
+      "HotelName": "Broadway Residences",
+      "Description": "Experience the excitement of Broadway from this stylish and comfortable hotel.",
+      "Description_fr": "Vivez l'excitation de Broadway depuis cet hôtel élégant et confortable.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Entertainment",
+      "Tags": ["Broadway", "theater", "vibrant"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2020-08-05T00:00:00Z",
+      "Rating": 4.5,
+      "Address": {
+        "StreetAddress": "78 Theater Ln",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10036",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9891, 40.7580] },
+      "Rooms": [
+        {
+          "Description": "Modern room with vibrant decor and smart technology.",
+          "Description_fr": "Chambre moderne avec décor vibrant et technologie intelligente.",
+          "Type": "Modern",
+          "BaseRate": 280.0,
+          "BedOptions": "Queen",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["tech", "modern"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel5",
+      "HotelName": "Harbor View Hotel",
+      "Description": "Enjoy stunning views of the harbor and the Statue of Liberty from this waterfront hotel.",
+      "Description_fr": "Profitez de vues imprenables sur le port et la Statue de la Liberté depuis cet hôtel au bord de l'eau.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Scenic",
+      "Tags": ["harbor", "waterfront", "views"],
+      "ParkingIncluded": true,
+      "LastRenovationDate": "2019-03-18T00:00:00Z",
+      "Rating": 4.2,
+      "Address": {
+        "StreetAddress": "12 Waterfront Dr",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10004",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0169, 40.7033] },
+      "Rooms": [
+        {
+          "Description": "Room featuring panoramic water views and a cozy ambiance.",
+          "Description_fr": "Chambre offrant une vue panoramique sur l'eau et une ambiance chaleureuse.",
+          "Type": "Suite",
+          "BaseRate": 320.0,
+          "BedOptions": "King",
+          "SleepsCount": 3,
+          "SmokingAllowed": false,
+          "Tags": ["waterfront", "suite"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel6",
+      "HotelName": "Midtown Comfort",
+      "Description": "A comfortable and affordable hotel located in the bustling Midtown area.",
+      "Description_fr": "Un hôtel confortable et abordable situé dans le quartier animé de Midtown.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Budget",
+      "Tags": ["affordable", "central", "midtown"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2022-01-12T00:00:00Z",
+      "Rating": 3.9,
+      "Address": {
+        "StreetAddress": "89 Midtown St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10019",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9840, 40.7549] },
+      "Rooms": [
+        {
+          "Description": "Simple yet comfortable room ideal for city explorers.",
+          "Description_fr": "Chambre simple mais confortable idéale pour les explorateurs urbains.",
+          "Type": "Standard",
+          "BaseRate": 150.0,
+          "BedOptions": "Double",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["affordable", "simple"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel7",
+      "HotelName": "Uptown Elegance",
+      "Description": "Experience elegance and sophistication in Uptown New York with refined decor and service.",
+      "Description_fr": "Vivez l'élégance et la sophistication dans le Uptown de New York avec un décor raffiné et un service de qualité.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Luxury",
+      "Tags": ["elegance", "sophisticated", "uptown"],
+      "ParkingIncluded": true,
+      "LastRenovationDate": "2021-07-22T00:00:00Z",
+      "Rating": 4.7,
+      "Address": {
+        "StreetAddress": "56 Uptown Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10028",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9557, 40.7789] },
+      "Rooms": [
+        {
+          "Description": "Luxurious room with premium bedding and designer furnishings.",
+          "Description_fr": "Chambre luxueuse avec literie haut de gamme et meubles design.",
+          "Type": "Deluxe",
+          "BaseRate": 380.0,
+          "BedOptions": "King",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["luxury", "designer"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel8",
+      "HotelName": "Harlem Heritage",
+      "Description": "A culturally rich hotel in Harlem offering a blend of historic charm and modern amenities.",
+      "Description_fr": "Un hôtel riche en culture à Harlem offrant un mélange de charme historique et d'équipements modernes.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Boutique",
+      "Tags": ["historic", "culture", "heritage"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2020-12-05T00:00:00Z",
+      "Rating": 4.4,
+      "Address": {
+        "StreetAddress": "101 Heritage Rd",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10027",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9442, 40.8116] },
+      "Rooms": [
+        {
+          "Description": "Room with artistic decor and a nod to Harlem's rich history.",
+          "Description_fr": "Chambre avec décor artistique et un clin d'œil à la riche histoire de Harlem.",
+          "Type": "Standard",
+          "BaseRate": 210.0,
+          "BedOptions": "Queen",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["artistic", "heritage"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel9",
+      "HotelName": "SoHo Chic",
+      "Description": "A trendy hotel in the heart of SoHo known for its chic design and vibrant local scene.",
+      "Description_fr": "Un hôtel tendance au cœur de SoHo, réputé pour son design chic et son ambiance locale vibrante.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Boutique",
+      "Tags": ["trendy", "chic", "soho"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2023-02-14T00:00:00Z",
+      "Rating": 4.6,
+      "Address": {
+        "StreetAddress": "33 SoHo St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10012",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0007, 40.7240] },
+      "Rooms": [
+        {
+          "Description": "Stylish room with modern art accents and urban vibe.",
+          "Description_fr": "Chambre stylée avec accents d'art moderne et ambiance urbaine.",
+          "Type": "Modern",
+          "BaseRate": 260.0,
+          "BedOptions": "Queen",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["urban", "stylish"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel10",
+      "HotelName": "Financial District Lodge",
+      "Description": "Ideal for business travelers, this hotel in the Financial District offers comfort and convenience.",
+      "Description_fr": "Idéal pour les voyageurs d'affaires, cet hôtel dans le Financial District offre confort et commodité.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Business",
+      "Tags": ["business", "central", "convenience"],
+      "ParkingIncluded": true,
+      "LastRenovationDate": "2021-03-30T00:00:00Z",
+      "Rating": 4.1,
+      "Address": {
+        "StreetAddress": "77 Wall St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10005",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0089, 40.7060] },
+      "Rooms": [
+        {
+          "Description": "Efficient room equipped with business amenities.",
+          "Description_fr": "Chambre fonctionnelle équipée d'équipements pour affaires.",
+          "Type": "Business",
+          "BaseRate": 240.0,
+          "BedOptions": "Double",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["business", "efficient"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel11",
+      "HotelName": "Chelsea Charm",
+      "Description": "A stylish hotel located in the artistic hub of Chelsea, blending modern design with creative flair.",
+      "Description_fr": "Un hôtel élégant situé dans le quartier artistique de Chelsea, alliant design moderne et flair créatif.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Boutique",
+      "Tags": ["art", "creative", "stylish"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2022-06-10T00:00:00Z",
+      "Rating": 4.5,
+      "Address": {
+        "StreetAddress": "88 Art St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10011",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0000, 40.7465] },
+      "Rooms": [
+        {
+          "Description": "Room featuring contemporary art pieces and stylish decor.",
+          "Description_fr": "Chambre ornée de pièces d'art contemporain et d'un décor élégant.",
+          "Type": "Suite",
+          "BaseRate": 330.0,
+          "BedOptions": "King",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["artistic", "suite"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel12",
+      "HotelName": "Tribeca Trend",
+      "Description": "Located in the fashionable Tribeca neighborhood, this hotel offers a chic retreat with modern comforts.",
+      "Description_fr": "Situé dans le quartier à la mode de Tribeca, cet hôtel offre une retraite chic avec tout le confort moderne.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Luxury",
+      "Tags": ["tribeca", "chic", "modern"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2020-10-05T00:00:00Z",
+      "Rating": 4.7,
+      "Address": {
+        "StreetAddress": "150 Canal St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10007",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0059, 40.7195] },
+      "Rooms": [
+        {
+          "Description": "Contemporary room with minimalist design and smart controls.",
+          "Description_fr": "Chambre contemporaine avec design minimaliste et contrôles intelligents.",
+          "Type": "Executive",
+          "BaseRate": 360.0,
+          "BedOptions": "Queen",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["minimalist", "executive"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel13",
+      "HotelName": "East Village Escape",
+      "Description": "A vibrant hotel in the East Village offering eclectic decor and a relaxed vibe.",
+      "Description_fr": "Un hôtel vibrant dans l'East Village offrant un décor éclectique et une ambiance détendue.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Boutique",
+      "Tags": ["vibrant", "eclectic", "relaxed"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2023-01-20T00:00:00Z",
+      "Rating": 4.0,
+      "Address": {
+        "StreetAddress": "55 Village Rd",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10003",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9819, 40.7265] },
+      "Rooms": [
+        {
+          "Description": "Cozy room with an artistic twist and comfortable layout.",
+          "Description_fr": "Chambre confortable avec une touche artistique et une disposition pratique.",
+          "Type": "Standard",
+          "BaseRate": 190.0,
+          "BedOptions": "Double",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["cozy", "artistic"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel14",
+      "HotelName": "Greenwich Getaway",
+      "Description": "A serene escape in Greenwich offering a blend of urban and natural elements.",
+      "Description_fr": "Une escapade sereine à Greenwich alliant éléments urbains et naturels.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Premium",
+      "Tags": ["serene", "urban", "green"],
+      "ParkingIncluded": true,
+      "LastRenovationDate": "2022-04-15T00:00:00Z",
+      "Rating": 4.3,
+      "Address": {
+        "StreetAddress": "300 Greenwich Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10014",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0031, 40.7340] },
+      "Rooms": [
+        {
+          "Description": "Room with nature-inspired decor and modern comforts.",
+          "Description_fr": "Chambre au décor inspiré de la nature et équipée de conforts modernes.",
+          "Type": "Deluxe",
+          "BaseRate": 310.0,
+          "BedOptions": "Queen",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["nature", "deluxe"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel15",
+      "HotelName": "Brooklyn Bridge Inn",
+      "Description": "Situated near the iconic Brooklyn Bridge, this hotel offers a unique blend of history and modern style.",
+      "Description_fr": "Situé près du célèbre pont de Brooklyn, cet hôtel offre un mélange unique d'histoire et de style moderne.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Scenic",
+      "Tags": ["brooklyn", "bridge", "historic"],
+      "ParkingIncluded": true,
+      "LastRenovationDate": "2021-08-30T00:00:00Z",
+      "Rating": 4.4,
+      "Address": {
+        "StreetAddress": "400 Bridge St",
+        "City": "Brooklyn",
+        "StateProvince": "NY",
+        "PostalCode": "11201",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9969, 40.7061] },
+      "Rooms": [
+        {
+          "Description": "Room with historic charm and modern upgrades.",
+          "Description_fr": "Chambre au charme historique avec des améliorations modernes.",
+          "Type": "Standard",
+          "BaseRate": 230.0,
+          "BedOptions": "Queen",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["historic", "upgraded"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel16",
+      "HotelName": "SoHo Luxe",
+      "Description": "An upscale hotel in SoHo offering refined elegance and exceptional service.",
+      "Description_fr": "Un hôtel haut de gamme à SoHo offrant une élégance raffinée et un service exceptionnel.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Luxury",
+      "Tags": ["upscale", "elegance", "service"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2023-03-05T00:00:00Z",
+      "Rating": 4.9,
+      "Address": {
+        "StreetAddress": "77 Luxe Ln",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10013",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0018, 40.7247] },
+      "Rooms": [
+        {
+          "Description": "Room with plush furnishings and elegant design.",
+          "Description_fr": "Chambre avec mobilier luxueux et design élégant.",
+          "Type": "Suite",
+          "BaseRate": 420.0,
+          "BedOptions": "King",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["plush", "suite"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel17",
+      "HotelName": "Times Square Retreat",
+      "Description": "Located steps from Times Square, this hotel offers a lively atmosphere with modern comforts.",
+      "Description_fr": "Situé à deux pas de Times Square, cet hôtel offre une ambiance animée avec des conforts modernes.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Entertainment",
+      "Tags": ["times square", "lively", "modern"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2020-11-11T00:00:00Z",
+      "Rating": 4.2,
+      "Address": {
+        "StreetAddress": "1 Times Sq",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10036",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9851, 40.7580] },
+      "Rooms": [
+        {
+          "Description": "Contemporary room designed for comfort and convenience.",
+          "Description_fr": "Chambre contemporaine conçue pour le confort et la commodité.",
+          "Type": "Standard",
+          "BaseRate": 250.0,
+          "BedOptions": "Double",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["convenient", "modern"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel18",
+      "HotelName": "Fifth Avenue Grand",
+      "Description": "A grand hotel on Fifth Avenue known for its opulent decor and high-end amenities.",
+      "Description_fr": "Un hôtel grandiose sur la Cinquième Avenue, réputé pour son décor opulent et ses équipements haut de gamme.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Luxury",
+      "Tags": ["fifth avenue", "opulent", "grand"],
+      "ParkingIncluded": true,
+      "LastRenovationDate": "2022-12-01T00:00:00Z",
+      "Rating": 4.8,
+      "Address": {
+        "StreetAddress": "500 Fifth Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10110",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9740, 40.7638] },
+      "Rooms": [
+        {
+          "Description": "Luxurious room with premium finishes and city views.",
+          "Description_fr": "Chambre luxueuse avec finitions haut de gamme et vue sur la ville.",
+          "Type": "Executive",
+          "BaseRate": 410.0,
+          "BedOptions": "King",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["premium", "city view"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel19",
+      "HotelName": "Battery Park Boutique",
+      "Description": "A boutique hotel offering serene views of Battery Park and the waterfront.",
+      "Description_fr": "Un hôtel boutique offrant des vues sereines sur Battery Park et le front de mer.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Boutique",
+      "Tags": ["battery park", "waterfront", "serene"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2021-10-18T00:00:00Z",
+      "Rating": 4.3,
+      "Address": {
+        "StreetAddress": "99 Battery Pl",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10280",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0168, 40.7033] },
+      "Rooms": [
+        {
+          "Description": "Charming room with classic design and waterfront views.",
+          "Description_fr": "Chambre charmante au design classique avec vue sur le front de mer.",
+          "Type": "Standard",
+          "BaseRate": 270.0,
+          "BedOptions": "Queen",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["classic", "waterfront"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel20",
+      "HotelName": "Murray Hill Manor",
+      "Description": "A refined hotel in Murray Hill offering elegant accommodations and personalized service.",
+      "Description_fr": "Un hôtel raffiné à Murray Hill offrant des logements élégants et un service personnalisé.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Premium",
+      "Tags": ["murray hill", "elegant", "service"],
+      "ParkingIncluded": true,
+      "LastRenovationDate": "2022-07-07T00:00:00Z",
+      "Rating": 4.5,
+      "Address": {
+        "StreetAddress": "250 Murray St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10016",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9787, 40.7505] },
+      "Rooms": [
+        {
+          "Description": "Spacious room with refined decor and excellent service.",
+          "Description_fr": "Chambre spacieuse avec décor raffiné et service excellent.",
+          "Type": "Deluxe",
+          "BaseRate": 350.0,
+          "BedOptions": "King",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["refined", "deluxe"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel21",
+      "HotelName": "Upper West Side Retreat",
+      "Description": "A peaceful retreat on the Upper West Side, blending classic charm with modern updates.",
+      "Description_fr": "Une retraite paisible sur l'Upper West Side, alliant charme classique et mises à jour modernes.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Boutique",
+      "Tags": ["upper west", "charm", "peaceful"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2020-05-25T00:00:00Z",
+      "Rating": 4.4,
+      "Address": {
+        "StreetAddress": "400 West End Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10025",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9780, 40.7870] },
+      "Rooms": [
+        {
+          "Description": "Comfortable room with classic decor and modern amenities.",
+          "Description_fr": "Chambre confortable avec décor classique et commodités modernes.",
+          "Type": "Standard",
+          "BaseRate": 280.0,
+          "BedOptions": "Double",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["classic", "comfortable"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel22",
+      "HotelName": "Central Hub Hotel",
+      "Description": "Located in the center of the city, this hotel offers easy access to all major attractions.",
+      "Description_fr": "Situé au centre de la ville, cet hôtel offre un accès facile à toutes les attractions majeures.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Business",
+      "Tags": ["central", "convenient", "modern"],
+      "ParkingIncluded": true,
+      "LastRenovationDate": "2023-04-01T00:00:00Z",
+      "Rating": 4.0,
+      "Address": {
+        "StreetAddress": "10 Central Pkwy",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10002",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9934, 40.7128] },
+      "Rooms": [
+        {
+          "Description": "Modern room with ergonomic furnishings and tech-friendly features.",
+          "Description_fr": "Chambre moderne avec mobilier ergonomique et fonctionnalités technologiques.",
+          "Type": "Business",
+          "BaseRate": 260.0,
+          "BedOptions": "Queen",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["tech-friendly", "modern"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel23",
+      "HotelName": "Little Italy Inn",
+      "Description": "Experience the vibrant culture of Little Italy in this charming and cozy inn.",
+      "Description_fr": "Vivez la culture vibrante de Little Italy dans cette auberge charmante et cosy.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Boutique",
+      "Tags": ["little italy", "charming", "cozy"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2019-09-12T00:00:00Z",
+      "Rating": 4.1,
+      "Address": {
+        "StreetAddress": "22 Mulberry St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10013",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0020, 40.7191] },
+      "Rooms": [
+        {
+          "Description": "Cozy room with traditional Italian decor and modern comforts.",
+          "Description_fr": "Chambre cosy avec décor italien traditionnel et conforts modernes.",
+          "Type": "Standard",
+          "BaseRate": 210.0,
+          "BedOptions": "Double",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["traditional", "cozy"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel24",
+      "HotelName": "Gramercy Grand",
+      "Description": "An elegant hotel in Gramercy offering refined accommodations and a sophisticated atmosphere.",
+      "Description_fr": "Un hôtel élégant à Gramercy offrant des logements raffinés et une atmosphère sophistiquée.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Luxury",
+      "Tags": ["gramercy", "refined", "sophisticated"],
+      "ParkingIncluded": true,
+      "LastRenovationDate": "2022-02-14T00:00:00Z",
+      "Rating": 4.6,
+      "Address": {
+        "StreetAddress": "89 Gramercy Park S",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10003",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9833, 40.7360] },
+      "Rooms": [
+        {
+          "Description": "Spacious room with refined furnishings and a touch of classic elegance.",
+          "Description_fr": "Chambre spacieuse avec mobilier raffiné et une touche d'élégance classique.",
+          "Type": "Executive",
+          "BaseRate": 370.0,
+          "BedOptions": "King",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["refined", "executive"]
+        }
+      ]
+    },
+    {
+      "HotelId": "hotel25",
+      "HotelName": "SoHo Central",
+      "Description": "A modern hotel in SoHo that perfectly blends style and functionality.",
+      "Description_fr": "Un hôtel moderne à SoHo qui allie parfaitement style et fonctionnalité.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Business",
+      "Tags": ["modern", "soho", "central"],
+      "ParkingIncluded": false,
+      "LastRenovationDate": "2023-06-01T00:00:00Z",
+      "Rating": 4.3,
+      "Address": {
+        "StreetAddress": "150 Broadway",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10012",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9973, 40.7209] },
+      "Rooms": [
+        {
+          "Description": "Contemporary room with a blend of style and smart features.",
+          "Description_fr": "Chambre contemporaine alliant style et fonctionnalités intelligentes.",
+          "Type": "Standard",
+          "BaseRate": 250.0,
+          "BedOptions": "Queen",
+          "SleepsCount": 2,
+          "SmokingAllowed": false,
+          "Tags": ["contemporary", "smart"]
+        }
+      ]
+    }
+  ]
+  

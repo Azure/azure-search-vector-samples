@@ -1,0 +1,603 @@
+[
+    {
+      "ActivityId": "activity1",
+      "ActivityName": "Central Park Yoga",
+      "Description": "Start your day with a rejuvenating yoga session in the lush greenery of Central Park.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Commencez votre journée avec une séance de yoga revigorante dans la verdure luxuriante de Central Park.",
+      "Description_fr_Embedding": [],
+      "Category": "Outdoor",
+      "Tags": ["yoga", "wellness", "morning"],
+      "Price": 15.0,
+      "DurationMinutes": 60,
+      "Rating": 4.7,
+      "LocationDetails": {
+        "StreetAddress": "Central Park West",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10023",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9680, 40.7851] },
+      "Schedule": [
+        { "Date": "2023-08-01T00:00:00Z", "Time": "07:00 AM" }
+      ]
+    },
+    {
+      "ActivityId": "activity2",
+      "ActivityName": "Broadway Dance Workshop",
+      "Description": "Learn dance techniques used in Broadway shows in an interactive workshop.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Apprenez les techniques de danse utilisées dans les spectacles de Broadway lors d'un atelier interactif.",
+      "Description_fr_Embedding": [],
+      "Category": "Indoor",
+      "Tags": ["dance", "workshop", "Broadway"],
+      "Price": 40.0,
+      "DurationMinutes": 90,
+      "Rating": 4.5,
+      "LocationDetails": {
+        "StreetAddress": "150 W 42nd St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10036",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9890, 40.7587] },
+      "Schedule": [
+        { "Date": "2023-08-02T00:00:00Z", "Time": "02:00 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity3",
+      "ActivityName": "MoMA Guided Tour",
+      "Description": "Explore the masterpieces of modern art with a guided tour of the Museum of Modern Art.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Explorez les chefs-d'œuvre de l'art moderne avec une visite guidée du Museum of Modern Art.",
+      "Description_fr_Embedding": [],
+      "Category": "Cultural",
+      "Tags": ["art", "museum", "guided"],
+      "Price": 25.0,
+      "DurationMinutes": 75,
+      "Rating": 4.8,
+      "LocationDetails": {
+        "StreetAddress": "11 W 53rd St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10019",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9776, 40.7614] },
+      "Schedule": [
+        { "Date": "2023-08-03T00:00:00Z", "Time": "11:00 AM" }
+      ]
+    },
+    {
+      "ActivityId": "activity4",
+      "ActivityName": "Brooklyn Biking Adventure",
+      "Description": "Cycle through Brooklyn's scenic neighborhoods on a guided biking adventure.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Parcourez à vélo les quartiers pittoresques de Brooklyn lors d'une aventure guidée.",
+      "Description_fr_Embedding": [],
+      "Category": "Outdoor",
+      "Tags": ["biking", "adventure", "Brooklyn"],
+      "Price": 30.0,
+      "DurationMinutes": 120,
+      "Rating": 4.6,
+      "LocationDetails": {
+        "StreetAddress": "Brooklyn Bridge Park",
+        "City": "Brooklyn",
+        "StateProvince": "NY",
+        "PostalCode": "11201",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9970, 40.7061] },
+      "Schedule": [
+        { "Date": "2023-08-04T00:00:00Z", "Time": "09:00 AM" }
+      ]
+    },
+    {
+      "ActivityId": "activity5",
+      "ActivityName": "Statue of Liberty Kayaking",
+      "Description": "Paddle around Liberty Island and get a unique view of the Statue of Liberty.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Pagayez autour de Liberty Island pour une vue unique sur la Statue de la Liberté.",
+      "Description_fr_Embedding": [],
+      "Category": "Adventure",
+      "Tags": ["kayaking", "water", "liberty"],
+      "Price": 50.0,
+      "DurationMinutes": 90,
+      "Rating": 4.7,
+      "LocationDetails": {
+        "StreetAddress": "Battery Park",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10004",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0160, 40.7033] },
+      "Schedule": [
+        { "Date": "2023-08-05T00:00:00Z", "Time": "10:00 AM" }
+      ]
+    },
+    {
+      "ActivityId": "activity6",
+      "ActivityName": "NYC Photography Walk",
+      "Description": "Capture the essence of New York City on a guided photography walk through its streets.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Capturez l'essence de New York lors d'une promenade photographique guidée dans ses rues.",
+      "Description_fr_Embedding": [],
+      "Category": "Art",
+      "Tags": ["photography", "walk", "urban"],
+      "Price": 20.0,
+      "DurationMinutes": 90,
+      "Rating": 4.5,
+      "LocationDetails": {
+        "StreetAddress": "East Village",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10009",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9819, 40.7265] },
+      "Schedule": [
+        { "Date": "2023-08-06T00:00:00Z", "Time": "03:00 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity7",
+      "ActivityName": "Harlem Jazz Night",
+      "Description": "Immerse yourself in the soulful rhythms of Harlem with an evening of live jazz.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Imprégnez-vous des rythmes envoûtants de Harlem lors d'une soirée de jazz live.",
+      "Description_fr_Embedding": [],
+      "Category": "Music",
+      "Tags": ["jazz", "live", "Harlem"],
+      "Price": 35.0,
+      "DurationMinutes": 120,
+      "Rating": 4.8,
+      "LocationDetails": {
+        "StreetAddress": "125 W 125th St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10027",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9442, 40.8116] },
+      "Schedule": [
+        { "Date": "2023-08-07T00:00:00Z", "Time": "08:00 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity8",
+      "ActivityName": "Chelsea Art Gallery Crawl",
+      "Description": "Discover cutting-edge contemporary art at Chelsea's renowned galleries.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Découvrez l'art contemporain avant-gardiste dans les galeries renommées de Chelsea.",
+      "Description_fr_Embedding": [],
+      "Category": "Cultural",
+      "Tags": ["art", "gallery", "Chelsea"],
+      "Price": 0.0,
+      "DurationMinutes": 120,
+      "Rating": 4.6,
+      "LocationDetails": {
+        "StreetAddress": "99 10th Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10011",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0007, 40.7240] },
+      "Schedule": [
+        { "Date": "2023-08-08T00:00:00Z", "Time": "01:00 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity9",
+      "ActivityName": "Lower Manhattan Food Tour",
+      "Description": "Taste the diverse flavors of Lower Manhattan on a guided food tour.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Goûtez aux saveurs diversifiées du Lower Manhattan lors d'une visite guidée culinaire.",
+      "Description_fr_Embedding": [],
+      "Category": "Food",
+      "Tags": ["food", "tour", "culinary"],
+      "Price": 45.0,
+      "DurationMinutes": 150,
+      "Rating": 4.7,
+      "LocationDetails": {
+        "StreetAddress": "99 Water St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10005",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0089, 40.7060] },
+      "Schedule": [
+        { "Date": "2023-08-09T00:00:00Z", "Time": "12:00 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity10",
+      "ActivityName": "High Line Sunset Stroll",
+      "Description": "Enjoy a peaceful sunset walk along the elevated High Line park.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Profitez d'une promenade paisible au coucher du soleil le long du parc surélevé High Line.",
+      "Description_fr_Embedding": [],
+      "Category": "Outdoor",
+      "Tags": ["sunset", "walk", "High Line"],
+      "Price": 0.0,
+      "DurationMinutes": 60,
+      "Rating": 4.5,
+      "LocationDetails": {
+        "StreetAddress": "Gansevoort St Entrance",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10014",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0048, 40.7479] },
+      "Schedule": [
+        { "Date": "2023-08-10T00:00:00Z", "Time": "06:00 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity11",
+      "ActivityName": "SoHo Shopping Experience",
+      "Description": "Explore the trendy boutiques of SoHo on a guided shopping excursion.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Découvrez les boutiques branchées de SoHo lors d'une excursion shopping guidée.",
+      "Description_fr_Embedding": [],
+      "Category": "Shopping",
+      "Tags": ["shopping", "boutiques", "SoHo"],
+      "Price": 0.0,
+      "DurationMinutes": 90,
+      "Rating": 4.4,
+      "LocationDetails": {
+        "StreetAddress": "Broadway, SoHo",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10012",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0000, 40.7240] },
+      "Schedule": [
+        { "Date": "2023-08-11T00:00:00Z", "Time": "11:00 AM" }
+      ]
+    },
+    {
+      "ActivityId": "activity12",
+      "ActivityName": "Times Square Meditation",
+      "Description": "Take a moment of calm in the bustling heart of Times Square with a guided meditation session.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Prenez un moment de calme au cœur animé de Times Square avec une séance de méditation guidée.",
+      "Description_fr_Embedding": [],
+      "Category": "Wellness",
+      "Tags": ["meditation", "calm", "Times Square"],
+      "Price": 10.0,
+      "DurationMinutes": 30,
+      "Rating": 4.3,
+      "LocationDetails": {
+        "StreetAddress": "7th Ave & W 47th St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10036",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9851, 40.7580] },
+      "Schedule": [
+        { "Date": "2023-08-12T00:00:00Z", "Time": "08:00 AM" }
+      ]
+    },
+    {
+      "ActivityId": "activity13",
+      "ActivityName": "NYC Architecture Sketching",
+      "Description": "Join local artists to sketch the iconic architecture of New York City.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Rejoignez des artistes locaux pour dessiner l'architecture emblématique de New York.",
+      "Description_fr_Embedding": [],
+      "Category": "Art",
+      "Tags": ["sketching", "architecture", "art"],
+      "Price": 20.0,
+      "DurationMinutes": 90,
+      "Rating": 4.6,
+      "LocationDetails": {
+        "StreetAddress": "Madison Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10010",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9855, 40.7484] },
+      "Schedule": [
+        { "Date": "2023-08-13T00:00:00Z", "Time": "01:00 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity14",
+      "ActivityName": "Central Park Bird Watching",
+      "Description": "Discover diverse bird species in Central Park on a guided bird watching tour.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Découvrez diverses espèces d'oiseaux à Central Park lors d'une visite guidée d'observation des oiseaux.",
+      "Description_fr_Embedding": [],
+      "Category": "Outdoor",
+      "Tags": ["bird watching", "nature", "Central Park"],
+      "Price": 12.0,
+      "DurationMinutes": 60,
+      "Rating": 4.5,
+      "LocationDetails": {
+        "StreetAddress": "East 72nd St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10021",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9670, 40.7789] },
+      "Schedule": [
+        { "Date": "2023-08-14T00:00:00Z", "Time": "07:30 AM" }
+      ]
+    },
+    {
+      "ActivityId": "activity15",
+      "ActivityName": "Greenwich Village Poetry Reading",
+      "Description": "Enjoy an evening of spoken word and poetry in the bohemian atmosphere of Greenwich Village.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Profitez d'une soirée de poésie et de slam dans l'ambiance bohème de Greenwich Village.",
+      "Description_fr_Embedding": [],
+      "Category": "Cultural",
+      "Tags": ["poetry", "spoken word", "Greenwich Village"],
+      "Price": 8.0,
+      "DurationMinutes": 75,
+      "Rating": 4.4,
+      "LocationDetails": {
+        "StreetAddress": "Bleecker St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10012",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0000, 40.7320] },
+      "Schedule": [
+        { "Date": "2023-08-15T00:00:00Z", "Time": "06:30 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity16",
+      "ActivityName": "NYC Night Market Exploration",
+      "Description": "Explore local crafts and gourmet foods at a bustling night market in the city.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Explorez l'artisanat local et la gastronomie dans un marché nocturne animé de la ville.",
+      "Description_fr_Embedding": [],
+      "Category": "Market",
+      "Tags": ["night market", "local", "food"],
+      "Price": 0.0,
+      "DurationMinutes": 120,
+      "Rating": 4.6,
+      "LocationDetails": {
+        "StreetAddress": "99 Canal St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10013",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0059, 40.7195] },
+      "Schedule": [
+        { "Date": "2023-08-16T00:00:00Z", "Time": "07:00 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity17",
+      "ActivityName": "Liberty Island Picnic",
+      "Description": "Enjoy a relaxing picnic on Liberty Island with panoramic views of the harbor.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Profitez d'un pique-nique relaxant sur Liberty Island avec une vue panoramique sur le port.",
+      "Description_fr_Embedding": [],
+      "Category": "Leisure",
+      "Tags": ["picnic", "relaxation", "harbor"],
+      "Price": 20.0,
+      "DurationMinutes": 90,
+      "Rating": 4.5,
+      "LocationDetails": {
+        "StreetAddress": "Liberty Island",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10004",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0160, 40.7033] },
+      "Schedule": [
+        { "Date": "2023-08-17T00:00:00Z", "Time": "12:00 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity18",
+      "ActivityName": "NYC Bicycle Tour",
+      "Description": "Join a guided bicycle tour to explore the city's vibrant neighborhoods.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Rejoignez une visite guidée à vélo pour explorer les quartiers dynamiques de la ville.",
+      "Description_fr_Embedding": [],
+      "Category": "Outdoor",
+      "Tags": ["cycling", "tour", "urban"],
+      "Price": 35.0,
+      "DurationMinutes": 105,
+      "Rating": 4.6,
+      "LocationDetails": {
+        "StreetAddress": "Prospect Park West",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "11215",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9690, 40.6602] },
+      "Schedule": [
+        { "Date": "2023-08-18T00:00:00Z", "Time": "10:00 AM" }
+      ]
+    },
+    {
+      "ActivityId": "activity19",
+      "ActivityName": "Manhattan Rock Climbing",
+      "Description": "Challenge yourself with an indoor rock climbing session in Manhattan.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Repoussez vos limites avec une séance d'escalade en salle à Manhattan.",
+      "Description_fr_Embedding": [],
+      "Category": "Adventure",
+      "Tags": ["climbing", "indoor", "challenge"],
+      "Price": 45.0,
+      "DurationMinutes": 90,
+      "Rating": 4.7,
+      "LocationDetails": {
+        "StreetAddress": "88 10th Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10011",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0000, 40.7421] },
+      "Schedule": [
+        { "Date": "2023-08-19T00:00:00Z", "Time": "03:00 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity20",
+      "ActivityName": "Street Art Graffiti Workshop",
+      "Description": "Learn graffiti art techniques and create your own street art masterpiece.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Apprenez les techniques du graffiti et créez votre propre œuvre de street art.",
+      "Description_fr_Embedding": [],
+      "Category": "Art",
+      "Tags": ["graffiti", "workshop", "street art"],
+      "Price": 30.0,
+      "DurationMinutes": 75,
+      "Rating": 4.5,
+      "LocationDetails": {
+        "StreetAddress": "180 Orchard St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10002",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9870, 40.7150] },
+      "Schedule": [
+        { "Date": "2023-08-20T00:00:00Z", "Time": "02:00 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity21",
+      "ActivityName": "NYC Sailing Lesson",
+      "Description": "Learn the basics of sailing on the Hudson River with a hands-on lesson.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Apprenez les bases de la voile sur le fleuve Hudson lors d'une leçon pratique.",
+      "Description_fr_Embedding": [],
+      "Category": "Water Sports",
+      "Tags": ["sailing", "lesson", "Hudson"],
+      "Price": 60.0,
+      "DurationMinutes": 90,
+      "Rating": 4.7,
+      "LocationDetails": {
+        "StreetAddress": "Pier 84",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10018",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0101, 40.7057] },
+      "Schedule": [
+        { "Date": "2023-08-21T00:00:00Z", "Time": "10:00 AM" }
+      ]
+    },
+    {
+      "ActivityId": "activity22",
+      "ActivityName": "Bronx Botanical Garden Walk",
+      "Description": "Explore the beauty of nature at the Bronx Botanical Garden on a guided walk.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Explorez la beauté de la nature au Bronx Botanical Garden lors d'une promenade guidée.",
+      "Description_fr_Embedding": [],
+      "Category": "Nature",
+      "Tags": ["garden", "walk", "nature"],
+      "Price": 18.0,
+      "DurationMinutes": 80,
+      "Rating": 4.6,
+      "LocationDetails": {
+        "StreetAddress": "2100 Southern Blvd",
+        "City": "Bronx",
+        "StateProvince": "NY",
+        "PostalCode": "10460",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.8770, 40.8506] },
+      "Schedule": [
+        { "Date": "2023-08-22T00:00:00Z", "Time": "09:30 AM" }
+      ]
+    },
+    {
+      "ActivityId": "activity23",
+      "ActivityName": "Rooftop Bar Crawl",
+      "Description": "Experience New York's vibrant nightlife with a guided crawl of the best rooftop bars.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Découvrez la vie nocturne vibrante de New York avec une tournée guidée des meilleurs bars sur les toits.",
+      "Description_fr_Embedding": [],
+      "Category": "Nightlife",
+      "Tags": ["rooftop", "bar crawl", "nightlife"],
+      "Price": 50.0,
+      "DurationMinutes": 120,
+      "Rating": 4.7,
+      "LocationDetails": {
+        "StreetAddress": "Various Locations",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "N/A",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9851, 40.7580] },
+      "Schedule": [
+        { "Date": "2023-08-23T00:00:00Z", "Time": "08:00 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity24",
+      "ActivityName": "NYC Escape Room Challenge",
+      "Description": "Test your problem-solving skills in one of New York's most challenging escape rooms.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Mettez à l'épreuve vos compétences en résolution de problèmes dans l'une des salles d'évasion les plus difficiles de New York.",
+      "Description_fr_Embedding": [],
+      "Category": "Indoor",
+      "Tags": ["escape room", "challenge", "teamwork"],
+      "Price": 35.0,
+      "DurationMinutes": 60,
+      "Rating": 4.5,
+      "LocationDetails": {
+        "StreetAddress": "45 W 25th St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10010",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9930, 40.7440] },
+      "Schedule": [
+        { "Date": "2023-08-24T00:00:00Z", "Time": "04:00 PM" }
+      ]
+    },
+    {
+      "ActivityId": "activity25",
+      "ActivityName": "Hudson River Kayaking",
+      "Description": "Paddle along the Hudson River for an adventurous water activity with scenic views.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Pagayez sur le fleuve Hudson pour une activité nautique aventureuse avec des vues pittoresques.",
+      "Description_fr_Embedding": [],
+      "Category": "Adventure",
+      "Tags": ["kayaking", "water sports", "Hudson"],
+      "Price": 55.0,
+      "DurationMinutes": 90,
+      "Rating": 4.7,
+      "LocationDetails": {
+        "StreetAddress": "Pier 84",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10018",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-74.0101, 40.7057] },
+      "Schedule": [
+        { "Date": "2023-08-25T00:00:00Z", "Time": "11:00 AM" }
+      ]
+    }
+  ]
+  

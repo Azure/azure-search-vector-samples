@@ -1,0 +1,813 @@
+[
+    {
+      "RestaurantId": "restaurant1",
+      "RestaurantName": "The Gourmet Spot",
+      "Description": "A fine dining restaurant offering a seasonal menu crafted with locally sourced ingredients.",
+      "DescriptionEmbedding": [],
+      "Description_fr": "Un restaurant gastronomique offrant un menu de saison élaboré avec des ingrédients locaux.",
+      "Description_fr_Embedding": [],
+      "Category": "Fine Dining",
+      "Tags": ["romantic", "elegant"],
+      "Cuisine": "French",
+      "PriceRange": "$$$$",
+      "ParkingIncluded": true,
+      "LastInspectionDate": "2023-04-10T00:00:00Z",
+      "Rating": 4.8,
+      "Address": {
+        "StreetAddress": "123 Culinary Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10010",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9822, 40.7440] },
+      "Menu": [
+        {
+          "ItemName": "Truffle Risotto",
+          "ItemDescription": "Creamy risotto with black truffles and parmesan.",
+          "Price": 38.5,
+          "Tags": ["vegetarian", "truffle"]
+        },
+        {
+          "ItemName": "Seared Scallops",
+          "ItemDescription": "Pan-seared scallops served with a lemon butter sauce.",
+          "Price": 42.0,
+          "Tags": ["seafood", "gluten-free"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant2",
+      "RestaurantName": "City Bites",
+      "Description": "A casual eatery serving up international street food with a modern twist.",
+      "Description_fr": "Un restaurant décontracté proposant de la street food internationale avec une touche moderne.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Casual",
+      "Tags": ["street food", "trendy"],
+      "Cuisine": "Global",
+      "PriceRange": "$$",
+      "ParkingIncluded": false,
+      "LastInspectionDate": "2023-03-15T00:00:00Z",
+      "Rating": 4.2,
+      "Address": {
+        "StreetAddress": "45 Market St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10012",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9950, 40.7250] },
+      "Menu": [
+        {
+          "ItemName": "Korean BBQ Tacos",
+          "ItemDescription": "Fusion tacos with marinated beef and kimchi slaw.",
+          "Price": 12.0,
+          "Tags": ["fusion", "spicy"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant3",
+      "RestaurantName": "Bella Pasta",
+      "Description": "A family-run Italian restaurant known for its homemade pasta and cozy atmosphere.",
+      "Description_fr": "Un restaurant italien familial réputé pour ses pâtes maison et son ambiance chaleureuse.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Family",
+      "Tags": ["cozy", "authentic"],
+      "Cuisine": "Italian",
+      "PriceRange": "$$",
+      "ParkingIncluded": true,
+      "LastInspectionDate": "2022-12-05T00:00:00Z",
+      "Rating": 4.5,
+      "Address": {
+        "StreetAddress": "200 Little Italy Rd",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10013",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9970, 40.7220] },
+      "Menu": [
+        {
+          "ItemName": "Spaghetti Carbonara",
+          "ItemDescription": "Classic pasta with pancetta, egg, and pecorino cheese.",
+          "Price": 18.0,
+          "Tags": ["classic", "creamy"]
+        },
+        {
+          "ItemName": "Margherita Pizza",
+          "ItemDescription": "Wood-fired pizza with fresh basil, mozzarella, and tomato sauce.",
+          "Price": 16.0,
+          "Tags": ["vegetarian", "wood-fired"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant4",
+      "RestaurantName": "Sushi Zen",
+      "Description": "A modern sushi bar featuring an omakase menu and a serene ambiance.",
+      "Description_fr": "Un bar à sushi moderne proposant un menu omakase dans une ambiance sereine.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Fine Dining",
+      "Tags": ["sushi", "omakase"],
+      "Cuisine": "Japanese",
+      "PriceRange": "$$$",
+      "ParkingIncluded": false,
+      "LastInspectionDate": "2023-01-22T00:00:00Z",
+      "Rating": 4.7,
+      "Address": {
+        "StreetAddress": "77 Sashimi Ln",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10014",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9855, 40.7320] },
+      "Menu": [
+        {
+          "ItemName": "Omakase Platter",
+          "ItemDescription": "A curated selection of the chef's finest sushi.",
+          "Price": 55.0,
+          "Tags": ["chef special", "fresh"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant5",
+      "RestaurantName": "Burger Haven",
+      "Description": "A popular fast-casual joint known for its gourmet burgers and crispy fries.",
+      "Description_fr": "Un établissement fast-casual populaire connu pour ses burgers gourmets et ses frites croustillantes.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Fast Food",
+      "Tags": ["burger", "casual"],
+      "Cuisine": "American",
+      "PriceRange": "$",
+      "ParkingIncluded": false,
+      "LastInspectionDate": "2023-05-02T00:00:00Z",
+      "Rating": 4.1,
+      "Address": {
+        "StreetAddress": "300 Burger Blvd",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10011",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9900, 40.7400] },
+      "Menu": [
+        {
+          "ItemName": "Classic Cheeseburger",
+          "ItemDescription": "Juicy beef patty with cheese, lettuce, tomato, and pickles.",
+          "Price": 9.5,
+          "Tags": ["beef", "cheesy"]
+        },
+        {
+          "ItemName": "Sweet Potato Fries",
+          "ItemDescription": "Crispy fries served with a side of aioli.",
+          "Price": 4.0,
+          "Tags": ["crispy", "vegan"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant6",
+      "RestaurantName": "Café Solstice",
+      "Description": "A chic café offering artisanal coffee, pastries, and light bites in a relaxed setting.",
+      "Description_fr": "Un café chic proposant du café artisanal, des pâtisseries et des encas légers dans un cadre détendu.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Café",
+      "Tags": ["coffee", "pastries"],
+      "Cuisine": "Continental",
+      "PriceRange": "$$",
+      "ParkingIncluded": false,
+      "LastInspectionDate": "2023-02-18T00:00:00Z",
+      "Rating": 4.3,
+      "Address": {
+        "StreetAddress": "50 Brew St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10009",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9800, 40.7280] },
+      "Menu": [
+        {
+          "ItemName": "Cappuccino",
+          "ItemDescription": "Rich espresso topped with steamed milk and foam.",
+          "Price": 4.5,
+          "Tags": ["beverage", "hot"]
+        },
+        {
+          "ItemName": "Almond Croissant",
+          "ItemDescription": "Flaky pastry filled with almond cream.",
+          "Price": 3.5,
+          "Tags": ["pastry", "sweet"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant7",
+      "RestaurantName": "Taco Fiesta",
+      "Description": "A vibrant Mexican restaurant famous for its street tacos and festive atmosphere.",
+      "Description_fr": "Un restaurant mexicain vibrant célèbre pour ses tacos de rue et son ambiance festive.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Casual",
+      "Tags": ["tacos", "festive"],
+      "Cuisine": "Mexican",
+      "PriceRange": "$",
+      "ParkingIncluded": false,
+      "LastInspectionDate": "2023-06-05T00:00:00Z",
+      "Rating": 4.0,
+      "Address": {
+        "StreetAddress": "88 Fiesta Rd",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10015",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9955, 40.7300] },
+      "Menu": [
+        {
+          "ItemName": "Street Tacos",
+          "ItemDescription": "Three tacos with your choice of carne asada or al pastor.",
+          "Price": 8.0,
+          "Tags": ["spicy", "street food"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant8",
+      "RestaurantName": "Veggie Delight",
+      "Description": "A modern eatery focusing on organic and locally sourced vegetarian dishes.",
+      "Description_fr": "Un restaurant moderne axé sur des plats végétariens biologiques et locaux.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Healthy",
+      "Tags": ["vegetarian", "organic"],
+      "Cuisine": "Vegetarian",
+      "PriceRange": "$$",
+      "ParkingIncluded": true,
+      "LastInspectionDate": "2023-04-22T00:00:00Z",
+      "Rating": 4.6,
+      "Address": {
+        "StreetAddress": "77 Greenway",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10016",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9750, 40.7480] },
+      "Menu": [
+        {
+          "ItemName": "Quinoa Salad",
+          "ItemDescription": "Mixed greens with quinoa, avocado, and a lemon vinaigrette.",
+          "Price": 14.0,
+          "Tags": ["gluten-free", "vegan"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant9",
+      "RestaurantName": "Spice Route",
+      "Description": "An exotic Indian restaurant offering a vibrant array of traditional dishes.",
+      "Description_fr": "Un restaurant indien exotique proposant une gamme vibrante de plats traditionnels.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Fine Dining",
+      "Tags": ["spicy", "traditional"],
+      "Cuisine": "Indian",
+      "PriceRange": "$$$",
+      "ParkingIncluded": true,
+      "LastInspectionDate": "2022-11-30T00:00:00Z",
+      "Rating": 4.5,
+      "Address": {
+        "StreetAddress": "66 Curry Blvd",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10017",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9850, 40.7550] },
+      "Menu": [
+        {
+          "ItemName": "Butter Chicken",
+          "ItemDescription": "Tender chicken in a creamy tomato sauce.",
+          "Price": 20.0,
+          "Tags": ["creamy", "mild"]
+        },
+        {
+          "ItemName": "Naan Bread",
+          "ItemDescription": "Freshly baked naan served with garlic butter.",
+          "Price": 4.0,
+          "Tags": ["side", "flatbread"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant10",
+      "RestaurantName": "Ocean's Catch",
+      "Description": "A seafood restaurant specializing in fresh catches and coastal flavors.",
+      "Description_fr": "Un restaurant de fruits de mer spécialisé dans les prises fraîches et les saveurs côtières.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Casual",
+      "Tags": ["seafood", "coastal"],
+      "Cuisine": "Seafood",
+      "PriceRange": "$$$",
+      "ParkingIncluded": false,
+      "LastInspectionDate": "2023-03-30T00:00:00Z",
+      "Rating": 4.4,
+      "Address": {
+        "StreetAddress": "500 Harbor Dr",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10019",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9785, 40.7500] },
+      "Menu": [
+        {
+          "ItemName": "Grilled Salmon",
+          "ItemDescription": "Fresh salmon grilled to perfection with seasonal vegetables.",
+          "Price": 28.0,
+          "Tags": ["grilled", "healthy"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant11",
+      "RestaurantName": "Pasta Pronto",
+      "Description": "A fast-casual Italian spot offering quick, delicious pasta dishes on the go.",
+      "Description_fr": "Un établissement italien fast-casual proposant des plats de pâtes rapides et délicieux.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Fast Food",
+      "Tags": ["quick", "italian"],
+      "Cuisine": "Italian",
+      "PriceRange": "$",
+      "ParkingIncluded": false,
+      "LastInspectionDate": "2023-05-15T00:00:00Z",
+      "Rating": 4.0,
+      "Address": {
+        "StreetAddress": "150 Pasta Ln",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10018",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9905, 40.7420] },
+      "Menu": [
+        {
+          "ItemName": "Penne Arrabbiata",
+          "ItemDescription": "Penne pasta tossed in a spicy tomato sauce.",
+          "Price": 12.0,
+          "Tags": ["spicy", "vegan"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant12",
+      "RestaurantName": "The Rustic Spoon",
+      "Description": "A farm-to-table restaurant that serves seasonal dishes in a rustic setting.",
+      "Description_fr": "Un restaurant de la ferme à la table servant des plats de saison dans un cadre rustique.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Casual",
+      "Tags": ["farm-to-table", "rustic"],
+      "Cuisine": "American",
+      "PriceRange": "$$",
+      "ParkingIncluded": true,
+      "LastInspectionDate": "2023-01-10T00:00:00Z",
+      "Rating": 4.3,
+      "Address": {
+        "StreetAddress": "80 Harvest Rd",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10020",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9755, 40.7560] },
+      "Menu": [
+        {
+          "ItemName": "Roasted Chicken",
+          "ItemDescription": "Herb-roasted chicken served with seasonal vegetables.",
+          "Price": 19.0,
+          "Tags": ["roasted", "hearty"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant13",
+      "RestaurantName": "Noodle Nirvana",
+      "Description": "A trendy spot serving a fusion of Asian noodle dishes with bold flavors.",
+      "Description_fr": "Un lieu branché proposant une fusion de plats de nouilles asiatiques aux saveurs audacieuses.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Casual",
+      "Tags": ["noodles", "fusion"],
+      "Cuisine": "Asian Fusion",
+      "PriceRange": "$$",
+      "ParkingIncluded": false,
+      "LastInspectionDate": "2023-02-28T00:00:00Z",
+      "Rating": 4.2,
+      "Address": {
+        "StreetAddress": "25 Noodle St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10021",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9830, 40.7620] },
+      "Menu": [
+        {
+          "ItemName": "Pad Thai",
+          "ItemDescription": "Stir-fried rice noodles with tofu, peanuts, and bean sprouts.",
+          "Price": 13.0,
+          "Tags": ["peanut", "gluten-free"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant14",
+      "RestaurantName": "Mediterraneo",
+      "Description": "A stylish restaurant offering a variety of Mediterranean dishes and a lively wine bar.",
+      "Description_fr": "Un restaurant élégant offrant une variété de plats méditerranéens et un bar à vins animé.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Fine Dining",
+      "Tags": ["Mediterranean", "wine"],
+      "Cuisine": "Mediterranean",
+      "PriceRange": "$$$",
+      "ParkingIncluded": true,
+      "LastInspectionDate": "2023-03-12T00:00:00Z",
+      "Rating": 4.6,
+      "Address": {
+        "StreetAddress": "190 Olive Ln",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10022",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9788, 40.7585] },
+      "Menu": [
+        {
+          "ItemName": "Hummus Platter",
+          "ItemDescription": "Creamy hummus served with pita, olives, and vegetables.",
+          "Price": 15.0,
+          "Tags": ["vegan", "starter"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant15",
+      "RestaurantName": "Steak & Barrel",
+      "Description": "A robust steakhouse paired with an extensive selection of craft beers.",
+      "Description_fr": "Un steakhouse robuste associé à une vaste sélection de bières artisanales.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Casual",
+      "Tags": ["steak", "beer"],
+      "Cuisine": "American",
+      "PriceRange": "$$$$",
+      "ParkingIncluded": true,
+      "LastInspectionDate": "2023-05-25T00:00:00Z",
+      "Rating": 4.7,
+      "Address": {
+        "StreetAddress": "350 Grill Rd",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10024",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9815, 40.7790] },
+      "Menu": [
+        {
+          "ItemName": "Ribeye Steak",
+          "ItemDescription": "Grilled ribeye steak served with garlic mashed potatoes.",
+          "Price": 45.0,
+          "Tags": ["grilled", "beef"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant16",
+      "RestaurantName": "Dim Sum Dynasty",
+      "Description": "A bustling restaurant specializing in traditional Cantonese dim sum.",
+      "Description_fr": "Un restaurant animé spécialisé dans le dim sum cantonnais traditionnel.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Casual",
+      "Tags": ["dim sum", "family"],
+      "Cuisine": "Chinese",
+      "PriceRange": "$$",
+      "ParkingIncluded": false,
+      "LastInspectionDate": "2023-01-30T00:00:00Z",
+      "Rating": 4.3,
+      "Address": {
+        "StreetAddress": "210 Dumpling Dr",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10023",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9870, 40.7520] },
+      "Menu": [
+        {
+          "ItemName": "Shrimp Har Gow",
+          "ItemDescription": "Steamed dumplings filled with shrimp and bamboo shoots.",
+          "Price": 9.0,
+          "Tags": ["steamed", "seafood"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant17",
+      "RestaurantName": "BBQ Junction",
+      "Description": "A lively barbecue joint offering smoked meats and hearty sides.",
+      "Description_fr": "Un restaurant animé de barbecue proposant des viandes fumées et des accompagnements copieux.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Casual",
+      "Tags": ["barbecue", "smoked"],
+      "Cuisine": "American",
+      "PriceRange": "$$",
+      "ParkingIncluded": true,
+      "LastInspectionDate": "2023-04-05T00:00:00Z",
+      "Rating": 4.4,
+      "Address": {
+        "StreetAddress": "400 Smoke Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10020",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9920, 40.7450] },
+      "Menu": [
+        {
+          "ItemName": "Smoked Brisket",
+          "ItemDescription": "Slow-smoked beef brisket served with tangy barbecue sauce.",
+          "Price": 22.0,
+          "Tags": ["smoked", "beef"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant18",
+      "RestaurantName": "Bakery Bliss",
+      "Description": "A charming bakery and bistro offering freshly baked goods and gourmet sandwiches.",
+      "Description_fr": "Une boulangerie-bistro charmante offrant des produits fraîchement cuits et des sandwichs gourmets.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Café",
+      "Tags": ["bakery", "cozy"],
+      "Cuisine": "French",
+      "PriceRange": "$$",
+      "ParkingIncluded": false,
+      "LastInspectionDate": "2023-02-12T00:00:00Z",
+      "Rating": 4.5,
+      "Address": {
+        "StreetAddress": "15 Sweet St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10007",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9965, 40.7100] },
+      "Menu": [
+        {
+          "ItemName": "Croissant Sandwich",
+          "ItemDescription": "Flaky croissant filled with ham, cheese, and egg.",
+          "Price": 10.0,
+          "Tags": ["breakfast", "savory"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant19",
+      "RestaurantName": "Fusion Flame",
+      "Description": "A trendy restaurant blending flavors from various cuisines to create unique fusion dishes.",
+      "Description_fr": "Un restaurant branché mêlant des saveurs de diverses cuisines pour créer des plats fusion uniques.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Fine Dining",
+      "Tags": ["fusion", "innovative"],
+      "Cuisine": "Fusion",
+      "PriceRange": "$$$$",
+      "ParkingIncluded": true,
+      "LastInspectionDate": "2023-03-20T00:00:00Z",
+      "Rating": 4.7,
+      "Address": {
+        "StreetAddress": "250 Fusion Blvd",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10012",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9840, 40.7445] },
+      "Menu": [
+        {
+          "ItemName": "Lobster Ramen",
+          "ItemDescription": "A rich broth ramen topped with lobster and soft-boiled egg.",
+          "Price": 32.0,
+          "Tags": ["seafood", "noodle"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant20",
+      "RestaurantName": "Pizza Paradiso",
+      "Description": "A family-friendly pizzeria serving classic and creative pizzas baked in a wood-fired oven.",
+      "Description_fr": "Une pizzeria conviviale servant des pizzas classiques et créatives cuites au four à bois.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Family",
+      "Tags": ["pizza", "wood-fired"],
+      "Cuisine": "Italian",
+      "PriceRange": "$$",
+      "ParkingIncluded": true,
+      "LastInspectionDate": "2023-04-28T00:00:00Z",
+      "Rating": 4.4,
+      "Address": {
+        "StreetAddress": "320 Pizza Rd",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10019",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9857, 40.7525] },
+      "Menu": [
+        {
+          "ItemName": "Marinara Pizza",
+          "ItemDescription": "Classic pizza with tomato sauce, garlic, and basil.",
+          "Price": 14.0,
+          "Tags": ["vegetarian", "classic"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant21",
+      "RestaurantName": "The Noodle House",
+      "Description": "A cozy eatery specializing in a variety of noodle soups and stir-fry dishes.",
+      "Description_fr": "Un restaurant chaleureux spécialisé dans une variété de soupes de nouilles et de plats sautés.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Casual",
+      "Tags": ["noodles", "comfort"],
+      "Cuisine": "Asian",
+      "PriceRange": "$$",
+      "ParkingIncluded": false,
+      "LastInspectionDate": "2023-05-08T00:00:00Z",
+      "Rating": 4.2,
+      "Address": {
+        "StreetAddress": "85 Noodle Ave",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10020",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9880, 40.7500] },
+      "Menu": [
+        {
+          "ItemName": "Beef Pho",
+          "ItemDescription": "Vietnamese noodle soup with tender beef slices.",
+          "Price": 13.5,
+          "Tags": ["beef", "soup"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant22",
+      "RestaurantName": "Urban Bites",
+      "Description": "A trendy urban diner offering a mix of comfort food classics and innovative small plates.",
+      "Description_fr": "Un diner urbain tendance proposant un mélange de plats réconfortants classiques et de petites assiettes innovantes.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Casual",
+      "Tags": ["urban", "diner"],
+      "Cuisine": "American",
+      "PriceRange": "$$",
+      "ParkingIncluded": false,
+      "LastInspectionDate": "2023-03-18T00:00:00Z",
+      "Rating": 4.3,
+      "Address": {
+        "StreetAddress": "99 City Ln",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10016",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9835, 40.7570] },
+      "Menu": [
+        {
+          "ItemName": "Classic Burger",
+          "ItemDescription": "Grilled beef burger with lettuce, tomato, and our special sauce.",
+          "Price": 11.0,
+          "Tags": ["beef", "classic"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant23",
+      "RestaurantName": "Curry Corner",
+      "Description": "A vibrant spot offering a range of spicy curries from various regions of India.",
+      "Description_fr": "Un lieu vibrant proposant une gamme de currys épicés provenant de différentes régions de l'Inde.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Casual",
+      "Tags": ["curry", "spicy"],
+      "Cuisine": "Indian",
+      "PriceRange": "$$",
+      "ParkingIncluded": true,
+      "LastInspectionDate": "2023-02-05T00:00:00Z",
+      "Rating": 4.4,
+      "Address": {
+        "StreetAddress": "210 Spice Rd",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10018",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9925, 40.7510] },
+      "Menu": [
+        {
+          "ItemName": "Lamb Curry",
+          "ItemDescription": "Rich and hearty lamb curry served with basmati rice.",
+          "Price": 19.0,
+          "Tags": ["lamb", "hearty"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant24",
+      "RestaurantName": "The Green Fork",
+      "Description": "A health-focused restaurant offering organic salads, smoothie bowls, and fresh juices.",
+      "Description_fr": "Un restaurant axé sur la santé proposant des salades bio, des smoothie bowls et des jus frais.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Healthy",
+      "Tags": ["organic", "vegan"],
+      "Cuisine": "Vegetarian",
+      "PriceRange": "$$",
+      "ParkingIncluded": false,
+      "LastInspectionDate": "2023-06-01T00:00:00Z",
+      "Rating": 4.5,
+      "Address": {
+        "StreetAddress": "55 Wellness Way",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10014",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9775, 40.7450] },
+      "Menu": [
+        {
+          "ItemName": "Avocado Salad",
+          "ItemDescription": "Mixed greens, avocado, cherry tomatoes, and a citrus dressing.",
+          "Price": 13.0,
+          "Tags": ["fresh", "vegan"]
+        }
+      ]
+    },
+    {
+      "RestaurantId": "restaurant25",
+      "RestaurantName": "Dessert Dreams",
+      "Description": "An indulgent dessert bar offering an array of cakes, pastries, and artisanal chocolates.",
+      "Description_fr": "Un bar à desserts indulgent proposant une gamme de gâteaux, pâtisseries et chocolats artisanaux.",
+      "DescriptionEmbedding": [],
+      "Description_fr_Embedding": [],
+      "Category": "Dessert",
+      "Tags": ["sweet", "indulgent"],
+      "Cuisine": "Dessert",
+      "PriceRange": "$$",
+      "ParkingIncluded": true,
+      "LastInspectionDate": "2023-05-05T00:00:00Z",
+      "Rating": 4.6,
+      "Address": {
+        "StreetAddress": "77 Sweet St",
+        "City": "New York",
+        "StateProvince": "NY",
+        "PostalCode": "10012",
+        "Country": "USA"
+      },
+      "Location": { "type": "Point", "coordinates": [-73.9930, 40.7380] },
+      "Menu": [
+        {
+          "ItemName": "Chocolate Lava Cake",
+          "ItemDescription": "Warm chocolate cake with a molten chocolate center.",
+          "Price": 8.5,
+          "Tags": ["chocolate", "warm"]
+        },
+        {
+          "ItemName": "Strawberry Cheesecake",
+          "ItemDescription": "Creamy cheesecake topped with fresh strawberries.",
+          "Price": 7.0,
+          "Tags": ["cheesecake", "fruit"]
+        }
+      ]
+    }
+  ]

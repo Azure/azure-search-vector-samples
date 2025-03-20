@@ -1,0 +1,50 @@
+[
+    {
+      "BookingId": "booking1",
+      "BookingType": "restaurant",
+      "EntityId": "restaurant5",
+      "CustomerName": "Alice Johnson",
+      "CustomerEmail": "alice.johnson@example.com",
+      "BookingDate": "2023-09-15T00:00:00Z",
+      "BookingTime": "07:30 PM",
+      "Price": 75.0,
+      "Status": "confirmed",
+      "Notes": "Window seat requested"
+    },
+    {
+      "BookingId": "booking2",
+      "BookingType": "activity",
+      "EntityId": "activity8",
+      "CustomerName": "Bob Smith",
+      "CustomerEmail": "bob.smith@example.com",
+      "BookingDate": "2023-09-20T00:00:00Z",
+      "BookingTime": "02:00 PM",
+      "Price": 30.0,
+      "Status": "pending",
+      "Notes": "Allergic to peanuts; please advise"
+    },
+    {
+      "BookingId": "booking3",
+      "BookingType": "tour",
+      "EntityId": "tour3",
+      "CustomerName": "Carol Davis",
+      "CustomerEmail": "carol.davis@example.com",
+      "BookingDate": "2023-10-05T00:00:00Z",
+      "BookingTime": "10:00 AM",
+      "Price": 50.0,
+      "Status": "confirmed",
+      "Notes": "Include photo package"
+    },
+    {
+      "BookingId": "booking4",
+      "BookingType": "hotel",
+      "EntityId": "hotel2",
+      "CustomerName": "David Lee",
+      "CustomerEmail": "david.lee@example.com",
+      "BookingDate": "2023-10-12T00:00:00Z",
+      "BookingTime": "03:00 PM",
+      "Price": 320.0,
+      "Status": "cancelled",
+      "Notes": "Cancelled due to schedule conflict"
+    }
+  ]
