@@ -3,4 +3,5 @@ azure-search-documents==11.6.0b9
 azure-storage-blob
 azure-identity
 openai
-semantic-kernel
+aiohttp
+pandas
