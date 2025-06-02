@@ -236,7 +236,7 @@ async def process_file(client: DocumentIntelligenceClient, record_id: str, file:
 
     try:
         poller = await client.begin_analyze_document(
-            "prebuilt-layout", analyze_request=file_data, content_type="application/octet-stream", output_content_format=mode, features=["ocrHighResolution"]
+            "prebuilt-layout", body=file_data, content_type="application/octet-stream", output_content_format=mode, features=["ocrHighResolution"]
         )
         result = await poller.result()
         return {
@@ -257,7 +257,7 @@ async def process_file(client: DocumentIntelligenceClient, record_id: str, file:
 async def process_sas_uri(client: DocumentIntelligenceClient, record_id: str, sas_uri: str, mode: str):
     try:
         poller = await client.begin_analyze_document(
-            "prebuilt-layout", analyze_request=AnalyzeDocumentRequest(url_source=sas_uri), output_content_format=mode, features=["ocrHighResolution"]
+            "prebuilt-layout", body=AnalyzeDocumentRequest(url_source=sas_uri), output_content_format=mode, features=["ocrHighResolution"]
         )
         result = await poller.result()
         return {
