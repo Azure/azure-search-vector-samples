@@ -1,0 +1,115 @@
+{
+  "name": "index",
+  "fields": [
+    {
+      "name": "uid",
+      "type": "Edm.String",
+      "key": true,
+      "retrievable": true,
+      "stored": true,
+      "searchable": true,
+      "filterable": false,
+      "sortable": true,
+      "facetable": false,
+      "analyzer": "keyword",
+      "synonymMaps": []
+    },
+    {
+      "name": "snippet_parent_id",
+      "type": "Edm.String",
+      "key": false,
+      "retrievable": true,
+      "stored": true,
+      "searchable": false,
+      "filterable": true,
+      "sortable": false,
+      "facetable": false,
+      "synonymMaps": []
+    },
+    {
+      "name": "blob_path",
+      "type": "Edm.String",
+      "key": false,
+      "retrievable": true,
+      "stored": true,
+      "searchable": false,
+      "filterable": true,
+      "sortable": false,
+      "facetable": false,
+      "synonymMaps": []
+    },
+    {
+      "name": "snippet",
+      "type": "Edm.String",
+      "key": false,
+      "retrievable": true,
+      "stored": true,
+      "searchable": true,
+      "filterable": false,
+      "sortable": false,
+      "facetable": false,
+      "synonymMaps": []
+    },
+    {
+      "name": "snippet_vector",
+      "type": "Collection(Edm.Single)",
+      "key": false,
+      "retrievable": true,
+      "stored": true,
+      "searchable": true,
+      "filterable": false,
+      "sortable": false,
+      "facetable": false,
+      "dimensions": 3072,
+      "vectorSearchProfile": "vector-search-profile",
+      "synonymMaps": []
+    }
+  ],
+  "semantic": {
+    "defaultConfiguration": "semantic-configuration",
+    "configurations": [
+      {
+        "name": "semantic-configuration",
+        "prioritizedFields": {
+          "prioritizedContentFields": [
+            {
+              "fieldName": "snippet"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "vectorSearch": {
+    "profiles": [
+      {
+        "name": "vector-search-profile",
+        "algorithm": "vector-search-algorithm",
+        "vectorizer": "vectorizer"
+      }
+    ],
+    "algorithms": [
+      {
+        "name": "vector-search-algorithm",
+        "kind": "hnsw",
+        "hnswParameters": {
+          "m": 4,
+          "efConstruction": 400,
+          "efSearch": 500,
+          "metric": "cosine"
+        }
+      }
+    ],
+    "vectorizers": [
+      {
+        "name": "vectorizer",
+        "kind": "azureOpenAI",
+        "azureOpenAIParameters": {
+          "resourceUri": null,
+          "deploymentId": "text-embedding-3-large",
+          "modelName": "text-embedding-3-large"
+        }
+      }
+    ]
+  }
+}
