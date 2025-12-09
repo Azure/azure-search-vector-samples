@@ -1,0 +1,447 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Azure AI Search with Cohere Embed V4 via Microsoft Foundry\n",
+    "\n",
+    "This notebook demonstrates how to use Cohere's `embed-v-4-0` embedding model deployed on **Microsoft Foundry** to generate embeddings and perform vector search in **Azure AI Search**.\n",
+    "\n",
+    "Key features:\n",
+    "- Uses the **azure-ai-inference SDK** for Microsoft Foundry integration\n",
+    "- Supports **document vs query** embedding types for optimal RAG performance\n",
+    "- **1536-dimensional vectors** from Cohere's embed-v-4-0 model\n",
+    "\n",
+    "References:\n",
+    "- [Using Cohere Embeddings in Azure AI Search](https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/using-cohere-binary-embeddings-in-azure-ai-search-and-command-rr-model-via-azure/4158111)\n",
+    "- [Microsoft Foundry Cohere Embed Models](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/deploy-models-cohere-embed)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Prerequisites\n",
+    "\n",
+    "- Python 3.10+\n",
+    "- Azure AI Search service\n",
+    "- Cohere embed-v4-0 model deployed on Microsoft Foundry\n",
+    "\n",
+    "Create a virtual environment and install dependencies:\n",
+    "```bash\n",
+    "python -m venv .venv\n",
+    "source .venv/bin/activate  # On Windows: .venv\\Scripts\\activate\n",
+    "pip install -r requirements.txt\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Install dependencies\n",
+    "! pip install --pre azure-search-documents azure-ai-inference azure-identity python-dotenv"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "from dotenv import load_dotenv\n",
+    "from azure.ai.inference import EmbeddingsClient\n",
+    "from azure.ai.inference.models import EmbeddingInputType\n",
+    "from azure.core.credentials import AzureKeyCredential\n",
+    "from azure.search.documents import SearchClient\n",
+    "from azure.search.documents.indexes import SearchIndexClient\n",
+    "from azure.search.documents.indexes.models import (\n",
+    "    HnswAlgorithmConfiguration,\n",
+    "    SearchField,\n",
+    "    SearchableField,\n",
+    "    SearchFieldDataType,\n",
+    "    SearchIndex,\n",
+    "    SimpleField,\n",
+    "    VectorSearch,\n",
+    "    VectorSearchAlgorithmKind,\n",
+    "    VectorSearchProfile,\n",
+    ")\n",
+    "from azure.search.documents.models import VectorizedQuery"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Configure Credentials\n",
+    "\n",
+    "Set your Azure AI Search and Microsoft Foundry credentials in a `.env` file:\n",
+    "\n",
+    "```\n",
+    "AZURE_SEARCH_ENDPOINT=https://your-search.search.windows.net\n",
+    "AZURE_SEARCH_API_KEY=your-search-admin-key\n",
+    "AZURE_INFERENCE_ENDPOINT=https://your-resource.services.ai.azure.com/models\n",
+    "AZURE_INFERENCE_CREDENTIAL=your-microsoft-foundry-api-key\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "load_dotenv()\n",
+    "\n",
+    "# Microsoft Foundry - Cohere Embeddings\n",
+    "azure_inference_endpoint = os.getenv(\"AZURE_INFERENCE_ENDPOINT\")\n",
+    "azure_inference_credential = os.getenv(\"AZURE_INFERENCE_CREDENTIAL\")\n",
+    "\n",
+    "# Azure AI Search\n",
+    "search_service_endpoint = os.getenv(\"AZURE_SEARCH_ENDPOINT\")\n",
+    "search_service_api_key = os.getenv(\"AZURE_SEARCH_API_KEY\")\n",
+    "\n",
+    "index_name = \"cohere-embed-v4-index\"\n",
+    "\n",
+    "# Initialize the embeddings client\n",
+    "embedding_client = EmbeddingsClient(\n",
+    "    endpoint=azure_inference_endpoint,\n",
+    "    credential=AzureKeyCredential(azure_inference_credential),\n",
+    "    model=\"embed-v-4-0\"\n",
+    ")\n",
+    "\n",
+    "print(f\"Inference Endpoint: {azure_inference_endpoint}\")\n",
+    "print(f\"Search Endpoint: {search_service_endpoint}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Generate Embeddings\n",
+    "\n",
+    "The `generate_embeddings` function uses the Cohere embed-v4-0 model via Microsoft Foundry to create embeddings.\n",
+    "\n",
+    "**Important**: Cohere models support different input types:\n",
+    "- `EmbeddingInputType.DOCUMENT` - Use when indexing documents\n",
+    "- `EmbeddingInputType.QUERY` - Use when searching\n",
+    "\n",
+    "**Note**: Cohere models process one input at a time (batch processing is not supported)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def generate_embeddings(texts, input_type=\"search_document\"):\n",
+    "    \"\"\"\n",
+    "    Generate embeddings using Cohere embed-v4-0 via Microsoft Foundry.\n",
+    "    \n",
+    "    Args:\n",
+    "        texts: A string or list of strings to embed\n",
+    "        input_type: Either \"search_document\" (for indexing) or \"search_query\" (for queries)\n",
+    "    \n",
+    "    Returns:\n",
+    "        List of embedding vectors (1536 dimensions each)\n",
+    "    \"\"\"\n",
+    "    if isinstance(texts, str):\n",
+    "        texts = [texts]\n",
+    "    \n",
+    "    # Map input type to EmbeddingInputType enum\n",
+    "    embed_input_type = EmbeddingInputType.DOCUMENT if input_type == \"search_document\" else EmbeddingInputType.QUERY\n",
+    "    \n",
+    "    embeddings = []\n",
+    "    for text in texts:\n",
+    "        response = embedding_client.embed(\n",
+    "            input=[text],\n",
+    "            input_type=embed_input_type\n",
+    "        )\n",
+    "        embeddings.append(response.data[0].embedding)\n",
+    "    \n",
+    "    return embeddings"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Create Search Index\n",
+    "\n",
+    "Create an Azure AI Search index with a vector field for Cohere embeddings.\n",
+    "\n",
+    "The index schema includes:\n",
+    "- `id`: Document identifier (key field)\n",
+    "- `text`: Searchable text content\n",
+    "- `embedding`: Vector field (1536 dimensions, float32)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def create_or_update_index(index_client, index_name):\n",
+    "    \"\"\"\n",
+    "    Create or update an Azure AI Search index with vector support.\n",
+    "    \"\"\"\n",
+    "    fields = [\n",
+    "        SimpleField(\n",
+    "            name=\"id\",\n",
+    "            type=SearchFieldDataType.String,\n",
+    "            key=True,\n",
+    "            filterable=True\n",
+    "        ),\n",
+    "        SearchableField(\n",
+    "            name=\"text\",\n",
+    "            type=SearchFieldDataType.String,\n",
+    "            searchable=True\n",
+    "        ),\n",
+    "        SearchField(\n",
+    "            name=\"embedding\",\n",
+    "            type=SearchFieldDataType.Collection(SearchFieldDataType.Single),\n",
+    "            searchable=True,\n",
+    "            vector_search_dimensions=1536,\n",
+    "            vector_search_profile_name=\"my-vector-config\"\n",
+    "        ),\n",
+    "    ]\n",
+    "\n",
+    "    vector_search = VectorSearch(\n",
+    "        algorithms=[\n",
+    "            HnswAlgorithmConfiguration(\n",
+    "                name=\"my-algorithms-config\",\n",
+    "                kind=VectorSearchAlgorithmKind.HNSW\n",
+    "            ),\n",
+    "        ],\n",
+    "        profiles=[\n",
+    "            VectorSearchProfile(\n",
+    "                name=\"my-vector-config\",\n",
+    "                algorithm_configuration_name=\"my-algorithms-config\"\n",
+    "            ),\n",
+    "        ],\n",
+    "    )\n",
+    "\n",
+    "    index = SearchIndex(\n",
+    "        name=index_name,\n",
+    "        fields=fields,\n",
+    "        vector_search=vector_search\n",
+    "    )\n",
+    "\n",
+    "    result = index_client.create_or_update_index(index)\n",
+    "    print(f\"Index '{result.name}' created or updated\")\n",
+    "    return result"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Index Documents\n",
+    "\n",
+    "Upload documents with their embeddings to the search index."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def index_documents(search_client, documents, embeddings):\n",
+    "    \"\"\"\n",
+    "    Upload documents with embeddings to the search index.\n",
+    "    \"\"\"\n",
+    "    documents_to_index = [\n",
+    "        {\"id\": str(idx), \"text\": doc, \"embedding\": emb}\n",
+    "        for idx, (doc, emb) in enumerate(zip(documents, embeddings))\n",
+    "    ]\n",
+    "    result = search_client.upload_documents(documents=documents_to_index)\n",
+    "    print(f\"Uploaded {len(documents_to_index)} documents\")\n",
+    "    return result"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Run the Workflow\n",
+    "\n",
+    "1. Create the search index\n",
+    "2. Generate embeddings for sample documents\n",
+    "3. Upload documents to the index"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Index 'cohere-embed-v4-index' created or updated\n",
+      "Generating embeddings...\n",
+      "Generated 4 embeddings of dimension 1536\n",
+      "Uploaded 4 documents\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "[<azure.search.documents._generated.models._models_py3.IndexingResult at 0x110b86060>,\n",
+       " <azure.search.documents._generated.models._models_py3.IndexingResult at 0x110b0af90>,\n",
+       " <azure.search.documents._generated.models._models_py3.IndexingResult at 0x1109e8490>,\n",
+       " <azure.search.documents._generated.models._models_py3.IndexingResult at 0x1109e9e10>]"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Sample documents\n",
+    "documents = [\n",
+    "    \"Alan Turing was a British mathematician and computer scientist who is widely considered to be the father of theoretical computer science and artificial intelligence.\",\n",
+    "    \"Albert Einstein was a German-born theoretical physicist who developed the theory of relativity, one of the two pillars of modern physics.\",\n",
+    "    \"Isaac Newton was an English polymath active as a mathematician, physicist, astronomer, alchemist, theologian, and author who is widely recognized as one of the greatest mathematicians and physicists.\",\n",
+    "    \"Marie Curie was a Polish and naturalized-French physicist and chemist who conducted pioneering research on radioactivity.\"\n",
+    "]\n",
+    "\n",
+    "# Initialize clients\n",
+    "index_client = SearchIndexClient(\n",
+    "    endpoint=search_service_endpoint,\n",
+    "    credential=AzureKeyCredential(search_service_api_key)\n",
+    ")\n",
+    "\n",
+    "search_client = SearchClient(\n",
+    "    endpoint=search_service_endpoint,\n",
+    "    index_name=index_name,\n",
+    "    credential=AzureKeyCredential(search_service_api_key)\n",
+    ")\n",
+    "\n",
+    "# Create index\n",
+    "create_or_update_index(index_client, index_name)\n",
+    "\n",
+    "# Generate embeddings for documents\n",
+    "print(\"Generating embeddings...\")\n",
+    "embeddings = generate_embeddings(documents, input_type=\"search_document\")\n",
+    "print(f\"Generated {len(embeddings)} embeddings of dimension {len(embeddings[0])}\")\n",
+    "\n",
+    "# Index documents\n",
+    "index_documents(search_client, documents, embeddings)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Vector Search\n",
+    "\n",
+    "Perform a vector similarity search using a query embedding."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Query: 'foundational figures in computer science'\n",
+      "\n",
+      "Results:\n",
+      "------------------------------------------------------------\n",
+      "Score: 0.6661\n",
+      "Text: Alan Turing was a British mathematician and computer scientist who is widely considered to be the father of theoretical computer science and artificial intelligence.\n",
+      "------------------------------------------------------------\n",
+      "Score: 0.5813\n",
+      "Text: Albert Einstein was a German-born theoretical physicist who developed the theory of relativity, one of the two pillars of modern physics.\n",
+      "------------------------------------------------------------\n",
+      "Score: 0.5778\n",
+      "Text: Isaac Newton was an English polymath active as a mathematician, physicist, astronomer, alchemist, theologian, and author who is widely recognized as one of the greatest mathematicians and physicists.\n",
+      "------------------------------------------------------------\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Search query\n",
+    "query = \"foundational figures in computer science\"\n",
+    "\n",
+    "# Generate query embedding (use search_query input type)\n",
+    "query_embedding = generate_embeddings(query, input_type=\"search_query\")[0]\n",
+    "\n",
+    "# Perform vector search\n",
+    "vector_query = VectorizedQuery(\n",
+    "    vector=query_embedding,\n",
+    "    k=3,\n",
+    "    fields=\"embedding\"\n",
+    ")\n",
+    "\n",
+    "results = search_client.search(\n",
+    "    search_text=None,\n",
+    "    vector_queries=[vector_query],\n",
+    "    select=[\"id\", \"text\"]\n",
+    ")\n",
+    "\n",
+    "print(f\"Query: '{query}'\\n\")\n",
+    "print(\"Results:\")\n",
+    "print(\"-\" * 60)\n",
+    "for result in results:\n",
+    "    print(f\"Score: {result['@search.score']:.4f}\")\n",
+    "    print(f\"Text: {result['text']}\")\n",
+    "    print(\"-\" * 60)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Cleanup (Optional)\n",
+    "\n",
+    "Delete the index when done."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Uncomment to delete the index\n",
+    "# index_client.delete_index(index_name)\n",
+    "# print(f\"Index '{index_name}' deleted\")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "arm64_env",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
