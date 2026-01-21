@@ -46,7 +46,7 @@ jsonpointer==2.4
 jupyter_client==8.6.0
 jupyter_core==5.7.1
 kiwisolver==1.4.5
-langchain==0.1.4
+langchain==0.1.11
 langchain-community==0.0.16
 langchain-core==0.1.17
 langcodes==3.3.0
