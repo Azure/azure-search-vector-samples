@@ -2,4 +2,7 @@
 
 . ./scripts/init_python_env.ps1
 
-Start-Process -FilePath $venvPythonPath -ArgumentList "./scripts/download_embedding_model.py" -Wait -NoNewWindow
+& $venvPythonPath ./scripts/download_embedding_model.py
+if ($LASTEXITCODE -ne 0) {
+    throw "Failed to download the embedding model."
+}
