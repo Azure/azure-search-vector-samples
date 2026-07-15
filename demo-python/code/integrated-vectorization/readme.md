@@ -24,6 +24,10 @@ The code reads the `data/text-sample.json` file, which contains the input string
 
 - Azure AI Search, any version, but make sure search service capacity is sufficient for the workload. We recommend Basic or higher for this demo.
 
+- Azure AI Search data-plane access that matches the notebook credential:
+  - If you set `AZURE_SEARCH_ADMIN_KEY`, go to **Settings > Keys** on the search service and select **API Keys** or **Both**.
+  - If you don't set `AZURE_SEARCH_ADMIN_KEY`, select **Role-based access control** or **Both**. Assign your signed-in identity **Search Service Contributor** to create search objects and **Search Index Data Reader** (or the broader **Search Index Data Contributor**) to run queries.
+
 - Azure Storage, with a blob container containing documents to load, chunk, and vectorize. Depending on which integrated vectorization options you choose, different sample data is provided
 
 - A deployment of the `text-embedding-3-large` or `text-embedding-3-small` embedding model in your Azure OpenAI service. We recommend Azure OpenAI REST API version `2024-10-21`. As a naming convention, we name deployments after the model name: "text-embedding-3-large".
@@ -44,7 +48,11 @@ We used Visual Studio Code with the [Python extension](https://marketplace.visua
 
 1. Execute the cells one by one, or select **Run** or Shift+Enter.
 
+1. After the indexer finishes, run the notebook's search access and content preflight. Don't continue to the query cells until it reports at least one indexed document.
+
 ## Troubleshoot errors
+
+If the notebook preflight or **Search Explorer** can't query the index, verify the search service's **Settings > Keys** selection matches the credential mode described in the prerequisites. For role-based access, also verify that your portal identity has **Search Index Data Reader** or **Search Index Data Contributor**. If access succeeds but the document count is zero, wait for the indexer to complete and review its execution history for errors.
 
 If you get error 429 from Azure OpenAI, it means the resource is over capacity:
 
