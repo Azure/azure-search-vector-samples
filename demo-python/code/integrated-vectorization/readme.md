@@ -32,6 +32,10 @@ The code reads the `data/text-sample.json` file, which contains the input string
 
 - A deployment of the `text-embedding-3-large` or `text-embedding-3-small` embedding model in your Azure OpenAI service. We recommend Azure OpenAI REST API version `2024-10-21`. As a naming convention, we name deployments after the model name: "text-embedding-3-large".
 
+- Azure OpenAI access for the search service. Choose one authentication mode:
+  - For key-based authentication, set `AZURE_OPENAI_KEY` to a key from the Azure OpenAI resource and leave `AZURE_OPENAI_USE_MANAGED_IDENTITY` set to `false`.
+  - For managed identity, leave `AZURE_OPENAI_KEY` empty, set `AZURE_OPENAI_USE_MANAGED_IDENTITY` to `true`, enable a system-assigned managed identity on the Azure AI Search service, and assign that identity **Cognitive Services OpenAI User** on the Azure OpenAI resource. Assigning this role to the notebook user does not authorize the search service.
+
 - Python (these instructions were tested with version 3.11.x)
 
 We used Visual Studio Code with the [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) and [Jupyter extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) to test this sample.
@@ -53,6 +57,8 @@ We used Visual Studio Code with the [Python extension](https://marketplace.visua
 ## Troubleshoot errors
 
 If the notebook preflight or **Search Explorer** can't query the index, verify the search service's **Settings > Keys** selection matches the credential mode described in the prerequisites. For role-based access, also verify that your portal identity has **Search Index Data Reader** or **Search Index Data Contributor**. If access succeeds but the document count is zero, wait for the indexer to complete and review its execution history for errors.
+
+If a vector query returns **The vectorization endpoint returned status code '401'**, Azure AI Search couldn't authenticate to Azure OpenAI. Verify the authentication mode described in the prerequisites. For key-based authentication, confirm `AZURE_OPENAI_KEY` belongs to the resource named by `AZURE_OPENAI_ENDPOINT`. For managed identity, confirm the search service's identity has **Cognitive Services OpenAI User** on that Azure OpenAI resource. After correcting authentication, rerun the cells that create the index and skillset so their stored vectorizer and embedding-skill configuration is updated.
 
 If you get error 429 from Azure OpenAI, it means the resource is over capacity:
 
