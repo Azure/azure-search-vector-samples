@@ -2,4 +2,7 @@
 
 . ./scripts/init_python_env.ps1
 
-Start-Process -FilePath $venvPythonPath -ArgumentList "./scripts/setup_search_service.py" -Wait -NoNewWindow
+& $venvPythonPath ./scripts/setup_search_service.py
+if ($LASTEXITCODE -ne 0) {
+    throw "Failed to configure Azure AI Search."
+}

@@ -4,50 +4,34 @@ This repository provides Python, C#, REST, and JavaScript code samples for [vect
 
 There are breaking changes from REST API version 2023-07-01-Preview to newer API versions. These breaking changes also apply to the Azure SDK beta packages targeting that REST API version. See [Upgrade REST APIs](https://learn.microsoft.com/azure/search/search-api-migration) for migration guidance.
 
-## Feature status
-
-Vector support consists of generally available features and preview features.
-
-| Feature | Status |
-|---------|--------|
-| [vector indexing](https://learn.microsoft.com/azure/search/vector-search-how-to-create-index) | generally available (2023-11-01 and stable SDK packages) |
-| [vector queries](https://learn.microsoft.com/azure/search/vector-search-how-to-query) | generally available (2023-11-01 and stable SDK packages)|
-| [integrated data chunking](https://learn.microsoft.com/azure/search/cognitive-search-skill-textsplit) | public preview (2023-10-01-preview and later, plus beta SDK packages) |
-| [integrated embedding](https://learn.microsoft.com/azure/search/cognitive-search-skill-azure-openai-embedding) | public preview (2023-10-01-preview and later, plus beta SDK packages) |
-| [index projections](https://learn.microsoft.com/azure/search/index-projections-concept-intro) | public preview (2023-10-01-preview and later, plus beta SDK packages) |
-| [vectorizers](https://learn.microsoft.com/azure/search/vector-search-how-to-configure-vectorizer) | public preview (2023-10-01-preview and later, plus beta SDK packages) |
-| [scalar quantization](https://learn.microsoft.com/azure/search/vector-search-how-to-configure-compression-storage) | public preview (2024-03-01-preview and later, plus beta SDK packages) |
-| [OneLake indexer](https://learn.microsoft.com/azure/search/search-how-to-index-onelake-files) | public preview (2024-05-01-preview, plus beta SDK packages) |
-| [Binary vectors support](https://learn.microsoft.com/azure/search/vector-search-how-to-index-binary-data) | public preview (2024-05-01-preview, plus beta SDK packages) |
-
 Preview features are available under [Supplemental Terms of Use](https://azure.microsoft.com/support/legal/preview-supplemental-terms/). 
 
 ## demo-python samples
 
-| Sample | Description | Status |
-| ------ | ------------|--------|
-| [demo-python readme](demo-python/readme.md) |  A growing collection of notebooks that demonstrate aspects of vector search support, including data chunking and embedding of both text and image content and queries, using a variety of frameworks and techniques.| GA and preview | 
+| Sample | Description |
+| ------ | ------------|
+| [demo-python readme](demo-python/readme.md) |  A growing collection of notebooks that demonstrate aspects of vector search support, including data chunking and embedding of both text and image content and queries, using a variety of frameworks and techniques.|
 
 ## demo-dotnet samples
 
-| Sample | Description | Status |
-| ------ | ------------|--------|
-| [DotNetVectorDemo](demo-dotnet/DotNetVectorDemo/readme.md) | A .NET console app that calls Azure OpenAI to vectorize data. It then calls Azure AI Search to create, load, and query vector data.| Generally available (GA) |
-| [DotNetIntegratedVectorizationDemo](demo-dotnet/DotNetIntegratedVectorizationDemo/readme.md) | A .NET console app that calls Azure AI Search to create an index, indexer, data source, and skillset. An Azure Storage account provides the data. Azure OpenAI is called by the skillset during indexing, and again during query execution to vectorize text queries. | Public preview |
-| [QuantizationAndStorageOptions](demo-dotnet/demo-dotnet/QuantizationAndStorageOptions/readme.md) | A .NET console app that demonstrates [narrow data types](https://learn.microsoft.com/rest/api/searchservice/supported-data-types#edm-data-types-for-vector-fields) and built-in scalar quantization, reducing vector index size in memory and on disk. It also disables storage of vectors returned in query response, which you don't need if you're not returning vectors in a query.  | Public preview |
+| Sample | Description |
+| ------ | ------------|
+| [DotNetVectorDemo](demo-dotnet/DotNetVectorDemo/readme.md) | A .NET console app that calls Azure OpenAI to vectorize data. It then calls Azure AI Search to create, load, and query vector data.|
+| [DotNetIntegratedVectorizationDemo](demo-dotnet/DotNetIntegratedVectorizationDemo/readme.md) | A .NET console app that calls Azure AI Search to create an index, indexer, data source, and skillset. An Azure Storage account provides the data. Azure OpenAI is called by the skillset during indexing, and again during query execution to vectorize text queries. |
+| [QuantizationAndStorageOptions](demo-dotnet/demo-dotnet/QuantizationAndStorageOptions/readme.md) | A .NET console app that demonstrates [narrow data types](https://learn.microsoft.com/rest/api/searchservice/supported-data-types#edm-data-types-for-vector-fields) and built-in scalar quantization, reducing vector index size in memory and on disk. It also disables storage of vectors returned in query response, which you don't need if you're not returning vectors in a query.  |
 
 ## demo-java samples
 
-| Sample | Description | Status |
-| ------ | ------------|--------|
-| [demo-vectors](demo-java/demo-vectors/readme.md) | A Java console app that calls Azure OpenAI to vectorize data. It then calls Azure AI Search to create, load, and query vector data.| GA | 
-| [demo-integrated-vectorization](demo-java/demo-integrated-vectorization/readme.md) | A Java console app that calls Azure AI Search to create an index, indexer, data source, and skillset. An Azure Storage account provides the data. Azure OpenAI is called by the skillset during indexing, and again during query execution to vectorize text queries. | GA and preview | 
+| Sample | Description |
+| ------ | ------------|
+| [demo-vectors](demo-java/demo-vectors/readme.md) | A Java console app that calls Azure OpenAI to vectorize data. It then calls Azure AI Search to create, load, and query vector data.|
+| [demo-integrated-vectorization](demo-java/demo-integrated-vectorization/readme.md) | A Java console app that calls Azure AI Search to create an index, indexer, data source, and skillset. An Azure Storage account provides the data. Azure OpenAI is called by the skillset during indexing, and again during query execution to vectorize text queries. |
 
 ## demo-javascript samples
 
-| Sample | Description | Status |
-| ------ | ------------|--------|
-| [JavaScriptVectorDemo](demo-javascript/readme.md) | A single folder contains three code samples. The `azure-search-vector-sample.js` script calls just Azure OpenAI and is used to generate embeddings for fields in an index. The `docs-text-openai-embeddings.js` program is an end-to-end code sample that calls Azure OpenAI for embeddings and Azure AI Seach to create, load, and query an index that contains vectors. The `query-text-openai-embeddings.js` script generates an embedding for a vector query. | GA and preview | 
+| Sample | Description |
+| ------ | ------------|
+| [JavaScriptVectorDemo](demo-javascript/readme.md) | A single folder contains three code samples. The `azure-search-vector-sample.js` script calls just Azure OpenAI and is used to generate embeddings for fields in an index. The `docs-text-openai-embeddings.js` program is an end-to-end code sample that calls Azure OpenAI for embeddings and Azure AI Seach to create, load, and query an index that contains vectors. The `query-text-openai-embeddings.js` script generates an embedding for a vector query. |
 
 ## Other vector samples and tools
 

@@ -52,7 +52,7 @@ def upload_sample_documents(
     if not container_client.exists():
         container_client.create_container()
 
-    documents_directory = os.path.join("..", "..", "..", "data", "documents")
+    documents_directory = os.path.join("..", "..", "..", "..", "data", "benefitdocs")
     pdf_files = glob.glob(os.path.join(documents_directory, '*.pdf'))
     for file in pdf_files:
         with open(file, "rb") as data:

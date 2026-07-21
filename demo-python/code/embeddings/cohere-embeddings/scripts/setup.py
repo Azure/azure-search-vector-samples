@@ -41,7 +41,7 @@ import os
 import glob
 
 current_file_directory = os.path.dirname(os.path.abspath(__file__))
-samples_path = os.path.join(current_file_directory, "..", "..", "..", "..", "data", "documents")
+samples_path = os.path.join(current_file_directory, "..", "..", "..", "..", "..", "data", "benefitdocs")
 
 def create_credential():
     return AzureCliCredential(tenant_id=os.getenv("AZURE_TENANT_ID", None))

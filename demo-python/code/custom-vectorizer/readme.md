@@ -9,6 +9,7 @@ This sample uses [indexer-based indexing](https://learn.microsoft.com/azure/sear
 ## Prerequisites
 
 + [azd](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd), used to deploy all Azure resources and assets used in this sample.
++ Python 3.10 or later, used by the deployment hooks.
 
 This sample uses the [Azure Python SDK](https://learn.microsoft.com/en-us/python/api/azure-search-documents/?view=azure-python-preview) for indexing and vector query operations.
 
@@ -33,7 +34,7 @@ This sample uses [`azd`](https://learn.microsoft.com/azure/developer/azure-devel
 
    If you aren't prompted for an environment or region, retry `azd env new` to specify a new environment.
 
-   The deployment creates multiple Azure resources and runs multiple jobs. It takes several minutes to complete. 
+   The deployment creates multiple Azure resources and runs multiple jobs. It takes several minutes to complete. If a deployment hook fails, `azd up` stops and reports the failed command instead of continuing with an incomplete function package.
 
 1. Open the [notebook](./azure-search-custom-vectorization-sample.ipynb) to run sample queries once the sample is provisioned and the indexer has finished running.
 

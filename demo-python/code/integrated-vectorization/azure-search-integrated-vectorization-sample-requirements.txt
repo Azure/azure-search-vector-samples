@@ -1,4 +1,4 @@
 python-dotenv
-azure-search-documents==11.6.0b8
+azure-search-documents==11.6.0b12
 azure-storage-blob
 azure-identity

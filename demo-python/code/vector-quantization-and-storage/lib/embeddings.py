@@ -13,8 +13,9 @@ data_path = os.path.join(
     "..",
     "..",
     "..",
+    "..",
     "data",
-    "documents")
+    "benefitdocs")
 content_path = os.path.join(
     file_directory,
     "..",

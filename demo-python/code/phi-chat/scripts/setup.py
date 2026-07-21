@@ -37,7 +37,7 @@ import os
 import glob
 
 current_file_directory = os.path.dirname(os.path.abspath(__file__))
-samples_path = os.path.join(current_file_directory, "..", "..", "..", "data", "documents")
+samples_path = os.path.join(current_file_directory, "..", "..", "..", "..", "data", "benefitdocs")
 
 async def main():
     async with DefaultAzureCredential() as credential:

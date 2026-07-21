@@ -152,6 +152,17 @@ module storageContribRoleUser 'core/security/role.bicep' = {
   }
 }
 
+// To query blobs in the index
+module searchIndexDataRoleUser 'core/security/role.bicep' = {
+  scope: searchServiceResourceGroup
+  name: 'search-data-role-user'
+  params: {
+    principalId: principalId
+    roleDefinitionId: '1407120a-92aa-4202-b7e9-c0e197c71c8f'
+    principalType: 'User'
+  }
+}
+
 // To use AI Services 
 module aiServicesRoleSearch 'core/security/role.bicep' = {
   scope: aiServicesResourceGroup
