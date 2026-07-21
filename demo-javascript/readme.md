@@ -24,7 +24,7 @@ The JavaScript demo in this repository creates vectorized data that can be index
 
 + An Azure subscription, with [access to Azure OpenAI](https://aka.ms/oai/access). You must have the Azure OpenAI service name and an API key.
 
-+ Node.js (these instructions were tested with version Node.js version 16.0)
++ Node.js 22 or later
 
 + A deployment of the **text-embedding-3-large** embedding model. For the deployment name, the deployment name is the same as the model, "text-embedding-3-large".
 
