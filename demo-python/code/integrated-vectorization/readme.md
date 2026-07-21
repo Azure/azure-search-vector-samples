@@ -34,7 +34,9 @@ The code reads the `data/text-sample.json` file, which contains the input string
 
 - Azure OpenAI access for the search service. Choose one authentication mode:
   - For key-based authentication, set `AZURE_OPENAI_KEY` to a key from the Azure OpenAI resource and leave `AZURE_OPENAI_USE_MANAGED_IDENTITY` set to `false`.
-  - For managed identity, leave `AZURE_OPENAI_KEY` empty, set `AZURE_OPENAI_USE_MANAGED_IDENTITY` to `true`, enable a system-assigned managed identity on the Azure AI Search service, and assign that identity **Cognitive Services OpenAI User** on the Azure OpenAI resource. Assigning this role to the notebook user does not authorize the search service.
+  - For a system-assigned managed identity, leave `AZURE_OPENAI_KEY` and `AZURE_OPENAI_MANAGED_IDENTITY_RESOURCE_ID` empty, set `AZURE_OPENAI_USE_MANAGED_IDENTITY` to `true`, and enable a system-assigned identity on the Azure AI Search service.
+  - For a user-assigned managed identity, leave `AZURE_OPENAI_KEY` empty, set `AZURE_OPENAI_USE_MANAGED_IDENTITY` to `true`, and set `AZURE_OPENAI_MANAGED_IDENTITY_RESOURCE_ID` to the full Azure resource ID of an identity attached to the search service.
+  - Assign the selected search service identity **Cognitive Services OpenAI User** on the Azure OpenAI resource. Assigning this role to the notebook user does not authorize the search service.
 
 - Python (these instructions were tested with version 3.11.x)
 
