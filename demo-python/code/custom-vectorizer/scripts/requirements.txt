@@ -1,6 +1,6 @@
-azure-identity==1.16.1
+azure-identity==1.15.0
 azure-mgmt-web==7.2.0
-azure-search-documents==11.6.0b9
+azure-search-documents==11.6.0b3
 azure-storage-blob==12.19.0
 huggingface-hub==0.20.2
 tenacity==8.2.3
