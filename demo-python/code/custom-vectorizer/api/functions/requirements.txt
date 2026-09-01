@@ -33,7 +33,7 @@ sympy==1.12
 threadpoolctl==3.2.0
 tokenizers==0.15.0
 tqdm==4.66.1
-transformers==4.36.2
+transformers==5.10.1
 typing_extensions==4.9.0
 urllib3==2.1.0
 
