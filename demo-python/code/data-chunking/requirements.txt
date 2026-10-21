@@ -65,7 +65,7 @@ numpy==1.26.3
 openai==1.10.0
 packaging==23.2
 parso==0.8.3
-pillow==10.2.0
+pillow==13.0.0
 platformdirs==4.1.0
 portalocker==2.8.2
 preshed==3.0.9
